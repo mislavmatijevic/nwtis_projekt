@@ -1,8 +1,5 @@
 package org.foi.nwtis.mmatijevi.projekt.aplikacija_1;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,11 +39,10 @@ public class Aplikacija {
             return;
         }
 
-        int maksCekanje = Integer.parseInt(konfig.dajPostavku("maks.cekanje"));
         int maksCekaca = Integer.parseInt(konfig.dajPostavku("maks.cekaca"));
         int maksDretvi = Integer.parseInt(konfig.dajPostavku("maks.dretvi"));
 
-        Server server = new Server(port, maksCekaca, maksCekanje, maksDretvi);
+        Server server = new Server(port, maksCekaca, maksDretvi);
         server.cekajZahtjeve();
     }
 

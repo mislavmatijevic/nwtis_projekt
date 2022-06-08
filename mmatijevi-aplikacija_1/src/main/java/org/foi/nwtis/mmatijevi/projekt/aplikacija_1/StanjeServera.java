@@ -27,8 +27,10 @@ public class StanjeServera {
             case inicijaliziran:
                 status = StatusEnum.aktivan;
                 break;
-            default:
+            case aktivan: {
+                status = StatusEnum.hibernira;
                 break;
+            }
         }
     }
 

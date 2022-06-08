@@ -11,14 +11,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.ispis.Terminal;
+import org.foi.nwtis.podaci.Aerodrom;
 
 public class Server implements ServerSucelje {
     private boolean aktivan = true;
 
     private int port;
     private int maksCekaca;
-    private int maksCekanje;
-    private int maksDretvi;
 
     private List<Dretva> listaDretvi;
     private Semaphore obustavaStvaranjaDretvi;
@@ -31,11 +30,9 @@ public class Server implements ServerSucelje {
      * @param maksCekanje Maksimalno čekanje za paljenje.
      * @param maksDretvi Servis dretvi koji stvara nove dretve po potrebi.
      */
-    public Server(int port, int maksCekaca, int maksCekanje, int maksDretvi) {
+    public Server(int port, int maksCekaca, int maksDretvi) {
         this.port = port;
         this.maksCekaca = maksCekaca;
-        this.maksCekanje = maksCekanje;
-        this.maksDretvi = maksDretvi;
 
         obustavaStvaranjaDretvi = new Semaphore(maksDretvi);
         listaDretvi = new ArrayList<>(maksDretvi);
@@ -67,11 +64,13 @@ public class Server implements ServerSucelje {
             }
         }));
 
+        List<Aerodrom> ucitaniAerodromi = new ArrayList<Aerodrom>();
+
         try (ServerSocket ss = new ServerSocket(this.port, this.maksCekaca)) {
             while (this.aktivan) {
                 Terminal.infoIspis("Čekanje korisnika na vratima " + this.port);
                 Socket veza = ss.accept();
-                Dretva dretva = new Dretva(this, veza);
+                Dretva dretva = new Dretva(this, veza, ucitaniAerodromi);
                 listaDretvi.add(dretva);
                 dretva.start();
                 Terminal.uspjehIspis("" + obustavaStvaranjaDretvi.availablePermits());
