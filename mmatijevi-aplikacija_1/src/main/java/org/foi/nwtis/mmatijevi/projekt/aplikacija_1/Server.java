@@ -1,27 +1,27 @@
 package org.foi.nwtis.mmatijevi.projekt.aplikacija_1;
 
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
-import java.nio.charset.Charset;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.ispis.Terminal;
 
-public class Server {
+public class Server implements ServerSucelje {
     private boolean aktivan = true;
 
     private int port;
     private int maksCekaca;
     private int maksCekanje;
-    private Socket veza = null;
-    private ExecutorService servisDretvi;
+    private int maksDretvi;
+
+    private List<Dretva> listaDretvi;
+    private Semaphore obustavaStvaranjaDretvi;
 
     /**
      * Za instanciranje objekta potrebna su mrežna vrata (port) na kojima se čeka te maksimalan broj klijenata - čekača.
@@ -29,13 +29,16 @@ public class Server {
      * @param maksCekaca Maksimalan broj klijenata - čekača, npr. <i>10</i>
      * @param maksDretvi Maksimalan broj dretvi.
      * @param maksCekanje Maksimalno čekanje za paljenje.
-     * @param servisDretvi Servis dretvi koji stvara nove dretve po potrebi.
+     * @param maksDretvi Servis dretvi koji stvara nove dretve po potrebi.
      */
-    public Server(int port, int maksCekaca, int maksCekanje, ExecutorService servisDretvi) {
+    public Server(int port, int maksCekaca, int maksCekanje, int maksDretvi) {
         this.port = port;
         this.maksCekaca = maksCekaca;
         this.maksCekanje = maksCekanje;
-        this.servisDretvi = servisDretvi;
+        this.maksDretvi = maksDretvi;
+
+        obustavaStvaranjaDretvi = new Semaphore(maksDretvi);
+        listaDretvi = new ArrayList<>(maksDretvi);
     }
 
     /**
@@ -49,59 +52,36 @@ public class Server {
             @Override
             public void run() {
                 Terminal.pozorIspis("Gašenje...");
-                servisDretvi.shutdown();
-                while (true) {
+                int brojacUgasenihDretvi = 0;
+                for (Dretva dretva : listaDretvi) {
+
                     try {
-                        Terminal.infoIspis("Čekanje da se servisDretvi ugasi...");
-                        if (servisDretvi.awaitTermination(5, TimeUnit.SECONDS)) {
-                            break;
-                        }
-                    } catch (InterruptedException e) {
+                        dretva.join(500);
+                        brojacUgasenihDretvi++;
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, "Prekid pri gašenju dretve!", ex);
+                        Terminal.pozorIspis("Gašenje dretve obustavljeno!");
                     }
                 }
-                Terminal.infoIspis("Ugašeno sve");
+                Terminal.uspjehIspis("Ugašeno " + brojacUgasenihDretvi + " dretvi!");
             }
         }));
 
         try (ServerSocket ss = new ServerSocket(this.port, this.maksCekaca)) {
             while (this.aktivan) {
                 Terminal.infoIspis("Čekanje korisnika na vratima " + this.port);
-                this.veza = ss.accept();
-
-                try (InputStreamReader isr = new InputStreamReader(this.veza.getInputStream(),
-                        Charset.forName("UTF-8"));
-                        OutputStreamWriter osw = new OutputStreamWriter(this.veza.getOutputStream(),
-                                Charset.forName("UTF-8"));) {
-
-                    StringBuilder ulazno = new StringBuilder();
-                    while (true) {
-                        int i = isr.read();
-                        if (i == -1) {
-                            break;
-                        }
-                        ulazno.append((char) i);
-                    }
-
-                    String komanda = ulazno.toString();
-
-                    Terminal.infoIspis("Dobivena komanda: \"" + komanda + "\"");
-                    this.veza.shutdownInput();
-
-                    if (komanda.equals("QUIT")) {
-                        posaljiOdgovor(osw, "OK");
-                        ugasiPosluzitelja();
-                    } else if (komanda.equals("STATUS")) {
-                        int oznakaStatusa = StanjeServera.dajInstancu().dajStatus().ordinal();
-                        posaljiOdgovor(osw, "OK " + oznakaStatusa);
-                    } else {
-                        Dretva novaDretva = new Dretva(osw, komanda);
-                        servisDretvi.execute(novaDretva);
-                    }
-                } catch (SocketException ex) {
-                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, "Problem pri zauzimanju utičnice",
-                            ex);
-                    Terminal.greskaIspis("Problem pri zauzimanju utičnice: " + ex.getMessage());
+                Socket veza = ss.accept();
+                Dretva dretva = new Dretva(this, veza);
+                listaDretvi.add(dretva);
+                dretva.start();
+                Terminal.uspjehIspis("" + obustavaStvaranjaDretvi.availablePermits());
+                try {
+                    obustavaStvaranjaDretvi.acquire();
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Server.class.getName()).log(Level.SEVERE, "Prekid pri čekanju dretvi!", ex);
+                    Terminal.pozorIspis("Čekanje dretve obustavljeno!");
                 }
+                Terminal.uspjehIspis("" + obustavaStvaranjaDretvi.availablePermits());
             }
 
         } catch (IOException ex) {
@@ -110,10 +90,16 @@ public class Server {
         }
     }
 
-    private void ugasiPosluzitelja() throws IOException {
+    @Override
+    public void prijaviGasenjeDretve(Dretva objektDretve) {
+        obustavaStvaranjaDretvi.release();
+        listaDretvi.remove(objektDretve);
+    }
+
+    public void ugasiPosluzitelja() {
         this.aktivan = false;
-        Terminal.pozorIspis("Gašenje!");
-        this.servisDretvi.shutdown();
+        Terminal.pozorIspis("Dobiven signal za gašenje glavnog poslužitelja!");
+        System.exit(0);
     }
 
     /** 
