@@ -1,6 +1,7 @@
 package org.foi.nwtis.mmatijevi.projekt.aplikacija_1;
 
-import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,14 +14,19 @@ public class Aplikacija {
     private static Konfiguracija konfig = null;
 
     public static void main(String[] args) {
+
+        String lokacijaKonfiguracije;
+
         if (args.length != 1) {
-            Terminal.greskaIspis("Broj argumenata nije 1. Proslijedite konfiguracijsku datoteku!");
-            Terminal.pozorIspis("Primjer pokretanja programa: \"ServerMeteo NWTiS_mmatijevi_1.txt\"");
-            return;
+            Terminal.greskaIspis(
+                    "Konfiguracijska datoteka nije proslijeđena, koristim klasičnu \"konfiguracija.json\"!");
+            lokacijaKonfiguracije = "konfiguracija.json";
+        } else {
+            lokacijaKonfiguracije = args[0];
         }
 
         try {
-            konfig = ucitajPodatke(args[0]);
+            konfig = ucitajPodatke(lokacijaKonfiguracije);
         } catch (NeispravnaKonfiguracija ex) {
             Logger.getLogger(Aplikacija.class.getName()).log(Level.WARNING, null, ex);
             Terminal.greskaIspis("Konfiguracija nije ispravna! " + ex.getMessage());
@@ -28,9 +34,6 @@ public class Aplikacija {
         }
 
         int port = Integer.parseInt(konfig.dajPostavku("port"));
-        int maksCekanje = Integer.parseInt(konfig.dajPostavku("maks.cekanje"));
-        int maksCekaca = Integer.parseInt(konfig.dajPostavku("maks.cekaca"));
-        int maksDretvi = Integer.parseInt(konfig.dajPostavku("maks.dretvi"));
 
         if (!ProvjeravacPorta.provjeriDostupnostPorta(port)) {
             Terminal.greskaIspis(
@@ -38,8 +41,14 @@ public class Aplikacija {
             return;
         }
 
-        Server server = new Server(port, maksCekaca, maksCekanje, maksDretvi);
-        server.cekajINIT();
+        int maksCekanje = Integer.parseInt(konfig.dajPostavku("maks.cekanje"));
+        int maksCekaca = Integer.parseInt(konfig.dajPostavku("maks.cekaca"));
+        int maksDretvi = Integer.parseInt(konfig.dajPostavku("maks.dretvi"));
+
+        ExecutorService executor = Executors.newFixedThreadPool(maksDretvi);
+
+        Server server = new Server(port, maksCekaca, maksCekanje, executor);
+        server.cekajZahtjeve();
     }
 
     /** 
