@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.foi.nwtis.mmatijevi</groupId>
 	<artifactId>mmatijevi-projekt_lib</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.0</version>
 	<name>mmatijevi-projekt_lib</name>
 	<packaging>jar</packaging>
 

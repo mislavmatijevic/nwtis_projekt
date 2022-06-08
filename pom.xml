@@ -5,4 +5,15 @@
   <version>1.0.0</version>
   <packaging>pom</packaging>
   <name>mmatijevi-projekt</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+  </properties>
+
+  <modules>
+    <module>mmatijevi-projekt_lib</module>
+    <module>mmatijevi-aplikacija_1</module>
+  </modules>
 </project>
