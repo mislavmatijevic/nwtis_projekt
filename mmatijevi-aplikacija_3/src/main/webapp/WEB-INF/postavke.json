@@ -2,5 +2,15 @@
     "a": "localhost",
     "p": 8000,
     "zeton.trajanje": 30,
-    "sustav.administratori": "NWTiS Admin"
+    "sustav.administratori": "NWTiS Admin",
+    "jdbc.derby": "org.apache.derby.jdbc.ClientDriver",
+    "jdbc.hsqldb.hsql": "org.hsqldb.jdbcDriver",
+    "user.username": "nwtis_bp_1",
+    "user.password": "nwtis",
+    "user.database": "nwtis_bp_1?useSSL\u003dfalse\u0026serverTimezone\u003dUTC\u0026allowPublicKeyRetrieval\u003dtrue",
+    "server.database": "jdbc:mysql://localhost:3306/",
+    "jdbc.mysql": "com.mysql.cj.jdbc.Driver",
+    "admin.username": "nwtis_bp_1",
+    "admin.password": "nwtis",
+    "admin.database": "nwtis_bp_1"
 }

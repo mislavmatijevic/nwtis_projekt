@@ -1,6 +1,5 @@
 {
     "jdbc.derby": "org.apache.derby.jdbc.ClientDriver",
-    "dnevnik.datoteka": "/home/mislav/Desktop/nwtis_app2_log.txt",
     "ciklus.korekcija": "10",
     "ciklus.vrijeme": "20",
     "jdbc.hsqldb.hsql": "org.hsqldb.jdbcDriver",
