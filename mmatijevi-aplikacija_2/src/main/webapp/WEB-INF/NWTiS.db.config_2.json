@@ -1,0 +1,22 @@
+{
+    "jdbc.derby": "org.apache.derby.jdbc.ClientDriver",
+    "dnevnik.datoteka": "/home/mislav/Desktop/nwtis_app2_log.txt",
+    "ciklus.korekcija": "10",
+    "ciklus.vrijeme": "20",
+    "jdbc.hsqldb.hsql": "org.hsqldb.jdbcDriver",
+    "preuzimanje.od": "01.01.2022 00:00:00",
+    "preuzimanje.do": "31.12.2022 00:00:00",
+    "user.username": "nwtis_bp_1",
+    "user.password": "nwtis",
+    "user.database": "nwtis_bp_1?useSSL\u003dfalse\u0026serverTimezone\u003dUTC\u0026allowPublicKeyRetrieval\u003dtrue",
+    "server.database": "jdbc:mysql://localhost:3306/",
+    "jdbc.mysql": "com.mysql.cj.jdbc.Driver",
+    "admin.username": "nwtis_bp_1",
+    "admin.password": "nwtis",
+    "admin.database": "nwtis_bp_1",
+    "preuzimanje.vrijeme": "6",
+    "preuzimanje.odmak": "2",
+    "preuzimanje.pauza": "100",
+    "OpenSkyNetwork.korisnik": "mmatijevi",
+    "OpenSkyNetwork.lozinka": "68Vxoh"
+}
