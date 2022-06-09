@@ -1,11 +1,6 @@
 package org.foi.nwtis.mmatijevi.projekt.aplikacija_2.slusaci;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_2.dretve.PreuzimanjeRasporedaAerodroma;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.NeispravnaKonfiguracija;
@@ -19,8 +14,6 @@ import jakarta.servlet.annotation.WebListener;
 @WebListener
 public class SlusacAplikacije implements ServletContextListener {
 
-	private Date vrijemeOd = new Date();
-	private Date vrijemeDo = null;
 	private org.foi.nwtis.mmatijevi.projekt.konfiguracije.bazePodataka.KonfiguracijaBP konfig = null;
 	private String putanja = null;
 	PreuzimanjeRasporedaAerodroma preuzimanjeDretva = null;
@@ -69,31 +62,6 @@ public class SlusacAplikacije implements ServletContextListener {
 			System.err.println("Problem pri zaustavljanju dretve: " + ex.getLocalizedMessage());
 		}
 
-		try {
-			dnevnikUpisiVremena();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			System.err.println("Neuspješan zapis u dnevnik: " + ex.getLocalizedMessage());
-		}
 		ServletContextListener.super.contextDestroyed(sce);
-	}
-
-	private void dnevnikUpisiVremena() throws Exception {
-		String dnevnikDatoteka = this.putanja + konfig.dajPostavku("dnevnik.datoteka");
-
-		SimpleDateFormat sdfDnevnik = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
-		vrijemeDo = new Date();
-
-		BufferedWriter writer = null;
-		try {
-			writer = new BufferedWriter(new FileWriter(dnevnikDatoteka, true));
-			writer.append("\nRad aplikacije: " + sdfDnevnik.format(vrijemeOd) + " - " + sdfDnevnik.format(vrijemeDo));
-		} catch (FileNotFoundException e) {
-			writer = new BufferedWriter(new FileWriter(dnevnikDatoteka, false));
-			writer.append("Rad aplikacije: " + sdfDnevnik.format(vrijemeOd) + " - " + sdfDnevnik.format(vrijemeDo));
-		} finally {
-			if (writer != null)
-				writer.close();
-		}
 	}
 }

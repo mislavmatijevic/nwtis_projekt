@@ -281,7 +281,7 @@ public class PreuzimanjeRasporedaAerodroma extends Thread {
 
 	@Override
 	public void interrupt() {
-		dozvolaPisanjaUBazu = false;
+		this.dozvolaPisanjaUBazu = false;
 		super.interrupt();
 	}
 }
