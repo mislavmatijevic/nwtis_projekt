@@ -7,9 +7,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.NovaOznakaNedostupnaException;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.bazePodataka.KonfiguracijaBP;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+@ApplicationScoped
 public class GeneratorOznakaZetona {
+    @Inject
+    Baza baza;
+
     /**
      * Generira novi žeton, tj. njegovu oznaku, na siguran način.
      * Ako još nije memorizirana oznaka žetona, čita iz baze posljednju.
@@ -22,8 +30,7 @@ public class GeneratorOznakaZetona {
     }
 
     private int dohvatiPosljednjuOznakuIzBaze(KonfiguracijaBP konfig) throws NovaOznakaNedostupnaException {
-        try (Baza baza = Baza.dajInstancu();
-                Connection veza = baza.stvoriVezu(konfig);
+        try (Connection veza = baza.stvoriVezu(konfig);
                 PreparedStatement izraz = veza.prepareStatement(
                         "SELECT oznaka_zeton FROM zetoni ORDER BY oznaka_zeton DESC LIMIT 1");
                 ResultSet rs = izraz.executeQuery()) {
@@ -38,12 +45,6 @@ public class GeneratorOznakaZetona {
             Logger.getLogger(ServisZetona.class.getName()).log(Level.SEVERE,
                     "Neuspjelo postavljanje posljednje oznake žetona!", ex);
             throw new NovaOznakaNedostupnaException("Neuspjelo postavljanje posljednje oznake žetona!");
-        }
-    }
-
-    public class NovaOznakaNedostupnaException extends Exception {
-        public NovaOznakaNedostupnaException(String message) {
-            super(message);
         }
     }
 }

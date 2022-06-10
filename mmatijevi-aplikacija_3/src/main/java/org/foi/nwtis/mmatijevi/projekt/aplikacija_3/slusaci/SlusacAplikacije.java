@@ -11,6 +11,7 @@ import org.foi.nwtis.mmatijevi.projekt.konfiguracije.NeispravnaKonfiguracija;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.bazePodataka.KonfiguracijaBP;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.bazePodataka.PostavkeBazaPodataka;
 
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
@@ -20,6 +21,11 @@ import jakarta.servlet.annotation.WebListener;
 public class SlusacAplikacije implements ServletContextListener {
 
 	private KonfiguracijaBP konfig = null;
+
+	@Inject
+	ServisPrijava servisPrijava;
+	@Inject
+	ServisZetona servisZetona;
 
 	public SlusacAplikacije() {
 
@@ -49,8 +55,8 @@ public class SlusacAplikacije implements ServletContextListener {
 			return;
 		}
 
-		ServisPrijava.dajInstancu().postaviKonfiguraciju(konfig);
-		ServisZetona.dajInstancu().postaviKonfiguraciju(konfig);
+		servisPrijava.postaviKonfiguraciju(konfig);
+		servisZetona.postaviKonfiguraciju(konfig);
 
 		ServletContextListener.super.contextInitialized(sce);
 

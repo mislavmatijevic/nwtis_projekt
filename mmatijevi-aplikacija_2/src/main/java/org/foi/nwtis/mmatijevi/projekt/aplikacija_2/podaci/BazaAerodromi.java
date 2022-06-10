@@ -18,24 +18,15 @@ import org.foi.nwtis.podaci.Airport;
 import org.foi.nwtis.rest.podaci.AvionLeti;
 import org.foi.nwtis.rest.podaci.Lokacija;
 
+import jakarta.inject.Singleton;
+
 /**
  * Klasa koja se brine pohranom podataka o aerodromima u bazu.
  */
+@Singleton
 public class BazaAerodromi implements AutoCloseable {
 
     Connection veza = null;
-
-    private BazaAerodromi() {
-    }
-
-    private static BazaAerodromi instanca = null;
-
-    public static BazaAerodromi dajInstancu() {
-        if (instanca == null) {
-            instanca = new BazaAerodromi();
-        }
-        return instanca;
-    }
 
     /** 
      * Po konfiguracijskoj datoteci stvara vezu na bazu.

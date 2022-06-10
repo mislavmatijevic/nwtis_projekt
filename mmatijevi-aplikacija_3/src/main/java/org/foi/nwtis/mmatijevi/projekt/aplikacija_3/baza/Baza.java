@@ -6,27 +6,19 @@ import java.sql.SQLException;
 
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.bazePodataka.KonfiguracijaBP;
 
+import jakarta.inject.Singleton;
+
 /**
  * Ova klasa omogućuje stvaranje i korištenje veze s pravom bazom podataka na siguran način.
  */
-public class Baza implements AutoCloseable {
+@Singleton
+public class Baza {
 
     Connection veza = null;
 
-    private Baza() {
-    }
-
-    private static Baza instanca = null;
-
-    public static Baza dajInstancu() {
-        if (instanca == null) {
-            instanca = new Baza();
-        }
-        return instanca;
-    }
-
     /** 
      * Po konfiguracijskoj datoteci stvara vezu na bazu.
+     * Očekuje se da korisnik klase zatvori vezu nakon završetka.
      * @param bp Konfiguracijska datoteka baze.
      * @return Connection Ostvarena veza na bazu.
      * @throws ClassNotFoundException
@@ -47,16 +39,5 @@ public class Baza implements AutoCloseable {
      */
     public Connection dajVezu() throws ClassNotFoundException, SQLException {
         return this.veza;
-    }
-
-    /**
-     * Omogućava sigurno zatvaranje veze na bazu.
-     * @throws Exception
-     */
-    @Override
-    public void close() throws Exception {
-        if (!this.veza.isClosed()) {
-            this.veza.close();
-        }
     }
 }

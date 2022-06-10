@@ -13,12 +13,16 @@ import org.foi.nwtis.podaci.Aerodrom;
 import org.foi.nwtis.rest.klijenti.OSKlijent;
 import org.foi.nwtis.rest.podaci.AvionLeti;
 
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
 
 /**
  * Ova klasa predstavlja dretvu koja u ciklusima ažurira podatke u bazi o polascima i dolascima.
  */
 public class PreuzimanjeRasporedaAerodroma extends Thread {
+
+	@Inject
+	BazaAerodromi baza;
 
 	private final int msJedanSat = 60 * 60 * 1000;
 
@@ -117,8 +121,7 @@ public class PreuzimanjeRasporedaAerodroma extends Thread {
 			}
 
 			List<Aerodrom> aerodromiPraceni;
-			try (BazaAerodromi baza = BazaAerodromi.dajInstancu();
-					Connection veza = baza.stvoriVezu(this.konfig)) {
+			try (Connection veza = baza.stvoriVezu(this.konfig)) {
 
 				aerodromiPraceni = baza.dohvatiPraceneAerodrome(veza);
 
@@ -213,8 +216,7 @@ public class PreuzimanjeRasporedaAerodroma extends Thread {
 	 * @param problemDTO Opisni objekt/preslika baze napunjen sa svim podacima osim <pre>stored</pre>
 	 */
 	private void unosProblemaUBazu(ProblemDTO problemDTO) {
-		try (BazaAerodromi baza = BazaAerodromi.dajInstancu();
-				Connection veza = baza.stvoriVezu(this.konfig)) {
+		try (Connection veza = baza.stvoriVezu(this.konfig)) {
 			baza.unesiProblem(veza, problemDTO);
 		} catch (Exception exInner) {
 			exInner.printStackTrace();

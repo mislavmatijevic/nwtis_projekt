@@ -8,20 +8,14 @@ import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+@ApplicationScoped
 public class ServisPrijava extends KonfigurabilniServis {
 
-    private static ServisPrijava instanca = null;
-
-    private ServisPrijava() {
-        super();
-    }
-
-    public static ServisPrijava dajInstancu() {
-        if (instanca == null) {
-            instanca = new ServisPrijava();
-        }
-        return instanca;
-    }
+    @Inject
+    Baza baza;
 
     /**
      * Prijava korisnika
@@ -34,8 +28,7 @@ public class ServisPrijava extends KonfigurabilniServis {
             return false;
         }
 
-        try (Baza baza = Baza.dajInstancu();
-                Connection veza = baza.stvoriVezu(this.konfig);
+        try (Connection veza = baza.stvoriVezu(this.konfig);
                 PreparedStatement izraz = veza
                         .prepareStatement("SELECT * FROM korisnici WHERE korisnik = ? AND lozinka = ?;")) {
 
