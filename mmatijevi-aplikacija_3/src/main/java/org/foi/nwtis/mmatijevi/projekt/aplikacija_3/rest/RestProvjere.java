@@ -2,6 +2,7 @@ package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.rest;
 
 import java.util.Date;
 
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KriviKorisnikException;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.NovaOznakaNedostupnaException;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.Odgovor;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.OdgovorObjekt;
@@ -60,6 +61,39 @@ public class RestProvjere {
         } else {
             odgovor = Response.status(Status.UNAUTHORIZED)
                     .entity(new Odgovor(false, "Takav korisnik nije pronađen"))
+                    .build();
+        }
+
+        return odgovor;
+    }
+
+    @GET
+    @Path("{token}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response provjeriToken(@HeaderParam("korisnik") String korime, @PathParam("token") String token) {
+        Response odgovor;
+
+        int zeton = -1;
+
+        try {
+            zeton = Integer.parseInt(token);
+            boolean provjera = servisZetona.provjeriZeton(zeton, korime);
+            if (provjera) {
+                odgovor = Response.status(Status.OK)
+                        .entity(new Odgovor(true, "Žeton je valjan"))
+                        .build();
+            } else {
+                odgovor = Response.status(Status.REQUEST_TIMEOUT)
+                        .entity(new Odgovor(false, "Žeton je istekao"))
+                        .build();
+            }
+        } catch (NumberFormatException ex) {
+            odgovor = Response.status(Status.BAD_REQUEST)
+                    .entity(new Odgovor(false, "Broj nije valjan"))
+                    .build();
+        } catch (KriviKorisnikException ex) {
+            odgovor = Response.status(Status.UNAUTHORIZED)
+                    .entity(new Odgovor(false, ex.getLocalizedMessage()))
                     .build();
         }
 
