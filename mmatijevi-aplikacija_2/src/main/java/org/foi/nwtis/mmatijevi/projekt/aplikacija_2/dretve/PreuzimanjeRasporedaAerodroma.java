@@ -121,7 +121,7 @@ public class PreuzimanjeRasporedaAerodroma extends Thread {
 			}
 
 			List<Aerodrom> aerodromiPraceni;
-			try (Connection veza = baza.stvoriVezu(this.konfig)) {
+			try (Connection veza = baza.dajVezu()) {
 
 				aerodromiPraceni = baza.dohvatiPraceneAerodrome(veza);
 
@@ -216,7 +216,7 @@ public class PreuzimanjeRasporedaAerodroma extends Thread {
 	 * @param problemDTO Opisni objekt/preslika baze napunjen sa svim podacima osim <pre>stored</pre>
 	 */
 	private void unosProblemaUBazu(ProblemDTO problemDTO) {
-		try (Connection veza = baza.stvoriVezu(this.konfig)) {
+		try (Connection veza = baza.dajVezu()) {
 			baza.unesiProblem(veza, problemDTO);
 		} catch (Exception exInner) {
 			exInner.printStackTrace();

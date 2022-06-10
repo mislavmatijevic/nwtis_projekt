@@ -3,9 +3,11 @@ package org.foi.nwtis.mmatijevi.projekt.aplikacija_2.slusaci;
 import java.io.File;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_2.dretve.PreuzimanjeRasporedaAerodroma;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_2.podaci.BazaAerodromi;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.NeispravnaKonfiguracija;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.bazePodataka.PostavkeBazaPodataka;
 
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
@@ -18,9 +20,8 @@ public class SlusacAplikacije implements ServletContextListener {
 	private String putanja = null;
 	PreuzimanjeRasporedaAerodroma preuzimanjeDretva = null;
 
-	public SlusacAplikacije() {
-
-	}
+	@Inject
+	BazaAerodromi baza;
 
 	@Override
 	public void contextInitialized(ServletContextEvent sce) {
@@ -29,8 +30,6 @@ public class SlusacAplikacije implements ServletContextListener {
 		String nazivDatoteke = context.getInitParameter("konfiguracija");
 		this.putanja = context.getRealPath("/WEB-INF") + File.separator;
 		nazivDatoteke = putanja + nazivDatoteke;
-
-		System.out.println(nazivDatoteke);
 
 		konfig = new PostavkeBazaPodataka(nazivDatoteke);
 		try {
@@ -41,6 +40,8 @@ public class SlusacAplikacije implements ServletContextListener {
 			ex.printStackTrace();
 			return;
 		}
+
+		baza.konfig = konfig;
 
 		System.out.println("Slusac Aplikacije 2 pokrenut!");
 		preuzimanjeDretva = new PreuzimanjeRasporedaAerodroma(context);

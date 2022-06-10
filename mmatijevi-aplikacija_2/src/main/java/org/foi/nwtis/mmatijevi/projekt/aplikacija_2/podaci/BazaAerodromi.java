@@ -24,48 +24,30 @@ import jakarta.inject.Singleton;
  * Klasa koja se brine pohranom podataka o aerodromima u bazu.
  */
 @Singleton
-public class BazaAerodromi implements AutoCloseable {
+public class BazaAerodromi {
 
-    Connection veza = null;
+    public KonfiguracijaBP konfig = null;
+    private Connection veza = null;
 
     /** 
      * Po konfiguracijskoj datoteci stvara vezu na bazu.
-     * @param bp Konfiguracijska datoteka baze.
-     * @return Connection Ostvarena veza na bazu.
+     * @return Ostvarena ili već postojeća (nezatvorena) veza na bazu.
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public Connection stvoriVezu(KonfiguracijaBP bp) throws ClassNotFoundException, SQLException {
-        if (this.veza == null || this.veza.isClosed()) {
-            Class.forName(bp.getDriverDatabase(bp.getServerDatabase()));
-            this.veza = DriverManager.getConnection(
-                    bp.getServerDatabase() + bp.getUserDatabase(),
-                    bp.getUserUsername(), bp.getUserPassword());
-        }
-        return this.veza;
-    }
-
-    /** 
-     * Dohvaća već stvorenu vezu.
-     */
     public Connection dajVezu() throws ClassNotFoundException, SQLException {
-        return this.veza;
-    }
-
-    /**
-     * Omogućava sigurno zatvaranje veze na bazu.
-     * @throws Exception
-     */
-    @Override
-    public void close() throws Exception {
-        if (!this.veza.isClosed()) {
-            this.veza.close();
+        if (this.veza == null || this.veza.isClosed()) {
+            Class.forName(konfig.getDriverDatabase(konfig.getServerDatabase()));
+            this.veza = DriverManager.getConnection(
+                    konfig.getServerDatabase() + konfig.getUserDatabase(),
+                    konfig.getUserUsername(), konfig.getUserPassword());
         }
+        return this.veza;
     }
 
     /** 
      * Dohvaća sve aerodrome.
-     * @param bp Konfiguracijska datoteka baze.
+     * @param konfig Konfiguracijska datoteka baze.
      * @return List<Aerodrom> Svi aerodromi.
      * @throws ClassNotFoundException
      * @throws SQLException
@@ -87,7 +69,7 @@ public class BazaAerodromi implements AutoCloseable {
 
     /** 
      * Dohvaća samo jedan aerodrom po icao oznaci.
-     * @param bp Konfiguracijska datoteka baze.
+     * @param konfig Konfiguracijska datoteka baze.
      * @param icao
      * @return Aerodrom
      * @throws ClassNotFoundException
@@ -113,7 +95,7 @@ public class BazaAerodromi implements AutoCloseable {
     }
 
     /** 
-     * @param bp Konfiguracijska datoteka baze.
+     * @param konfig Konfiguracijska datoteka baze.
      * @return List<Aerodrom>
      * @throws ClassNotFoundException
      * @throws SQLException
@@ -143,7 +125,7 @@ public class BazaAerodromi implements AutoCloseable {
         <li>AERODROMI_DOLASCI</li>
      * </ul>
      * <p>Metoda u tu odabranu tablicu unosi sve podatke, a atribut 'stored' generira se iz trenutnog vremena.
-     * @param bp Konfiguracijska datoteka baze.
+     * @param konfig Konfiguracijska datoteka baze.
      * @param polazak
      * @param tablicaUnos
      * @throws ClassNotFoundException
@@ -181,7 +163,7 @@ public class BazaAerodromi implements AutoCloseable {
 
     /** 
      * Unosi aerodrom po ICAO oznaci u bazu kao aerodrom za praćenje.
-     * @param bp Konfiguracijska datoteka baze.
+     * @param konfig Konfiguracijska datoteka baze.
      * @param aerodrom Aerodrom kojemu je dovoljno da je unesen samo 'icao'.
      * @return Ako ICAO oznaka ne pripada niti jednome aerodromu u bazi, vraća se <pre>false</pre>
      */
@@ -212,7 +194,7 @@ public class BazaAerodromi implements AutoCloseable {
 
     /** 
      * Dohvaća polaska <strong>ILI</strong> odlaske jednog aerodroma.
-     * @param bp Konfiguracijska datoteka baze.
+     * @param konfig Konfiguracijska datoteka baze.
      * @param icao ICAO oznaka aerodroma.
      * @param datum Datum za koji treba dohvatiti podatke.
      * @param nazivTablice Odabir tablice polazaka/dolazaka.
@@ -264,7 +246,7 @@ public class BazaAerodromi implements AutoCloseable {
     /** 
      * Unosi objekt problema u bazu. Atribut <pre>stored</pre> nije nužan,
      * već se ta inforamcija o vremenu unosa automatski unosi.
-     * @param bp Konfiguracijska datoteka baze.
+     * @param konfig Konfiguracijska datoteka baze.
      * @param problemDTO Objekt s podacima za unos.
      * @throws ClassNotFoundException
      * @throws SQLException
@@ -282,7 +264,7 @@ public class BazaAerodromi implements AutoCloseable {
 
     /** 
      * Vraća sve probleme zapisane u bazi.
-     * @param bp Konfiguracijska datoteka baze.
+     * @param konfig Konfiguracijska datoteka baze.
      * @throws ClassNotFoundException
      * @throws SQLException
      */
@@ -302,7 +284,7 @@ public class BazaAerodromi implements AutoCloseable {
 
     /** 
      * Vraća sve probleme iz baze za određeni aerodrom.
-     * @param bp Konfiguracijska datoteka baze.
+     * @param konfig Konfiguracijska datoteka baze.
      * @param icao ICAO oznaka aerodroma za koji se dohvaćaju problemi.
      * @throws ClassNotFoundException
      * @throws SQLException
@@ -328,7 +310,7 @@ public class BazaAerodromi implements AutoCloseable {
 
     /** 
      * Briše probleme za točno određeni aerodrom.
-     * @param bp Konfiguracijska datoteka baze.
+     * @param konfig Konfiguracijska datoteka baze.
      * @param icao ICAO oznaka aerodroma za koji obrisati podatke.
      * @return Uspjeh naredbe.
      */
