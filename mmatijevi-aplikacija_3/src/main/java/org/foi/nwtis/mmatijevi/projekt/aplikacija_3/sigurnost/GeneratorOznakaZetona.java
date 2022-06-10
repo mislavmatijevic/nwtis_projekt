@@ -10,8 +10,6 @@ import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.bazePodataka.KonfiguracijaBP;
 
 public class GeneratorOznakaZetona {
-    private static int posljednjaOznaka = -1;
-
     /**
      * Generira novi žeton, tj. njegovu oznaku, na siguran način.
      * Ako još nije memorizirana oznaka žetona, čita iz baze posljednju.
@@ -20,15 +18,7 @@ public class GeneratorOznakaZetona {
      * @throws NovaOznakaNedostupnaException
      */
     public int generirajNovuOznaku(KonfiguracijaBP konfig) throws NovaOznakaNedostupnaException {
-
-        if (posljednjaOznaka == -1) {
-            GeneratorOznakaZetona.posljednjaOznaka = dohvatiPosljednjuOznakuIzBaze(konfig);
-        }
-
-        int odabranaLozinka = GeneratorOznakaZetona.posljednjaOznaka;
-        posljednjaOznaka++;
-
-        return odabranaLozinka;
+        return 1 + dohvatiPosljednjuOznakuIzBaze(konfig);
     }
 
     private int dohvatiPosljednjuOznakuIzBaze(KonfiguracijaBP konfig) throws NovaOznakaNedostupnaException {
