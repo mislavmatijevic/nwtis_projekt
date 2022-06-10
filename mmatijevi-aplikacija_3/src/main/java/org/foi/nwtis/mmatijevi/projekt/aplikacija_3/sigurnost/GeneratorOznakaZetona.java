@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.NovaOznakaNedostupnaException;
-import org.foi.nwtis.mmatijevi.projekt.konfiguracije.bazePodataka.KonfiguracijaBP;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -25,12 +24,12 @@ public class GeneratorOznakaZetona {
      * @return
      * @throws NovaOznakaNedostupnaException
      */
-    public int generirajNovuOznaku(KonfiguracijaBP konfig) throws NovaOznakaNedostupnaException {
-        return 1 + dohvatiPosljednjuOznakuIzBaze(konfig);
+    public int generirajNovuOznaku() throws NovaOznakaNedostupnaException {
+        return 1 + dohvatiPosljednjuOznakuIzBaze();
     }
 
-    private int dohvatiPosljednjuOznakuIzBaze(KonfiguracijaBP konfig) throws NovaOznakaNedostupnaException {
-        try (Connection veza = baza.stvoriVezu(konfig);
+    private int dohvatiPosljednjuOznakuIzBaze() throws NovaOznakaNedostupnaException {
+        try (Connection veza = baza.stvoriVezu();
                 PreparedStatement izraz = veza.prepareStatement(
                         "SELECT oznaka_zeton FROM zetoni ORDER BY oznaka_zeton DESC LIMIT 1");
                 ResultSet rs = izraz.executeQuery()) {

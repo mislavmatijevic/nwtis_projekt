@@ -15,29 +15,22 @@ import jakarta.inject.Singleton;
 public class Baza {
 
     Connection veza = null;
+    public KonfiguracijaBP konfig = null;
 
     /** 
      * Po konfiguracijskoj datoteci stvara vezu na bazu.
      * Očekuje se da korisnik klase zatvori vezu nakon završetka.
-     * @param bp Konfiguracijska datoteka baze.
      * @return Connection Ostvarena veza na bazu.
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public Connection stvoriVezu(KonfiguracijaBP bp) throws ClassNotFoundException, SQLException {
+    public Connection stvoriVezu() throws ClassNotFoundException, SQLException {
         if (this.veza == null || this.veza.isClosed()) {
-            Class.forName(bp.getDriverDatabase(bp.getServerDatabase()));
+            Class.forName(konfig.getDriverDatabase(konfig.getServerDatabase()));
             this.veza = DriverManager.getConnection(
-                    bp.getServerDatabase() + bp.getUserDatabase(),
-                    bp.getUserUsername(), bp.getUserPassword());
+                    konfig.getServerDatabase() + konfig.getUserDatabase(),
+                    konfig.getUserUsername(), konfig.getUserPassword());
         }
-        return this.veza;
-    }
-
-    /** 
-     * Dohvaća već stvorenu vezu.
-     */
-    public Connection dajVezu() throws ClassNotFoundException, SQLException {
         return this.veza;
     }
 }

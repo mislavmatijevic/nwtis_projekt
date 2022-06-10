@@ -4,7 +4,8 @@ import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.sigurnost.ServisPrijava;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.sigurnost.ServisKorisnika;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.sigurnost.ServisZetona;
 import org.foi.nwtis.mmatijevi.projekt.ispis.Terminal;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.NeispravnaKonfiguracija;
@@ -23,9 +24,11 @@ public class SlusacAplikacije implements ServletContextListener {
 	private KonfiguracijaBP konfig = null;
 
 	@Inject
-	ServisPrijava servisPrijava;
+	ServisKorisnika servisPrijava;
 	@Inject
 	ServisZetona servisZetona;
+	@Inject
+	Baza baza;
 
 	public SlusacAplikacije() {
 
@@ -57,6 +60,7 @@ public class SlusacAplikacije implements ServletContextListener {
 
 		servisPrijava.postaviKonfiguraciju(konfig);
 		servisZetona.postaviKonfiguraciju(konfig);
+		baza.konfig = konfig;
 
 		ServletContextListener.super.contextInitialized(sce);
 
