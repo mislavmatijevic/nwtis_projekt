@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -160,7 +159,7 @@ public class ServisZetona extends KonfigurabilniServis {
      */
     public int deaktivirajSveZetone(String aktivator, String korime)
             throws NeovlasteniKorisnik, NepostojeciZetonException {
-        List<Integer> zetoni = new LinkedList<Integer>();
+        int brojObrisanihZetona = 0;
 
         if (!aktivator.equals(korime)) {
             String grupaAdministratora = this.konfig.dajPostavku("sustav.administratori");
@@ -175,31 +174,17 @@ public class ServisZetona extends KonfigurabilniServis {
         try (Connection veza = baza.stvoriVezu();
                 PreparedStatement izraz = veza
                         .prepareStatement(
-                                "SELECT oznaka_zeton, status FROM zetoni SET status = 0 WHERE podaci_korisnik = ?")) {
+                                "UPDATE zetoni SET status = 0 WHERE podaci_korisnik = ? AND status = 1")) {
 
             izraz.setString(1, korime);
 
-            try (ResultSet rezultat = izraz.executeQuery()) {
-                if (rezultat.next()) {
-                    boolean aktiviran = rezultat.getBoolean("status");
-                    if (aktiviran) {
-                        zetoni.add(rezultat.getInt("oznaka_zeton"));
-                    }
-                }
-            }
-
-            for (int zeton : zetoni) {
-                deaktivirajZeton(zeton);
-            }
-
-            return zetoni.size();
-
+            brojObrisanihZetona = izraz.executeUpdate();
         } catch (ClassNotFoundException | SQLException ex) {
             Logger.getLogger(ServisZetona.class.getName()).log(Level.SEVERE,
                     "Neuspjelo deaktiviranje svih žetona za korisnika " + korime, ex);
         }
 
-        return zetoni.size();
+        return brojObrisanihZetona;
     }
 
 }
