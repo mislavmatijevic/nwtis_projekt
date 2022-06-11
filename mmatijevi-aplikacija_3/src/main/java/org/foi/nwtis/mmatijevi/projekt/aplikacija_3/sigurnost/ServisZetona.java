@@ -164,7 +164,14 @@ public class ServisZetona extends KonfigurabilniServis {
 
         if (!aktivator.equals(korime)) {
             String grupaAdministratora = this.konfig.dajPostavku("sustav.administratori");
-            List<String> grupeKorisnika = servisKorisnika.dohvatiGrupeKorisnika(aktivator);
+            List<String> grupeKorisnika;
+            try {
+                grupeKorisnika = servisKorisnika.dohvatiGrupeKorisnika(aktivator);
+            } catch (KorisnikNePostojiException ex) {
+                Logger.getLogger(ServisZetona.class.getName())
+                        .log(Level.SEVERE, "Prijavljeni korisnik nije pronađen! ", ex);
+                throw new KorisnikNeovlastenException("Pokretač deaktivacije (korisnik " + aktivator + ") ne postoji!");
+            }
             if (!grupeKorisnika.contains(grupaAdministratora)) {
                 throw new KorisnikNeovlastenException("Korisnik " + aktivator
                         + " nije u ulozi administratora sustava te kao takav ne može brisati sve žetone korisnika "
