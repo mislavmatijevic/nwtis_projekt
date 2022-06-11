@@ -8,11 +8,11 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class Odgovor {
+public class RestOdgovor {
     private String uspjeh;
     private String poruka;
 
-    public Odgovor(boolean uspjeh, String poruka) {
+    public RestOdgovor(boolean uspjeh, String poruka) {
         super();
         this.poruka = poruka;
         this.uspjeh = uspjeh ? "Uspješno izvršeno" : "Operacija nije izvršena";
