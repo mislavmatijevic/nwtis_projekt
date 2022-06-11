@@ -24,7 +24,7 @@ public class Baza {
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public Connection stvoriVezu() throws ClassNotFoundException, SQLException {
+    public Connection dohvatiVezu() throws ClassNotFoundException, SQLException {
         if (this.veza == null || this.veza.isClosed()) {
             Class.forName(konfig.getDriverDatabase(konfig.getServerDatabase()));
             this.veza = DriverManager.getConnection(

@@ -30,7 +30,7 @@ public class ServisKorisnika extends KonfigurabilniServis {
             return false;
         }
 
-        try (Connection veza = baza.stvoriVezu();
+        try (Connection veza = baza.dohvatiVezu();
                 PreparedStatement izraz = veza
                         .prepareStatement("SELECT * FROM korisnici WHERE korisnik = ? AND lozinka = ?;")) {
 
@@ -58,7 +58,7 @@ public class ServisKorisnika extends KonfigurabilniServis {
     public List<String> dohvatiGrupeKorisnika(String korime) {
         List<String> korisnikoveGrupe = new LinkedList<>();
 
-        try (Connection veza = baza.stvoriVezu();
+        try (Connection veza = baza.dohvatiVezu();
                 PreparedStatement izraz = veza
                         .prepareStatement("SELECT grupa FROM uloge WHERE korisnik = ?")) {
 

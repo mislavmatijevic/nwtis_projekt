@@ -41,7 +41,7 @@ public class ServisZetona extends KonfigurabilniServis {
             int novoVrijeme = (int) (trenutnoVrijemeMs / 1000)
                     + Integer.parseInt(this.konfig.dajPostavku("zeton.trajanje"));
 
-            try (Connection veza = baza.stvoriVezu();
+            try (Connection veza = baza.dohvatiVezu();
                     PreparedStatement izraz = veza
                             .prepareStatement(
                                     "INSERT INTO `nwtis_bp_1`.`zetoni` (`oznaka_zeton`, `podaci_korisnik`, `rok_trajanja`) VALUES (?, ?, ?)")) {
@@ -74,7 +74,7 @@ public class ServisZetona extends KonfigurabilniServis {
 
         boolean zetonJeValjan = false;
 
-        try (Connection veza = baza.stvoriVezu();
+        try (Connection veza = baza.dohvatiVezu();
                 PreparedStatement izraz = veza
                         .prepareStatement(
                                 "SELECT rok_trajanja, status FROM zetoni WHERE oznaka_zeton = ? AND podaci_korisnik = ?")) {
@@ -117,7 +117,7 @@ public class ServisZetona extends KonfigurabilniServis {
      * @throws NepostojeciZetonException U slučaju da žeton ne postoji u bazi.
      */
     public void deaktivirajZeton(int zeton) throws NepostojeciZetonException {
-        try (Connection veza = baza.stvoriVezu();
+        try (Connection veza = baza.dohvatiVezu();
                 PreparedStatement izrazDohvataBaremJednog = veza
                         .prepareStatement("SELECT status FROM nwtis_bp_1.zetoni WHERE oznaka_zeton = ?")) {
 
@@ -171,7 +171,7 @@ public class ServisZetona extends KonfigurabilniServis {
             }
         }
 
-        try (Connection veza = baza.stvoriVezu();
+        try (Connection veza = baza.dohvatiVezu();
                 PreparedStatement izraz = veza
                         .prepareStatement(
                                 "UPDATE zetoni SET status = 0 WHERE podaci_korisnik = ? AND status = 1")) {
