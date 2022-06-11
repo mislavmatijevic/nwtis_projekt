@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.ZetonNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovor;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.sigurnost.ServisKorisnika;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.sigurnost.ServisZetona;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisKorisnika;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisZetona;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerRequestContext;

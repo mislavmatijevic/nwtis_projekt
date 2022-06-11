@@ -1,4 +1,4 @@
-package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.sigurnost;
+package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi;
 
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.bazePodataka.KonfiguracijaBP;
 

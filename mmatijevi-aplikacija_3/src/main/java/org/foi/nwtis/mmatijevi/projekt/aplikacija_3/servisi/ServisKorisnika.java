@@ -1,4 +1,4 @@
-package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.sigurnost;
+package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

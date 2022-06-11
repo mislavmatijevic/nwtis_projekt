@@ -8,7 +8,7 @@ import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikNePostojiExc
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.KorisnikPrikaz;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovor;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovorObjekt;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.sigurnost.ServisKorisnika;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisKorisnika;
 import org.foi.nwtis.podaci.Korisnik;
 
 import jakarta.inject.Inject;

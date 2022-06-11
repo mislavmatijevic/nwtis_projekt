@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.NovaOznakaNedostupnaException;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisZetona;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

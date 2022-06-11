@@ -5,8 +5,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.sigurnost.ServisKorisnika;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.sigurnost.ServisZetona;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisKorisnika;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisZetona;
 import org.foi.nwtis.mmatijevi.projekt.ispis.Terminal;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.NeispravnaKonfiguracija;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.bazePodataka.KonfiguracijaBP;
