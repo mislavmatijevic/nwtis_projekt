@@ -32,7 +32,7 @@ public class ServisKorisnika extends KonfigurabilniServis {
 
         try (Connection veza = baza.dohvatiVezu();
                 PreparedStatement izraz = veza
-                        .prepareStatement("SELECT * FROM korisnici WHERE korisnik = ? AND lozinka = ?;")) {
+                        .prepareStatement("SELECT * FROM korisnici WHERE korisnik = ? AND lozinka = ?")) {
 
             izraz.setString(1, korime);
             izraz.setString(2, lozinka);
@@ -44,7 +44,7 @@ public class ServisKorisnika extends KonfigurabilniServis {
             }
 
         } catch (Exception ex) {
-            Logger.getLogger(ServisKorisnika.class.getName()).log(Level.SEVERE, "Neuspjelo logiranje korisnika!", ex);
+            Logger.getLogger(ServisKorisnika.class.getName()).log(Level.SEVERE, "Neuspjelo logiranje korisnika", ex);
         }
 
         return false;
@@ -54,24 +54,30 @@ public class ServisKorisnika extends KonfigurabilniServis {
      * Dohvaća sve grupe u kojima se korisnik nalazi, tj. sve korisnikove uloge.
      * @param korime
      * @return Lista naziva grupa ili 'null' ako je došlo do pogreške pri čitanju.
+     * @throws KorisnikNePostojiException
      */
-    public List<String> dohvatiGrupeKorisnika(String korime) {
+    public List<String> dohvatiGrupeKorisnika(String korime) throws KorisnikNePostojiException {
         List<String> korisnikoveGrupe = new LinkedList<>();
 
         try (Connection veza = baza.dohvatiVezu();
                 PreparedStatement izraz = veza
                         .prepareStatement("SELECT grupa FROM uloge WHERE korisnik = ?")) {
 
+            if (!provjeriPostojiLiKorisnik(korime)) {
+                throw new KorisnikNePostojiException(
+                        "Korisnik " + korime + " nije pronađen u bazi");
+            }
+
             izraz.setString(1, korime);
 
             try (ResultSet rezultat = izraz.executeQuery()) {
-                if (rezultat.next()) {
+                while (rezultat.next()) {
                     korisnikoveGrupe.add(rezultat.getString("grupa"));
                 }
             }
 
-        } catch (Exception ex) {
-            Logger.getLogger(ServisKorisnika.class.getName()).log(Level.SEVERE, "Neuspjelo logiranje korisnika!", ex);
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(ServisKorisnika.class.getName()).log(Level.SEVERE, "Neuspio dohvat grupe korisnika", ex);
             korisnikoveGrupe = null;
         }
 
