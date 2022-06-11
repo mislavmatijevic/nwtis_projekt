@@ -2,8 +2,8 @@ package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.rest;
 
 import java.net.Authenticator;
 
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.NeovlasteniKorisnik;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.NepostojeciZetonException;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikNeovlastenException;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.ZetonNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.NovaOznakaNedostupnaException;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovor;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.Zeton;
@@ -81,7 +81,7 @@ public class RestProvjere extends Authenticator {
             odgovor = Response.status(Status.BAD_REQUEST)
                     .entity(new RestOdgovor(false, "Žeton nije valjan"))
                     .build();
-        } catch (NepostojeciZetonException ex) {
+        } catch (ZetonNePostojiException ex) {
             odgovor = Response.status(Status.UNAUTHORIZED)
                     .entity(new RestOdgovor(false, ex.getLocalizedMessage()))
                     .build();
@@ -116,7 +116,7 @@ public class RestProvjere extends Authenticator {
             odgovor = Response.status(Status.BAD_REQUEST)
                     .entity(new RestOdgovor(false, "Žeton nije valjan"))
                     .build();
-        } catch (NepostojeciZetonException ex) {
+        } catch (ZetonNePostojiException ex) {
             odgovor = Response.status(Status.NOT_FOUND)
                     .entity(new RestOdgovor(false, ex.getLocalizedMessage()))
                     .build();
@@ -148,11 +148,11 @@ public class RestProvjere extends Authenticator {
             odgovor = Response.status(Status.BAD_REQUEST)
                     .entity(new RestOdgovor(false, "Žeton nije valjan"))
                     .build();
-        } catch (NeovlasteniKorisnik ex) {
+        } catch (KorisnikNeovlastenException ex) {
             odgovor = Response.status(Status.UNAUTHORIZED)
                     .entity(new RestOdgovor(false, ex.getLocalizedMessage()))
                     .build();
-        } catch (NepostojeciZetonException ex) {
+        } catch (ZetonNePostojiException ex) {
             odgovor = Response.status(Status.NOT_FOUND)
                     .entity(new RestOdgovor(false, ex.getLocalizedMessage()))
                     .build();

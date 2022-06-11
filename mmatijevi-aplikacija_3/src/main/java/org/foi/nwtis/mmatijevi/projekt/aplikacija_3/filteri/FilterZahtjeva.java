@@ -2,7 +2,7 @@ package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.filteri;
 
 import java.io.IOException;
 
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.NepostojeciZetonException;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.ZetonNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovor;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.sigurnost.ServisKorisnika;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.sigurnost.ServisZetona;
@@ -68,7 +68,7 @@ public class FilterZahtjeva implements ContainerRequestFilter {
                     odgovorNeuspjeh = Response.status(Status.BAD_REQUEST)
                             .entity(new RestOdgovor(false, "Žeton nije valjan"))
                             .build();
-                } catch (NepostojeciZetonException ex) {
+                } catch (ZetonNePostojiException ex) {
                     odgovorNeuspjeh = Response.status(Status.UNAUTHORIZED)
                             .entity(new RestOdgovor(false, ex.getLocalizedMessage()))
                             .build();

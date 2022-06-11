@@ -10,8 +10,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.NeovlasteniKorisnik;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.NepostojeciZetonException;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikNePostojiException;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikNeovlastenException;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.ZetonNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.NovaOznakaNedostupnaException;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.Zeton;
 
@@ -154,18 +155,18 @@ public class ServisZetona extends KonfigurabilniServis {
      * Može biti u ulozi iz grupe definirane postavkom "sustav.administratori".
      * @param korime Korisnik kojemu će se svi žetoni deaktivirati.
      * @return Broj deaktiviranih žetona.
-     * @throws NeovlasteniKorisnik Aktivator nema ovlasti za brisanje svih žetona odabranog korisnika.
-     * @throws NepostojeciZetonException Neki se žeton nije mogao obrisati.
+     * @throws KorisnikNeovlastenException Aktivator nema ovlasti za brisanje svih žetona odabranog korisnika.
+     * @throws ZetonNePostojiException Neki se žeton nije mogao obrisati.
      */
     public int deaktivirajSveZetone(String aktivator, String korime)
-            throws NeovlasteniKorisnik, NepostojeciZetonException {
+            throws KorisnikNeovlastenException, ZetonNePostojiException {
         int brojObrisanihZetona = 0;
 
         if (!aktivator.equals(korime)) {
             String grupaAdministratora = this.konfig.dajPostavku("sustav.administratori");
             List<String> grupeKorisnika = servisKorisnika.dohvatiGrupeKorisnika(aktivator);
             if (!grupeKorisnika.contains(grupaAdministratora)) {
-                throw new NeovlasteniKorisnik("Korisnik " + aktivator
+                throw new KorisnikNeovlastenException("Korisnik " + aktivator
                         + " nije u ulozi administratora sustava te kao takav ne može brisati sve žetone korisnika "
                         + korime + "!");
             }
