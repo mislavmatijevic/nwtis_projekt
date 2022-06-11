@@ -53,7 +53,7 @@ public class FilterZahtjeva implements ContainerRequestFilter {
             Response odgovorNeuspjeh = null;
 
             String korime = requestContext.getHeaderString("korisnik");
-            String token = requestContext.getHeaderString("token");
+            String token = requestContext.getHeaderString("zeton");
 
             if (korime != null && !korime.isBlank() && token != null && !token.isBlank()) {
                 try {
@@ -73,6 +73,11 @@ public class FilterZahtjeva implements ContainerRequestFilter {
                             .entity(new RestOdgovor(false, ex.getLocalizedMessage()))
                             .build();
                 }
+            } else {
+                odgovorNeuspjeh = Response.status(Status.BAD_REQUEST)
+                        .entity(new RestOdgovor(false,
+                                "U zaglavlju zahtjeva nisu ispravno postavljeni atributi 'korisnik' i 'zeton'!"))
+                        .build();
             }
 
             if (odgovorNeuspjeh != null) {
