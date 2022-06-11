@@ -120,21 +120,27 @@ public class ServisZetona extends KonfigurabilniServis {
     public void deaktivirajZeton(int zeton) throws NepostojeciZetonException {
         try (Connection veza = baza.stvoriVezu();
                 PreparedStatement izrazDohvataBaremJednog = veza
-                        .prepareStatement("SELECT * FROM nwtis_bp_1.zetoni WHERE oznaka_zeton = ?")) {
+                        .prepareStatement("SELECT status FROM nwtis_bp_1.zetoni WHERE oznaka_zeton = ?")) {
 
             izrazDohvataBaremJednog.setInt(1, zeton);
 
+            boolean zetonJeAktivan = false;
+
             try (ResultSet rs = izrazDohvataBaremJednog.executeQuery()) {
-                if (rs.next() == false) {
+                if (rs.next()) {
+                    zetonJeAktivan = rs.getBoolean("status");
+                } else {
                     throw new NepostojeciZetonException("Žeton " + zeton + " nije bio izdan");
                 }
             }
 
-            try (PreparedStatement izrazPromijeneStatusa = veza
-                    .prepareStatement(
-                            "UPDATE nwtis_bp_1.zetoni SET status = 0 WHERE oznaka_zeton = ?")) {
-                izrazPromijeneStatusa.setInt(1, zeton);
-                izrazPromijeneStatusa.executeUpdate();
+            if (zetonJeAktivan) {
+                try (PreparedStatement izrazPromijeneStatusa = veza
+                        .prepareStatement(
+                                "UPDATE nwtis_bp_1.zetoni SET status = 0 WHERE oznaka_zeton = ?")) {
+                    izrazPromijeneStatusa.setInt(1, zeton);
+                    izrazPromijeneStatusa.executeUpdate();
+                }
             }
 
         } catch (ClassNotFoundException | SQLException ex) {
