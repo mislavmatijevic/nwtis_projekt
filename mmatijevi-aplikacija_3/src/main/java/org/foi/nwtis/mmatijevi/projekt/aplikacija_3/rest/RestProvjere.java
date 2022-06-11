@@ -22,6 +22,7 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 @Path("provjere")
+@Produces(MediaType.APPLICATION_JSON)
 public class RestProvjere extends Authenticator {
 
     @Inject
@@ -31,7 +32,6 @@ public class RestProvjere extends Authenticator {
     ServisZetona servisZetona;
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Response autenticiraj(
             @HeaderParam("korisnik") String korime) {
 
@@ -58,7 +58,6 @@ public class RestProvjere extends Authenticator {
 
     @GET
     @Path("{token}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response provjeriToken(@PathParam("token") String token,
             @HeaderParam("korisnik") String korime) {
 
@@ -93,7 +92,6 @@ public class RestProvjere extends Authenticator {
 
     @DELETE
     @Path("{token}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response deaktivirajToken(@PathParam("token") String token,
             @HeaderParam("korisnik") String korime) {
 
@@ -129,7 +127,6 @@ public class RestProvjere extends Authenticator {
 
     @DELETE
     @Path("korisnik/{korisnik}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response deaktivirajSveTokene(@PathParam("korisnik") String korime,
             @HeaderParam("korisnik") String aktivator) {
 
