@@ -1,7 +1,6 @@
-package org.foi.nwtis.mmatijevi.projekt.aplikacija_2.podaci;
+package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,51 +11,35 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.foi.nwtis.mmatijevi.projekt.konfiguracije.bazePodataka.KonfiguracijaBP;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.AerodromVecPracenException;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.InformacijeLeta;
 import org.foi.nwtis.podaci.Aerodrom;
 import org.foi.nwtis.podaci.Airport;
 import org.foi.nwtis.rest.podaci.AvionLeti;
 import org.foi.nwtis.rest.podaci.Lokacija;
 
-import jakarta.inject.Singleton;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
-/**
- * Klasa koja se brine pohranom podataka o aerodromima u bazu.
- */
-@Singleton
-public class BazaAerodromi {
+@ApplicationScoped
+public class ServisAerodroma {
 
-    public KonfiguracijaBP konfig = null;
-    private Connection veza = null;
-
-    /** 
-     * Po konfiguracijskoj datoteci stvara vezu na bazu.
-     * @return Ostvarena ili već postojeća (nezatvorena) veza na bazu.
-     * @throws ClassNotFoundException
-     * @throws SQLException
-     */
-    public Connection dajVezu() throws ClassNotFoundException, SQLException {
-        if (this.veza == null || this.veza.isClosed()) {
-            Class.forName(konfig.getDriverDatabase(konfig.getServerDatabase()));
-            this.veza = DriverManager.getConnection(
-                    konfig.getServerDatabase() + konfig.getUserDatabase(),
-                    konfig.getUserUsername(), konfig.getUserPassword());
-        }
-        return this.veza;
-    }
+    @Inject
+    Baza baza;
 
     /** 
      * Dohvaća sve aerodrome.
-     * @param konfig Konfiguracijska datoteka baze.
      * @return List<Aerodrom> Svi aerodromi.
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public List<Aerodrom> dohvatiAerodrome(Connection veza)
+    public List<Aerodrom> dohvatiAerodrome()
             throws ClassNotFoundException, SQLException {
         List<Aerodrom> aerodromi = new ArrayList<Aerodrom>();
 
-        try (Statement izrazSvi = veza.createStatement();
+        try (Connection veza = baza.dohvatiVezu();
+                Statement izrazSvi = veza.createStatement();
                 ResultSet rsSvi = izrazSvi.executeQuery("SELECT * FROM airports")) {
             while (rsSvi.next()) {
                 Airport airport = stvoriAirportObjekt(rsSvi);
@@ -69,49 +52,34 @@ public class BazaAerodromi {
 
     /** 
      * Dohvaća samo jedan aerodrom po icao oznaci.
-     * @param konfig Konfiguracijska datoteka baze.
      * @param icao
      * @return Aerodrom
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public Aerodrom dohvatiAerodrom(Connection veza, String icao)
+    public Aerodrom dohvatiAerodrom(String icao)
             throws ClassNotFoundException, SQLException {
         Aerodrom aerodrom = null;
 
-        try (PreparedStatement izraz = veza.prepareStatement("SELECT * FROM airports WHERE ident = ?")) {
-            izraz.setString(1, icao);
-
-            try (ResultSet rezultat = izraz.executeQuery()) {
-                if (rezultat.next()) {
-                    Airport airport = stvoriAirportObjekt(rezultat);
-                    aerodrom = mapirajAirportZaAerodrom(airport);
-                }
-            }
-
+        try (Connection veza = baza.dohvatiVezu()) {
+            aerodrom = dohvatiAerodromNaPostojecojVezi(icao, veza);
         }
 
         return aerodrom;
     }
 
     /** 
-     * @param konfig Konfiguracijska datoteka baze.
+     * Vraća sve praćene aerodrome.
      * @return List<Aerodrom>
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public List<Aerodrom> dohvatiPraceneAerodrome(Connection veza)
+    public List<Aerodrom> dohvatiPraceneAerodrome()
             throws ClassNotFoundException, SQLException {
         List<Aerodrom> aerodromi = new ArrayList<Aerodrom>();
 
-        try (Statement izrazPraceni = veza.createStatement();
-                ResultSet rsPraceni = izrazPraceni.executeQuery(
-                        "SELECT svi.*, praceni.ident FROM airports as svi, " +
-                                "AERODROMI_PRACENI as praceni WHERE praceni.ident = svi.ident")) {
-            while (rsPraceni.next()) {
-                Airport airport = stvoriAirportObjekt(rsPraceni);
-                aerodromi.add(mapirajAirportZaAerodrom(airport));
-            }
+        try (Connection veza = baza.dohvatiVezu()) {
+            aerodromi = dohvatiPraceneAerodromeNaPostojecojVezi(veza);
         }
 
         return aerodromi;
@@ -125,24 +93,24 @@ public class BazaAerodromi {
         <li>AERODROMI_DOLASCI</li>
      * </ul>
      * <p>Metoda u tu odabranu tablicu unosi sve podatke, a atribut 'stored' generira se iz trenutnog vremena.
-     * @param konfig Konfiguracijska datoteka baze.
      * @param polazak
      * @param tablicaUnos
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public void unesiPodatkeAerodroma(Connection veza, AvionLeti polazak, VrstaTablice tablicaUnos)
+    public void unesiPodatkeAerodroma(AvionLeti polazak, VrstaTablice tablicaUnos)
             throws ClassNotFoundException, SQLException {
 
         String nazivTablice = tablicaUnos.name();
 
-        try (PreparedStatement izraz = veza.prepareStatement(
-                "INSERT INTO " + nazivTablice + " (icao24, firstSeen, estDepartureAirport, lastSeen, " +
-                        "estArrivalAirport, callsign, estDepartureAirportHorizDistance, " +
-                        "estDepartureAirportVertDistance, estArrivalAirportHorizDistance, " +
-                        "estArrivalAirportVertDistance, departureAirportCandidatesCount, " +
-                        "arrivalAirportCandidatesCount, `stored`) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");) {
+        try (Connection veza = baza.dohvatiVezu();
+                PreparedStatement izraz = veza.prepareStatement(
+                        "INSERT INTO " + nazivTablice + " (icao24, firstSeen, estDepartureAirport, lastSeen, " +
+                                "estArrivalAirport, callsign, estDepartureAirportHorizDistance, " +
+                                "estDepartureAirportVertDistance, estArrivalAirportHorizDistance, " +
+                                "estArrivalAirportVertDistance, departureAirportCandidatesCount, " +
+                                "arrivalAirportCandidatesCount, `stored`) " +
+                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");) {
 
             izraz.setString(1, polazak.getIcao24());
             izraz.setInt(2, polazak.getFirstSeen());
@@ -163,20 +131,20 @@ public class BazaAerodromi {
 
     /** 
      * Unosi aerodrom po ICAO oznaci u bazu kao aerodrom za praćenje.
-     * @param konfig Konfiguracijska datoteka baze.
      * @param aerodrom Aerodrom kojemu je dovoljno da je unesen samo 'icao'.
      * @return Ako ICAO oznaka ne pripada niti jednome aerodromu u bazi, vraća se <pre>false</pre>
      */
-    public boolean unesiAerodromZaPratiti(Connection veza, String icao)
+    public boolean unesiAerodromZaPratiti(String icao)
             throws ClassNotFoundException, SQLException, AerodromVecPracenException {
-        try (PreparedStatement izrazUnosPraceni = veza.prepareStatement(
-                "INSERT INTO AERODROMI_PRACENI (ident, `stored`) VALUES (?, ?)");) {
+        try (Connection veza = baza.dohvatiVezu();
+                PreparedStatement izrazUnosPraceni = veza.prepareStatement(
+                        "INSERT INTO AERODROMI_PRACENI (ident, `stored`) VALUES (?, ?)");) {
 
-            if (dohvatiAerodrom(veza, icao) == null) {
+            if (dohvatiAerodromNaPostojecojVezi(icao, veza) == null) {
                 return false;
             }
 
-            List<Aerodrom> vecPraceniAerodromi = dohvatiPraceneAerodrome(veza);
+            List<Aerodrom> vecPraceniAerodromi = dohvatiPraceneAerodromeNaPostojecojVezi(veza);
             for (Aerodrom aerodrom : vecPraceniAerodromi) {
                 if (aerodrom.getIcao().equals(icao)) {
                     throw new AerodromVecPracenException(
@@ -194,22 +162,27 @@ public class BazaAerodromi {
 
     /** 
      * Dohvaća polaska <strong>ILI</strong> odlaske jednog aerodroma.
-     * @param konfig Konfiguracijska datoteka baze.
      * @param icao ICAO oznaka aerodroma.
      * @param datum Datum za koji treba dohvatiti podatke.
+     * @param datumOd Prvi relevantni datum.
+     * @param datumDo Zadnji relevantni datum.
      * @param nazivTablice Odabir tablice polazaka/dolazaka.
      * @return Aerodrom Objekt aerodroma.
      * @throws ClassNotFoundException
      * @throws SQLException
      */
     public List<InformacijeLeta> dohvatiPraceneLetoveZaAerodrom(
-            Connection veza, String icao, Date datum, VrstaTablice nazivTablice)
+            String icao, Date datumOd, Date datumDo, VrstaTablice nazivTablice)
             throws ClassNotFoundException, SQLException {
 
         List<InformacijeLeta> aktivnostiLetova = new ArrayList<InformacijeLeta>();
 
-        long datumPocetniUNIX = datum.getTime() / 1000;
-        long datumZavrsniUNIX = datumPocetniUNIX + (60 * 60 * 24);
+        long datumPocetniUNIX = datumOd.getTime() / 1000;
+        long datumZavrsniUNIX = datumDo.getTime() / 1000;
+
+        if (datumPocetniUNIX == datumZavrsniUNIX) {
+            datumZavrsniUNIX = datumPocetniUNIX + (60 * 60 * 24);
+        }
 
         String stupac = nazivTablice == VrstaTablice.AERODROMI_DOLASCI
                 ? "estArrivalAirport"
@@ -219,9 +192,10 @@ public class BazaAerodromi {
                 ? "lastSeen > ? AND lastSeen < ?"
                 : "firstSeen > ? AND firstSeen < ?";
 
-        try (PreparedStatement izrazUnosPraceni = veza.prepareStatement(
-                "SELECT * FROM " + nazivTablice.name() + " WHERE "
-                        + stupac + " = ? AND " + kriterij);) {
+        try (Connection veza = baza.dohvatiVezu();
+                PreparedStatement izrazUnosPraceni = veza.prepareStatement(
+                        "SELECT * FROM " + nazivTablice.name() + " WHERE "
+                                + stupac + " = ? AND " + kriterij);) {
 
             izrazUnosPraceni.setString(1, icao);
             izrazUnosPraceni.setInt(2, (int) (datumPocetniUNIX));
@@ -244,83 +218,55 @@ public class BazaAerodromi {
     }
 
     /** 
-     * Unosi objekt problema u bazu. Atribut <pre>stored</pre> nije nužan,
-     * već se ta inforamcija o vremenu unosa automatski unosi.
-     * @param konfig Konfiguracijska datoteka baze.
-     * @param problemDTO Objekt s podacima za unos.
+     * Privatna metoda koja se bavi dohvaćanjem samo jednog aerodroma po icao oznaci.
+     * Smisao ove metode u kontekstu javne metode za dohvat aerodroma jest što ova koristi već postojeću vezu.
+     * @param icao
+     * @return Aerodrom
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public void unesiProblem(Connection veza, ProblemDTO problemDTO)
+    private Aerodrom dohvatiAerodromNaPostojecojVezi(String icao, Connection postojecaVeza)
             throws ClassNotFoundException, SQLException {
-        try (PreparedStatement izrazProblem = veza.prepareStatement(
-                "INSERT INTO AERODROMI_PROBLEMI (ident, description, `stored`) VALUES (?, ?, ?)")) {
-            izrazProblem.setString(1, problemDTO.getIdent());
-            izrazProblem.setString(2, problemDTO.getDescription());
-            izrazProblem.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
-            izrazProblem.execute();
-        }
-    }
+        Aerodrom aerodrom = null;
 
-    /** 
-     * Vraća sve probleme zapisane u bazi.
-     * @param konfig Konfiguracijska datoteka baze.
-     * @throws ClassNotFoundException
-     * @throws SQLException
-     */
-    public List<ProblemDTO> dohvatiProbleme(Connection veza) throws ClassNotFoundException, SQLException {
-        List<ProblemDTO> problemi = new ArrayList<ProblemDTO>();
-
-        try (Statement izrazSvi = veza.createStatement();
-                ResultSet rsSvi = izrazSvi.executeQuery("SELECT * FROM AERODROMI_PROBLEMI")) {
-            while (rsSvi.next()) {
-                ProblemDTO problem = stvoriProblemObjekt(rsSvi);
-                problemi.add(problem);
-            }
-        }
-
-        return problemi;
-    }
-
-    /** 
-     * Vraća sve probleme iz baze za određeni aerodrom.
-     * @param konfig Konfiguracijska datoteka baze.
-     * @param icao ICAO oznaka aerodroma za koji se dohvaćaju problemi.
-     * @throws ClassNotFoundException
-     * @throws SQLException
-     */
-    public List<ProblemDTO> dohvatiProblemeZaAerodrom(Connection veza, String icao)
-            throws ClassNotFoundException, SQLException {
-        List<ProblemDTO> problemi = new ArrayList<ProblemDTO>();
-
-        try (PreparedStatement izraz = veza.prepareStatement("SELECT * FROM AERODROMI_PROBLEMI WHERE ident = ?");) {
-
+        try (PreparedStatement izraz = postojecaVeza.prepareStatement("SELECT * FROM airports WHERE ident = ?")) {
             izraz.setString(1, icao);
 
-            try (ResultSet rsSvi = izraz.executeQuery()) {
-                while (rsSvi.next()) {
-                    ProblemDTO problem = stvoriProblemObjekt(rsSvi);
-                    problemi.add(problem);
+            try (ResultSet rezultat = izraz.executeQuery()) {
+                if (rezultat.next()) {
+                    Airport airport = stvoriAirportObjekt(rezultat);
+                    aerodrom = mapirajAirportZaAerodrom(airport);
                 }
             }
+
         }
 
-        return problemi;
+        return aerodrom;
     }
 
     /** 
-     * Briše probleme za točno određeni aerodrom.
-     * @param konfig Konfiguracijska datoteka baze.
-     * @param icao ICAO oznaka aerodroma za koji obrisati podatke.
-     * @return Uspjeh naredbe.
+     * Privatna metoda koja se bavi dohvaćanjem svih aerodroma.
+     * Smisao ove metode u kontekstu javne metode za dohvat svih aerodroma jest što ova koristi već postojeću vezu.
+     * @param icao
+     * @return Aerodrom
+     * @throws ClassNotFoundException
+     * @throws SQLException
      */
-    public void izbrisiProblemeZaAerodrom(Connection veza, String icao)
+    private List<Aerodrom> dohvatiPraceneAerodromeNaPostojecojVezi(Connection postojecaVeza)
             throws ClassNotFoundException, SQLException {
-        try (PreparedStatement izrazUnosPraceni = veza.prepareStatement(
-                "DELETE FROM AERODROMI_PROBLEMI WHERE ident = ?")) {
-            izrazUnosPraceni.setString(1, icao);
-            izrazUnosPraceni.execute();
+        List<Aerodrom> aerodromi = new ArrayList<Aerodrom>();
+
+        try (Statement izrazPraceni = postojecaVeza.createStatement();
+                ResultSet rsPraceni = izrazPraceni.executeQuery(
+                        "SELECT svi.*, praceni.ident FROM airports as svi, " +
+                                "AERODROMI_PRACENI as praceni WHERE praceni.ident = svi.ident")) {
+            while (rsPraceni.next()) {
+                Airport airport = stvoriAirportObjekt(rsPraceni);
+                aerodromi.add(mapirajAirportZaAerodrom(airport));
+            }
         }
+
+        return aerodromi;
     }
 
     /** 
@@ -350,14 +296,6 @@ public class BazaAerodromi {
                 rs.getString("elevation_ft"), rs.getString("continent"), rs.getString("iso_country"),
                 rs.getString("iso_region"), rs.getString("municipality"), rs.getString("gps_code"),
                 rs.getString("iata_code"), rs.getString("local_code"), rs.getString("coordinates"));
-    }
-
-    private static ProblemDTO stvoriProblemObjekt(ResultSet rs) throws SQLException {
-        ProblemDTO problem = new ProblemDTO();
-        problem.setIdent(rs.getString("ident"));
-        problem.setDescription(rs.getString("description"));
-        problem.setStored(rs.getTimestamp("stored").getTime());
-        return problem;
     }
 
     /**

@@ -5,17 +5,17 @@ import java.util.Date;
 /**
  * Ova klasa sadržava informacije o letu.
  */
-public class InformacijeOLetu {
+public class InformacijeLeta {
     private String icaoPolazak;
     private String icaoDolazak;
     private Date pocetakLeta;
     private Date krajLeta;
     private String callsign;
 
-    public InformacijeOLetu() {
+    public InformacijeLeta() {
     }
 
-    public InformacijeOLetu(String icaoPolazak, String icaoDolazak, Date pocetakLeta, Date krajLeta, String callsign) {
+    public InformacijeLeta(String icaoPolazak, String icaoDolazak, Date pocetakLeta, Date krajLeta, String callsign) {
         this.icaoPolazak = icaoPolazak;
         this.icaoDolazak = icaoDolazak;
         this.pocetakLeta = pocetakLeta;
