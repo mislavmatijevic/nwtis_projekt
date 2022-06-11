@@ -1,7 +1,7 @@
 {
     "a": "localhost",
     "p": 8000,
-    "zeton.trajanje": 30,
+    "zeton.trajanje": 60,
     "sustav.administratori": "NWTiS Admin",
     "jdbc.derby": "org.apache.derby.jdbc.ClientDriver",
     "jdbc.hsqldb.hsql": "org.hsqldb.jdbcDriver",
