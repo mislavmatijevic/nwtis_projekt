@@ -69,9 +69,9 @@ public class ServisZetona extends KonfigurabilniServis {
      * @param zeton Broj žetona.
      * @param korime Korisnik kojemu je žeton izdan.
      * @return true - valjan, false - nije valjan/istekao
-     * @throws NepostojeciZetonException Ističe da žeton nije izdan korisniku (ili ne postoji uopće).
+     * @throws ZetonNePostojiException Ističe da žeton nije izdan korisniku (ili ne postoji uopće).
      */
-    public boolean provjeriZeton(int zeton, String korime) throws NepostojeciZetonException {
+    public boolean provjeriZeton(int zeton, String korime) throws ZetonNePostojiException {
 
         boolean zetonJeValjan = false;
 
@@ -98,7 +98,7 @@ public class ServisZetona extends KonfigurabilniServis {
                         }
                     }
                 } else {
-                    throw new NepostojeciZetonException(
+                    throw new ZetonNePostojiException(
                             "Žeton nije generiran za korisnika " + korime);
                 }
             }
@@ -115,9 +115,9 @@ public class ServisZetona extends KonfigurabilniServis {
     /**
      * Označava u bazi da je žeton deaktiviran
      * @param zeton Oznaka žetona koji treba deaktivirati.
-     * @throws NepostojeciZetonException U slučaju da žeton ne postoji u bazi.
+     * @throws ZetonNePostojiException U slučaju da žeton ne postoji u bazi.
      */
-    public void deaktivirajZeton(int zeton) throws NepostojeciZetonException {
+    public void deaktivirajZeton(int zeton) throws ZetonNePostojiException {
         try (Connection veza = baza.dohvatiVezu();
                 PreparedStatement izrazDohvataBaremJednog = veza
                         .prepareStatement("SELECT status FROM nwtis_bp_1.zetoni WHERE oznaka_zeton = ?")) {
@@ -130,7 +130,7 @@ public class ServisZetona extends KonfigurabilniServis {
                 if (rs.next()) {
                     zetonJeAktivan = rs.getBoolean("status");
                 } else {
-                    throw new NepostojeciZetonException("Žeton " + zeton + " nije bio izdan");
+                    throw new ZetonNePostojiException("Žeton " + zeton + " nije bio izdan");
                 }
             }
 
