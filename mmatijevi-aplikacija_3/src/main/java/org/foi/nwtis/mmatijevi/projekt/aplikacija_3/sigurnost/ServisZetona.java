@@ -78,19 +78,24 @@ public class ServisZetona extends KonfigurabilniServis {
         try (Connection veza = baza.stvoriVezu();
                 PreparedStatement izraz = veza
                         .prepareStatement(
-                                "SELECT rok_trajanja FROM zetoni WHERE oznaka_zeton = ? AND podaci_korisnik = ?")) {
+                                "SELECT rok_trajanja, status FROM zetoni WHERE oznaka_zeton = ? AND podaci_korisnik = ?")) {
 
             izraz.setInt(1, zeton);
             izraz.setString(2, korime);
 
             try (ResultSet rezultat = izraz.executeQuery()) {
                 if (rezultat.next()) {
-                    int rokTrajanja = rezultat.getInt("rok_trajanja");
-                    int trenutnoVrijeme = (int) (new Date().getTime() / 1000);
-                    if (trenutnoVrijeme < rokTrajanja) {
-                        zetonJeValjan = true;
-                    } else {
-                        deaktivirajZeton(zeton);
+
+                    boolean status = rezultat.getBoolean("status");
+
+                    if (status) {
+                        int rokTrajanja = rezultat.getInt("rok_trajanja");
+                        int trenutnoVrijeme = (int) (new Date().getTime() / 1000);
+                        if (trenutnoVrijeme < rokTrajanja) {
+                            zetonJeValjan = true;
+                        } else {
+                            deaktivirajZeton(zeton);
+                        }
                     }
                 } else {
                     throw new NepostojeciZetonException(
