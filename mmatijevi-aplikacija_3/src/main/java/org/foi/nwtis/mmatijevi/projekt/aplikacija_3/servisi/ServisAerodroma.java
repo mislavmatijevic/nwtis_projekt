@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.AerodromVecPracenException;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.AerodromiSviPrikaz;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.InformacijeLeta;
 import org.foi.nwtis.podaci.Aerodrom;
 import org.foi.nwtis.podaci.Airport;
@@ -28,26 +29,68 @@ public class ServisAerodroma {
     @Inject
     Baza baza;
 
-    /** 
-     * Dohvaća sve aerodrome.
-     * @return List<Aerodrom> Svi aerodromi.
+    private final int podatakaPoStranici = 50;
+
+    /**
+     * 
+     * Dohvaća sve aerodrome u posebnom formatu koji daje podatke o straničenju.
+     * @param trenutnaStranica Trenutna stranica, 1-(broj stranica).
+     * @return Objekt koji sadržava razne informacije i listu aerodroma ILI 'null' ako je došlo do pogreške.
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public List<Aerodrom> dohvatiAerodrome()
+    public AerodromiSviPrikaz dohvatiAerodrome(int trenutnaStranica)
             throws ClassNotFoundException, SQLException {
-        List<Aerodrom> aerodromi = new ArrayList<Aerodrom>();
+        AerodromiSviPrikaz objektOdgovora = null;
 
         try (Connection veza = baza.dohvatiVezu();
-                Statement izrazSvi = veza.createStatement();
-                ResultSet rsSvi = izrazSvi.executeQuery("SELECT * FROM airports")) {
-            while (rsSvi.next()) {
-                Airport airport = stvoriAirportObjekt(rsSvi);
-                aerodromi.add(mapirajAirportZaAerodrom(airport));
+                PreparedStatement izrazKolicina = veza
+                        .prepareStatement("SELECT COUNT(*) as ukupno_aerodroma FROM airports");
+                ResultSet rsKolicina = izrazKolicina.executeQuery();) {
+
+            int ukupnoStranica;
+            int offsetParametar;
+
+            if (rsKolicina.next()) {
+                int ukupnoAerodroma = rsKolicina.getInt("ukupno_aerodroma");
+                ukupnoStranica = (int) ((double) ukupnoAerodroma / (double) podatakaPoStranici + 0.5);
+
+                if (trenutnaStranica > ukupnoStranica) {
+                    trenutnaStranica = ukupnoStranica;
+                } else if (trenutnaStranica <= 0) {
+                    trenutnaStranica = 1;
+                }
+
+                offsetParametar = trenutnaStranica * podatakaPoStranici - podatakaPoStranici;
+
+                try (PreparedStatement izrazSvi = veza.prepareStatement(
+                        "SELECT ident, type, name, elevation_ft, continent, iso_country, iso_region, " +
+                                "municipality, gps_code, iata_code, local_code, coordinates FROM airports " +
+                                "LIMIT ?, ?")) {
+
+                    izrazSvi.setInt(1, offsetParametar);
+                    izrazSvi.setInt(2, podatakaPoStranici);
+
+                    ResultSet rsSvi = izrazSvi.executeQuery();
+
+                    List<Aerodrom> aerodromi = new ArrayList<Aerodrom>();
+                    while (rsSvi.next()) {
+                        Airport airport = stvoriAirportObjekt(rsSvi);
+                        aerodromi.add(mapirajAirportZaAerodrom(airport));
+                    }
+
+                    objektOdgovora = new AerodromiSviPrikaz(
+                            trenutnaStranica,
+                            ukupnoStranica,
+                            ukupnoAerodroma,
+                            aerodromi.size(),
+                            aerodromi);
+                }
             }
+
         }
 
-        return aerodromi;
+        return objektOdgovora;
     }
 
     /** 
@@ -70,7 +113,7 @@ public class ServisAerodroma {
 
     /** 
      * Vraća sve praćene aerodrome.
-     * @return List<Aerodrom>
+     * @return List<Aerodrom> ILI 'null' ako praćeni aerodromi nisu pronađeni.
      * @throws ClassNotFoundException
      * @throws SQLException
      */
@@ -80,6 +123,10 @@ public class ServisAerodroma {
 
         try (Connection veza = baza.dohvatiVezu()) {
             aerodromi = dohvatiPraceneAerodromeNaPostojecojVezi(veza);
+        }
+
+        if (aerodromi.size() == 0) {
+            aerodromi = null;
         }
 
         return aerodromi;
@@ -229,7 +276,9 @@ public class ServisAerodroma {
             throws ClassNotFoundException, SQLException {
         Aerodrom aerodrom = null;
 
-        try (PreparedStatement izraz = postojecaVeza.prepareStatement("SELECT * FROM airports WHERE ident = ?")) {
+        try (PreparedStatement izraz = postojecaVeza.prepareStatement(
+                "SELECT ident, type, name, elevation_ft, continent, iso_country, iso_region, " +
+                        "municipality, gps_code, iata_code, local_code, coordinates FROM airports WHERE ident = ?")) {
             izraz.setString(1, icao);
 
             try (ResultSet rezultat = izraz.executeQuery()) {
@@ -242,6 +291,7 @@ public class ServisAerodroma {
         }
 
         return aerodrom;
+
     }
 
     /** 

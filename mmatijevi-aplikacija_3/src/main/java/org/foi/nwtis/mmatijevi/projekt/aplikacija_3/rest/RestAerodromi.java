@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.AerodromVecPracenException;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.InformacijeLeta;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovor;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma.VrstaTablice;
 import org.foi.nwtis.podaci.Aerodrom;
@@ -39,21 +40,35 @@ public class RestAerodromi {
      */
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public Response dajSveAerodrome(@QueryParam("preuzimanje") String preuzimanje) {
+    public Response dajSveAerodrome(
+            @QueryParam("preuzimanje") String preuzimanje,
+            @QueryParam("stranica") String stranica) {
         Response odgovor;
 
+        int stranicaBrojcana;
+
         try {
-            List<Aerodrom> aerodromi;
+            Object aerodromi;
             if (preuzimanje == null) {
-                aerodromi = servisAerodroma.dohvatiAerodrome();
+
+                try {
+                    stranicaBrojcana = Integer.parseInt(stranica);
+                } catch (Exception e) {
+                    stranicaBrojcana = 1;
+                }
+                aerodromi = servisAerodroma.dohvatiAerodrome(stranicaBrojcana);
+
             } else {
                 aerodromi = servisAerodroma.dohvatiPraceneAerodrome();
             }
 
-            if (aerodromi.size() > 0) {
-                odgovor = Response.status(Status.OK).entity(aerodromi).build();
+            if (aerodromi == null) {
+                odgovor = Response
+                        .serverError()
+                        .entity(new RestOdgovor(false, "Aerodromi nisu mogli biti dohvaćeni"))
+                        .build();
             } else {
-                odgovor = Response.status(Status.NOT_FOUND).entity("Nema traženih aerodroma u bazi.").build();
+                odgovor = Response.status(Status.OK).entity(aerodromi).build();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
