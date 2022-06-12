@@ -10,18 +10,15 @@ import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.AerodromVecPracenExc
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.InformacijeLeta;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma.VrstaTablice;
-import org.foi.nwtis.mmatijevi.projekt.konfiguracije.bazePodataka.KonfiguracijaBP;
 import org.foi.nwtis.podaci.Aerodrom;
 
 import jakarta.inject.Inject;
-import jakarta.servlet.ServletContext;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
@@ -42,17 +39,21 @@ public class RestAerodromi {
      */
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public Response dajSveAerodrome(@Context ServletContext context) {
+    public Response dajSveAerodrome(@QueryParam("preuzimanje") String preuzimanje) {
         Response odgovor;
 
         try {
             List<Aerodrom> aerodromi;
-            aerodromi = servisAerodroma.dohvatiAerodrome();
+            if (preuzimanje == null) {
+                aerodromi = servisAerodroma.dohvatiAerodrome();
+            } else {
+                aerodromi = servisAerodroma.dohvatiPraceneAerodrome();
+            }
 
             if (aerodromi.size() > 0) {
                 odgovor = Response.status(Status.OK).entity(aerodromi).build();
             } else {
-                odgovor = Response.status(Status.NOT_FOUND).entity("Nema aerodroma u bazi.").build();
+                odgovor = Response.status(Status.NOT_FOUND).entity("Nema traženih aerodroma u bazi.").build();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -72,7 +73,7 @@ public class RestAerodromi {
      */
     @POST
     @Produces({ MediaType.APPLICATION_JSON })
-    public Response dodajAerodromZaPratiti(@Context ServletContext context, Aerodrom aerodrom) {
+    public Response dodajAerodromZaPratiti(Aerodrom aerodrom) {
         Response odgovor = null;
 
         if (aerodrom == null || aerodrom.getIcao() == null || aerodrom.getIcao().length() != 4) {
@@ -108,7 +109,7 @@ public class RestAerodromi {
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("{icao}")
-    public Response dajAerodrom(@Context ServletContext context, @PathParam("icao") String icao) {
+    public Response dajAerodrom(@PathParam("icao") String icao) {
         Response odgovor;
 
         try {
@@ -135,8 +136,10 @@ public class RestAerodromi {
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("{icao}/polasci")
-    public Response dajPolaskeAerodoma(@Context ServletContext context,
-            @PathParam("icao") String icao, @QueryParam("vrsta") int vrsta, @QueryParam("od") String vrijemeOd,
+    public Response dajPolaskeAerodoma(
+            @PathParam("icao") String icao,
+            @QueryParam("vrsta") int vrsta,
+            @QueryParam("od") String vrijemeOd,
             @QueryParam("do") String vrijemeDo) {
         Response odgovor = null;
 
@@ -195,8 +198,8 @@ public class RestAerodromi {
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("{icao}/dolasci")
-    public Response dajDolaskeAerodoma(@Context ServletContext context,
-            @PathParam("icao") String icao, @QueryParam("vrsta") int vrsta, @QueryParam("od") String vrijemeOd,
+    public Response dajDolaskeAerodoma(@PathParam("icao") String icao, @QueryParam("vrsta") int vrsta,
+            @QueryParam("od") String vrijemeOd,
             @QueryParam("do") String vrijemeDo) {
         Response odgovor = null;
 
