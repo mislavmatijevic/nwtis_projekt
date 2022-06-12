@@ -194,8 +194,7 @@ public class ServisAerodroma {
             List<Aerodrom> vecPraceniAerodromi = dohvatiPraceneAerodromeNaPostojecojVezi(veza);
             for (Aerodrom aerodrom : vecPraceniAerodromi) {
                 if (aerodrom.getIcao().equals(icao)) {
-                    throw new AerodromVecPracenException(
-                            "Aerodrom s oznakom '" + aerodrom.getIcao() + "' već jest u listi praćenja!");
+                    throw new AerodromVecPracenException(aerodrom.getIcao());
                 }
             }
 

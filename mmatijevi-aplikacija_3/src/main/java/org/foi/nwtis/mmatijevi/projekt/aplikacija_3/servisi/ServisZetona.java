@@ -99,8 +99,7 @@ public class ServisZetona extends KonfigurabilniServis {
                         }
                     }
                 } else {
-                    throw new ZetonNePostojiException(
-                            "Žeton nije generiran za korisnika " + korime);
+                    throw new ZetonNePostojiException(korime);
                 }
             }
 
@@ -131,7 +130,7 @@ public class ServisZetona extends KonfigurabilniServis {
                 if (rs.next()) {
                     zetonJeAktivan = rs.getBoolean("status");
                 } else {
-                    throw new ZetonNePostojiException("Žeton " + zeton + " nije bio izdan");
+                    throw new ZetonNePostojiException(zeton);
                 }
             }
 

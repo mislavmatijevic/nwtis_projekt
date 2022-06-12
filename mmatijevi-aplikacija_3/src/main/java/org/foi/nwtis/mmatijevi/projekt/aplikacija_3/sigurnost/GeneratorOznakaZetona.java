@@ -44,7 +44,7 @@ public class GeneratorOznakaZetona {
         } catch (Exception ex) {
             Logger.getLogger(ServisZetona.class.getName()).log(Level.SEVERE,
                     "Neuspjelo postavljanje posljednje oznake žetona!", ex);
-            throw new NovaOznakaNedostupnaException("Neuspjelo postavljanje posljednje oznake žetona!");
+            throw new NovaOznakaNedostupnaException();
         }
     }
 }

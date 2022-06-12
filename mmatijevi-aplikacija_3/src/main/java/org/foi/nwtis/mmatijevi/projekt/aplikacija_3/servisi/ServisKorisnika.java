@@ -171,8 +171,7 @@ public class ServisKorisnika extends KonfigurabilniServis {
                                 "INSERT INTO korisnici (korisnik, ime, prezime, lozinka, email) VALUES (?, ?, ?, ?, ?)")) {
 
             if (provjeriPostojiLiKorisnik(korime)) {
-                throw new KorisnikVecPostojiException(
-                        "Već postoji korisnik s korisničkim imenom '" + korime + "'");
+                throw new KorisnikVecPostojiException(korime);
             }
 
             izrazUnos.setString(1, korime);
