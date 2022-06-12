@@ -9,12 +9,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RestOdgovor {
-    private String uspjeh;
+    private boolean uspjeh;
     private String poruka;
 
     public RestOdgovor(boolean uspjeh, String poruka) {
         super();
+        this.uspjeh = uspjeh;
         this.poruka = poruka;
-        this.uspjeh = uspjeh ? "Uspješno izvršeno" : "Operacija nije izvršena";
     }
 }
