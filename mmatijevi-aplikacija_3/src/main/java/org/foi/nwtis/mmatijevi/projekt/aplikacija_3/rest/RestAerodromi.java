@@ -9,6 +9,7 @@ import java.util.List;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.AerodromVecPracenException;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.InformacijeLeta;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovor;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovorObjekt;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma.VrstaTablice;
 import org.foi.nwtis.podaci.Aerodrom;
@@ -68,12 +69,13 @@ public class RestAerodromi {
                         .entity(new RestOdgovor(false, "Aerodromi nisu mogli biti dohvaćeni"))
                         .build();
             } else {
-                odgovor = Response.status(Status.OK).entity(aerodromi).build();
+                odgovor = Response.status(Status.OK)
+                        .entity(new RestOdgovorObjekt<>(true, "Dohvat uspješan!", aerodromi)).build();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             odgovor = Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity("Dogodio se problem: " + ex.getLocalizedMessage() + ".").build();
+                    .entity(new RestOdgovor(false, "Dogodio se problem: " + ex.getLocalizedMessage() + ".")).build();
         }
 
         return odgovor;
@@ -92,23 +94,27 @@ public class RestAerodromi {
         Response odgovor = null;
 
         if (aerodrom == null || aerodrom.getIcao() == null || aerodrom.getIcao().length() != 4) {
-            odgovor = Response.status(Status.BAD_REQUEST).entity("ICAO oznaka mora biti postavljena!").build();
+            odgovor = Response.status(Status.BAD_REQUEST)
+                    .entity(new RestOdgovor(false, "ICAO oznaka mora biti postavljena!")).build();
         } else {
             try {
                 if (servisAerodroma.unesiAerodromZaPratiti(aerodrom.getIcao())) {
                     odgovor = Response.status(Status.CREATED)
-                            .entity("Aerodrom '" + aerodrom.getIcao() + "' dodan u praćenje.").build();
+                            .entity(new RestOdgovor(true, "Aerodrom '" + aerodrom.getIcao() + "' dodan u praćenje."))
+                            .build();
                 } else {
                     odgovor = Response.status(Status.NOT_FOUND)
-                            .entity("Aerodrom '" + aerodrom.getIcao() + "' nije pronađen.").build();
+                            .entity(new RestOdgovor(false, "Aerodrom '" + aerodrom.getIcao() + "' nije pronađen."))
+                            .build();
                 }
             } catch (AerodromVecPracenException ex) {
                 odgovor = Response.status(Status.FORBIDDEN)
-                        .entity(ex.getLocalizedMessage()).build();
+                        .entity(new RestOdgovor(false, ex.getLocalizedMessage())).build();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 odgovor = Response.status(Status.INTERNAL_SERVER_ERROR)
-                        .entity("Dogodio se problem: " + ex.getLocalizedMessage() + ".").build();
+                        .entity(new RestOdgovor(false, "Dogodio se problem: " + ex.getLocalizedMessage() + "."))
+                        .build();
             }
         }
 
@@ -130,14 +136,16 @@ public class RestAerodromi {
         try {
             Aerodrom aerodrom = servisAerodroma.dohvatiAerodrom(icao);
             if (aerodrom != null) {
-                odgovor = Response.status(Status.OK).entity(aerodrom).build();
+                odgovor = Response.status(Status.OK)
+                        .entity(new RestOdgovorObjekt<>(true, "Uspješan dohvat aerodroma", aerodrom)).build();
             } else {
-                odgovor = Response.status(Status.NOT_FOUND).entity("Nema aerodroma '" + icao + "'").build();
+                odgovor = Response.status(Status.NOT_FOUND)
+                        .entity(new RestOdgovor(false, "Nema aerodroma '" + icao + "'")).build();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
             odgovor = Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity("Dogodio se problem: " + ex.getLocalizedMessage() + ".").build();
+                    .entity(new RestOdgovor(false, "Dogodio se problem: " + ex.getLocalizedMessage() + ".")).build();
         }
 
         return odgovor;
@@ -153,113 +161,133 @@ public class RestAerodromi {
     @Path("{icao}/polasci")
     public Response dajPolaskeAerodoma(
             @PathParam("icao") String icao,
-            @QueryParam("vrsta") int vrsta,
+            @QueryParam("vrsta") String vrsta,
             @QueryParam("od") String vrijemeOd,
             @QueryParam("do") String vrijemeDo) {
-        Response odgovor = null;
 
-        Date datumOd = null;
-        Date datumDo = null;
-
-        switch (vrsta) {
-            case 0:
-                datumOd = izvuciDatumCitljivi(vrijemeOd);
-                datumDo = izvuciDatumCitljivi(vrijemeDo);
-                break;
-            case 1:
-                datumOd = izvuciDatumUnix(vrijemeOd);
-                datumDo = izvuciDatumUnix(vrijemeDo);
-                break;
-            default:
-                odgovor = Response.status(Status.BAD_REQUEST)
-                        .entity("Dodajte parametar '?vrsta' s vrijednošću 0 ili 1.").build();
-                break;
-        }
-
-        if (odgovor == null) {
-
-            if (datumOd == null || datumDo == null) {
-                String ispravanFormat = vrsta == 0 ? "{dd.mm.gggg}" : "{broj sekundi od 1.1.1970.}";
-                odgovor = Response.status(Status.BAD_REQUEST)
-                        .entity("Ispravno unesite parametre 'od' i 'do' u formatu " + ispravanFormat).build();
-            } else {
-                try {
-                    List<InformacijeLeta> aktivnostiAerodroma = servisAerodroma.dohvatiPraceneLetoveZaAerodrom(
-                            icao, datumOd, datumDo, VrstaTablice.AERODROMI_POLASCI);
-                    if (aktivnostiAerodroma.size() != 0) {
-                        odgovor = Response.status(Status.OK).entity(aktivnostiAerodroma).build();
-                    } else {
-                        odgovor = Response.status(Status.NOT_FOUND)
-                                .entity("Za taj datum nisu pronađeni polasci s aerodroma '" + icao + "'.").build();
-                    }
-                } catch (DateTimeParseException ex) {
-                    odgovor = Response.status(Status.BAD_REQUEST).entity(ex.getLocalizedMessage()).build();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    odgovor = Response.status(Status.INTERNAL_SERVER_ERROR)
-                            .entity("Dogodio se problem: " + ex.getLocalizedMessage() + ".").build();
-                }
-            }
-        }
-
+        Response odgovor = dajAktivnostAerodroma(icao, VrstaTablice.AERODROMI_POLASCI, vrsta, vrijemeOd, vrijemeDo);
         return odgovor;
+
     }
 
     /** 
-     * Metoda vraća sve dolaske s jednoga aerodroma u JSON formatu.
+     * Metoda vraća sve dolaske na jedan aerodrom u JSON formatu.
      * @param icao ICAO oznaka aerodroma nad kojim metoda radi.
      * @return Response Odgovor korisniku.
      */
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
     @Path("{icao}/dolasci")
-    public Response dajDolaskeAerodoma(@PathParam("icao") String icao, @QueryParam("vrsta") int vrsta,
+    public Response dajDolaskeAerodoma(
+            @PathParam("icao") String icao,
+            @QueryParam("vrsta") String vrsta,
             @QueryParam("od") String vrijemeOd,
             @QueryParam("do") String vrijemeDo) {
+
+        Response odgovor = dajAktivnostAerodroma(icao, VrstaTablice.AERODROMI_DOLASCI, vrsta, vrijemeOd, vrijemeDo);
+        return odgovor;
+
+    }
+
+    /**
+     * Obavlja dohvat polazaka ili dolazaka iz tablice.
+     * @param icao
+     * @param aktivnost
+     * @param vrsta
+     * @param vrijemeOd
+     * @param vrijemeDo
+     * @param odgovor
+     * @return
+     */
+    private Response dajAktivnostAerodroma(String icao, VrstaTablice relevantnaTablica,
+            String vrstaZnakovna, String vrijemeOd, String vrijemeDo) {
         Response odgovor = null;
 
-        Date datumOd = null;
-        Date datumDo = null;
+        int vrsta;
 
-        switch (vrsta) {
-            case 0:
-                datumOd = izvuciDatumCitljivi(vrijemeOd);
-                datumDo = izvuciDatumCitljivi(vrijemeDo);
-                break;
-            case 1:
-                datumOd = izvuciDatumUnix(vrijemeOd);
-                datumDo = izvuciDatumUnix(vrijemeDo);
-                break;
-            default:
-                odgovor = Response.status(Status.BAD_REQUEST)
-                        .entity("Dodajte parametar '?vrsta' s vrijednošću 0 ili 1.").build();
-                break;
+        try {
+            vrsta = Integer.parseInt(vrstaZnakovna);
+        } catch (Exception e) {
+            vrsta = -1;
         }
 
-        if (odgovor == null) {
+        if ((vrsta == 0 || vrsta == 1) && icao != null && vrstaZnakovna != null && vrijemeOd != null
+                && vrijemeDo != null) {
 
-            if (datumOd == null || datumDo == null) {
-                String ispravanFormat = vrsta == 0 ? "{dd.mm.gggg}" : "{broj sekundi od 1.1.1970.}";
+            Date datumOd = null;
+            Date datumDo = null;
+
+            switch (vrsta) {
+                case 0:
+                    try {
+                        datumOd = izvuciDatumCitljivi(vrijemeOd);
+                        datumDo = izvuciDatumCitljivi(vrijemeDo);
+                    } catch (DateTimeParseException ex) {
+                        odgovor = Response.status(Status.BAD_REQUEST)
+                                .entity(new RestOdgovor(false, ex.getLocalizedMessage()))
+                                .build();
+                    }
+                    break;
+                case 1:
+                    try {
+                        datumOd = izvuciDatumUnix(vrijemeOd);
+                        datumDo = izvuciDatumUnix(vrijemeDo);
+                    } catch (NumberFormatException ex) {
+                        odgovor = Response.status(Status.BAD_REQUEST)
+                                .entity(new RestOdgovor(false,
+                                        "Vrijednost " + ex.getLocalizedMessage().split("\"")[1] + " nije ispravna"))
+                                .build();
+                    }
+                    break;
+                default:
+                    odgovor = Response.status(Status.BAD_REQUEST)
+                            .entity(new RestOdgovor(false, "Dodajte parametar '?vrsta' s vrijednošću 0 ili 1."))
+                            .build();
+                    break;
+            }
+
+            if (datumOd.compareTo(datumDo) > 0) {
                 odgovor = Response.status(Status.BAD_REQUEST)
-                        .entity("Ispravno unesite parametre 'od' i 'do' u formatu " + ispravanFormat).build();
-            } else {
+                        .entity(new RestOdgovor(false,
+                                "Početak vremenskog raspona ('od') ne može biti nakon kraja vremenskog raspona ('do')."))
+                        .build();
+            }
+
+            if (odgovor == null) {
                 try {
                     List<InformacijeLeta> aktivnostiAerodroma = servisAerodroma.dohvatiPraceneLetoveZaAerodrom(
-                            icao, datumOd, datumDo, VrstaTablice.AERODROMI_DOLASCI);
-                    if (aktivnostiAerodroma.size() != 0) {
-                        odgovor = Response.status(Status.OK).entity(aktivnostiAerodroma).build();
+                            icao, datumOd, datumDo, relevantnaTablica);
+                    if (aktivnostiAerodroma.size() > 0) {
+                        odgovor = Response
+                                .status(Status.OK)
+                                .entity(new RestOdgovorObjekt<>(
+                                        true,
+                                        "Dohvaćeno je " + aktivnostiAerodroma.size() +
+                                                " podataka iz tablice " + relevantnaTablica.toString(),
+                                        aktivnostiAerodroma))
+                                .build();
                     } else {
                         odgovor = Response.status(Status.NOT_FOUND)
-                                .entity("Za taj datum nisu pronađeni dolasci na aerodrom '" + icao + "'.").build();
+                                .entity(new RestOdgovor(false,
+                                        "Za te parametre nisu pronađeni rezultati za aerodrom '" + icao + "'."))
+                                .build();
                     }
                 } catch (DateTimeParseException ex) {
-                    odgovor = Response.status(Status.BAD_REQUEST).entity(ex.getLocalizedMessage()).build();
+                    odgovor = Response.status(Status.BAD_REQUEST)
+                            .entity(new RestOdgovor(false, ex.getLocalizedMessage())).build();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     odgovor = Response.status(Status.INTERNAL_SERVER_ERROR)
-                            .entity("Dogodio se problem: " + ex.getLocalizedMessage() + ".").build();
+                            .entity(new RestOdgovor(false, "Dogodio se problem: " + ex.getLocalizedMessage() + "."))
+                            .build();
                 }
             }
+
+        } else {
+            odgovor = Response.status(Status.BAD_REQUEST)
+                    .entity(new RestOdgovor(false,
+                            "Zahtjev nije ispravan bez vremenskog intervala zadanog parametrima 'vrsta', 'od' i 'do'."))
+                    .build();
         }
 
         return odgovor;
@@ -289,9 +317,7 @@ public class RestAerodromi {
      * @throws Exception Neuspjela pretvorba znakovnog niza, vraća se poruka/uputa korisniku.
      */
     private Date izvuciDatumUnix(String trenutak) {
-        Date datumObjekt = new Date();
-        int trenutakBrojcani = Integer.parseInt(trenutak);
-        datumObjekt.setTime(trenutakBrojcani * 1000);
-        return datumObjekt;
+        long trenutakBrojcani = Long.parseLong(trenutak);
+        return new Date(trenutakBrojcani * 1000);
     }
 }

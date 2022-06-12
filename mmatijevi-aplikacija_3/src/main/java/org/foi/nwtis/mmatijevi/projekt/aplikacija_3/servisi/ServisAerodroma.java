@@ -251,11 +251,11 @@ public class ServisAerodroma {
             try (ResultSet rs = izrazUnosPraceni.executeQuery()) {
                 while (rs.next()) {
                     InformacijeLeta info = new InformacijeLeta(
-                            rs.getString("estDepartureAirport").trim(),
-                            rs.getString("estArrivalAirport").trim(),
+                            rs.getString("estDepartureAirport"),
+                            rs.getString("estArrivalAirport"),
                             new Date(1000 * Long.parseLong(rs.getString("firstSeen"))),
                             new Date(1000 * Long.parseLong(rs.getString("lastSeen"))),
-                            rs.getString("callsign").trim());
+                            rs.getString("callsign"));
                     aktivnostiLetova.add(info);
                 }
             }

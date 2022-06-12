@@ -25,6 +25,6 @@ public class AerodromiSviPrikaz {
     private int ukupnoAerodroma;
     @JsonbProperty("kolicina_podataka")
     private int dohvacenoAerodroma;
-    @JsonbProperty("podaci")
+    @JsonbProperty("sadrzaj")
     private List<Aerodrom> aerodromi;
 }
