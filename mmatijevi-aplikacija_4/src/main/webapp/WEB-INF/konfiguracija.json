@@ -1,0 +1,8 @@
+{
+    "a": "localhost",
+    "p": 8000,
+    "sustav.korisnik": "pkos",
+    "sustav.lozinka": "123456",
+    "sustav.administratori": "NWTiS Admin",
+    "adresa.aplikacija_3": "http://localhost:8080/mmatijevi-aplikacija_3-1.0.0/api"
+}
