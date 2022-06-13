@@ -83,7 +83,7 @@ public class RestAerodromi {
 
     /** 
      * Metoda dodaje jedan aerodrom za praćenje.
-     * <p>Aerodrom se dodaje tako da se u JSON tijelu pošalje vrijednost <pre>"icao":"{icao}"</pre>
+     * <p>Aerodrom se dodaje tako da se u JSON tijelu pošalje vrijednost <pre>{"icao":"{icao}"}</pre>
      * @param context Kontekst Servleta
      * @param aerodrom Čita se iz zahtjeva, to je objekt aerodroma kojemu je nužno upisati samo 'icao'.
      * @return Response Odgovor korisniku.
