@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisKorisnika;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisUdaljenosti;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisZetona;
 import org.foi.nwtis.mmatijevi.projekt.ispis.Terminal;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.NeispravnaKonfiguracija;
@@ -27,6 +28,8 @@ public class SlusacAplikacije implements ServletContextListener {
 	ServisKorisnika servisPrijava;
 	@Inject
 	ServisZetona servisZetona;
+	@Inject
+	ServisUdaljenosti servisUdaljenosti;
 	@Inject
 	Baza baza;
 
@@ -60,6 +63,7 @@ public class SlusacAplikacije implements ServletContextListener {
 
 		servisPrijava.postaviKonfiguraciju(konfig);
 		servisZetona.postaviKonfiguraciju(konfig);
+		servisUdaljenosti.postaviKonfiguraciju(konfig);
 		baza.konfig = konfig;
 
 		ServletContextListener.super.contextInitialized(sce);
