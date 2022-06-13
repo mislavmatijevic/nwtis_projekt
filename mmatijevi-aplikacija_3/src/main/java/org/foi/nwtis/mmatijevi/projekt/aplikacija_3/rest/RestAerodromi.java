@@ -1,17 +1,24 @@
 package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.rest;
 
+import java.io.IOException;
+import java.net.SocketException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.AerodromVecPracenException;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.ServerUdaljenostiIznimka;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.AvionLetiPrikaz;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovor;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovorObjekt;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma.VrstaTablice;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisUdaljenosti;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisUdaljenosti.ServerUdaljenostiNaredba;
 import org.foi.nwtis.podaci.Aerodrom;
 
 import jakarta.inject.Inject;
@@ -30,6 +37,8 @@ public class RestAerodromi {
 
     @Inject
     ServisAerodroma servisAerodroma;
+    @Inject
+    ServisUdaljenosti servisUdaljenosti;
 
     /** 
      * Metoda vraća sve aerodrome u JSON formatu <strong>ILI</strong> 
@@ -187,6 +196,56 @@ public class RestAerodromi {
         Response odgovor = dajAktivnostAerodroma(icao, VrstaTablice.AERODROMI_DOLASCI, vrsta, vrijemeOd, vrijemeDo);
         return odgovor;
 
+    }
+
+    /** 
+     * Metoda vraća sve dolaske na jedan aerodrom u JSON formatu.
+     * @param icao ICAO oznaka aerodroma nad kojim metoda radi.
+     * @return Response Odgovor korisniku.
+     */
+    @GET
+    @Produces({ MediaType.APPLICATION_JSON })
+    @Path("{icao1}/{icao2}")
+    public Response dajUdaljenostDvaAerodroma(
+            @PathParam("icao1") String icao1,
+            @PathParam("icao2") String icao2) {
+
+        Response odgovor;
+
+        try {
+
+            String odgovorServera = servisUdaljenosti.izvrsiNaredbu(
+                    ServerUdaljenostiNaredba.DISTANCE, new String[] { icao1, icao2 });
+
+            int udaljenost = Integer.parseInt(odgovorServera.split("OK ")[1]);
+
+            odgovor = Response.ok(new RestOdgovor(true, String.valueOf(udaljenost))).build();
+
+        } catch (ServerUdaljenostiIznimka ex) {
+            odgovor = Response.status(Status.BAD_REQUEST)
+                    .entity(new RestOdgovor(false, ex.getLocalizedMessage()))
+                    .build();
+        } catch (NumberFormatException ex) {
+            odgovor = Response.status(Status.BAD_REQUEST)
+                    .entity(new RestOdgovor(false,
+                            "Server je odgovorio neispravnom vrijednošću: " + ex.getLocalizedMessage().split("\"")[1]))
+                    .build();
+        } catch (SocketException ex) {
+            odgovor = Response.status(Status.BAD_REQUEST)
+                    .entity(new RestOdgovor(false, ex.getLocalizedMessage()))
+                    .build();
+            Logger.getLogger(RestAerodromi.class.getName()).log(Level.SEVERE,
+                    "Dogodio se problem pri pokušaju slanja komande na ServerUdaljenosti", ex);
+        } catch (IOException ex) {
+            odgovor = Response.status(Status.BAD_REQUEST)
+                    .entity(new RestOdgovor(false,
+                            "Dogodio se problem pri povezivanju na ServerUdaljenosti"))
+                    .build();
+            Logger.getLogger(RestAerodromi.class.getName()).log(Level.SEVERE,
+                    "Dogodio se problem pri povezivanju na ServerUdaljenosti", ex);
+        }
+
+        return odgovor;
     }
 
     /**
