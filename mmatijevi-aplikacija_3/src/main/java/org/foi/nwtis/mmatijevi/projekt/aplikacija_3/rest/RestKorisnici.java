@@ -6,10 +6,10 @@ import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikVecPostojiEx
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikNeispravanException;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.KorisnikPrikaz;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.KorisnikRegistracija;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovor;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovorObjekt;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisKorisnika;
-import org.foi.nwtis.podaci.Korisnik;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -48,7 +48,7 @@ public class RestKorisnici {
     }
 
     @POST
-    public Response dodajNovogKorisnika(Korisnik korisnik) {
+    public Response dodajNovogKorisnika(KorisnikRegistracija korisnik) {
         Response odgovor = null;
 
         if (korisnik != null) {
