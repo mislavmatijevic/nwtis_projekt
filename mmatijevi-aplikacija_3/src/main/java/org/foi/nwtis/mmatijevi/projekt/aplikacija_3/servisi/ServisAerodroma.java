@@ -9,12 +9,13 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.AerodromVecPracenException;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.AerodromiSviPrikaz;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.InformacijeLeta;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.AvionLetiPrikaz;
 import org.foi.nwtis.podaci.Aerodrom;
 import org.foi.nwtis.podaci.Airport;
 import org.foi.nwtis.rest.podaci.AvionLeti;
@@ -217,11 +218,11 @@ public class ServisAerodroma {
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public List<InformacijeLeta> dohvatiPraceneLetoveZaAerodrom(
+    public List<AvionLetiPrikaz> dohvatiPraceneLetoveZaAerodrom(
             String icao, Date datumOd, Date datumDo, VrstaTablice nazivTablice)
             throws ClassNotFoundException, SQLException {
 
-        List<InformacijeLeta> aktivnostiLetova = new ArrayList<InformacijeLeta>();
+        List<AvionLetiPrikaz> aktivnostiLetova = new LinkedList<AvionLetiPrikaz>();
 
         long datumPocetniUNIX = datumOd.getTime() / 1000;
         long datumZavrsniUNIX = datumDo.getTime() / 1000;
@@ -240,7 +241,20 @@ public class ServisAerodroma {
 
         try (Connection veza = baza.dohvatiVezu();
                 PreparedStatement izrazUnosPraceni = veza.prepareStatement(
-                        "SELECT * FROM " + nazivTablice.name() + " WHERE "
+                        "SELECT " +
+                                "icao24, " +
+                                "firstSeen, " +
+                                "estDepartureAirport, " +
+                                "lastSeen, " +
+                                "estArrivalAirport, " +
+                                "callsign, " +
+                                "estDepartureAirportHorizDistance, " +
+                                "estDepartureAirportVertDistance, " +
+                                "estArrivalAirportHorizDistance, " +
+                                "estArrivalAirportVertDistance, " +
+                                "departureAirportCandidatesCount, " +
+                                "arrivalAirportCandidatesCount " +
+                                "FROM " + nazivTablice.name() + " WHERE "
                                 + stupac + " = ? AND " + kriterij);) {
 
             izrazUnosPraceni.setString(1, icao);
@@ -249,12 +263,19 @@ public class ServisAerodroma {
 
             try (ResultSet rs = izrazUnosPraceni.executeQuery()) {
                 while (rs.next()) {
-                    InformacijeLeta info = new InformacijeLeta(
+                    AvionLetiPrikaz info = new AvionLetiPrikaz(
+                            rs.getString("icao24"),
+                            rs.getInt("firstSeen"),
                             rs.getString("estDepartureAirport"),
+                            rs.getInt("lastSeen"),
                             rs.getString("estArrivalAirport"),
-                            new Date(1000 * Long.parseLong(rs.getString("firstSeen"))),
-                            new Date(1000 * Long.parseLong(rs.getString("lastSeen"))),
-                            rs.getString("callsign"));
+                            rs.getString("callsign"),
+                            rs.getInt("estDepartureAirportHorizDistance"),
+                            rs.getInt("estDepartureAirportVertDistance"),
+                            rs.getInt("estArrivalAirportHorizDistance"),
+                            rs.getInt("estArrivalAirportVertDistance"),
+                            rs.getInt("departureAirportCandidatesCount"),
+                            rs.getInt("arrivalAirportCandidatesCount"));
                     aktivnostiLetova.add(info);
                 }
             }

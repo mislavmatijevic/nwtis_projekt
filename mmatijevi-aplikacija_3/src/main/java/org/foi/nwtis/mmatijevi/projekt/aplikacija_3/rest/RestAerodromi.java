@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.AerodromVecPracenException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.InformacijeLeta;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.AvionLetiPrikaz;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovor;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovorObjekt;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma;
@@ -255,7 +255,7 @@ public class RestAerodromi {
 
             if (odgovor == null) {
                 try {
-                    List<InformacijeLeta> aktivnostiAerodroma = servisAerodroma.dohvatiPraceneLetoveZaAerodrom(
+                    List<AvionLetiPrikaz> aktivnostiAerodroma = servisAerodroma.dohvatiPraceneLetoveZaAerodrom(
                             icao, datumOd, datumDo, relevantnaTablica);
                     if (aktivnostiAerodroma.size() > 0) {
                         odgovor = Response
