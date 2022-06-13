@@ -76,6 +76,10 @@ public class ServisZetona extends KonfigurabilniServis {
 
         boolean zetonJeValjan = false;
 
+        if (zeton == 0) {
+            return true;
+        }
+
         try (Connection veza = baza.dohvatiVezu();
                 PreparedStatement izraz = veza
                         .prepareStatement(
