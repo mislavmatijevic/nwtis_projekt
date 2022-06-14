@@ -13,9 +13,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.AerodromVecPracenException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.AerodromiSviPrikaz;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.AvionLetiPrikaz;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.AerodromVecPracenException;
+import org.foi.nwtis.mmatijevi.projekt.modeli.AerodromiSviPrikaz;
+import org.foi.nwtis.mmatijevi.projekt.modeli.AvionLetiPrikaz;
 import org.foi.nwtis.podaci.Aerodrom;
 import org.foi.nwtis.podaci.Airport;
 import org.foi.nwtis.rest.podaci.AvionLeti;

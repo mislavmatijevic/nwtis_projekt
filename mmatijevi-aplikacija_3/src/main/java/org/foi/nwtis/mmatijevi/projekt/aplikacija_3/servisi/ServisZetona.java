@@ -10,12 +10,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikNePostojiException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikNeovlastenException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.ZetonNePostojiException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.NovaOznakaNedostupnaException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.Zeton;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.sigurnost.GeneratorOznakaZetona;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeovlastenException;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.NovaOznakaNedostupnaException;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.ZetonNePostojiException;
+import org.foi.nwtis.mmatijevi.projekt.modeli.Zeton;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

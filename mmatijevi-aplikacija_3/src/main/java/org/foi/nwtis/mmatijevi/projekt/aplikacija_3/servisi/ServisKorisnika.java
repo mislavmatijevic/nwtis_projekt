@@ -10,10 +10,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikVecPostojiException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikNeispravanException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikNePostojiException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.KorisnikPrikaz;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeispravanException;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikVecPostojiException;
+import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikPrikaz;
 import org.foi.nwtis.podaci.Korisnik;
 
 import jakarta.enterprise.context.ApplicationScoped;

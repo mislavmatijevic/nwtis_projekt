@@ -10,15 +10,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.AerodromVecPracenException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.ServerUdaljenostiIznimka;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.AvionLetiPrikaz;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovor;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovorObjekt;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma.VrstaTablice;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisUdaljenosti;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisUdaljenosti.ServerUdaljenostiNaredba;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.AerodromVecPracenException;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.ServerUdaljenostiIznimka;
+import org.foi.nwtis.mmatijevi.projekt.modeli.AvionLetiPrikaz;
+import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovor;
+import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovorObjekt;
 import org.foi.nwtis.podaci.Aerodrom;
 
 import jakarta.inject.Inject;

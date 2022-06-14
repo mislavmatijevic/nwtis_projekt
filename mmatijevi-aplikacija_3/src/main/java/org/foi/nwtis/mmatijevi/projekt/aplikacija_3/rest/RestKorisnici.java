@@ -2,14 +2,14 @@ package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.rest;
 
 import java.util.List;
 
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikVecPostojiException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikNeispravanException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikNePostojiException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.KorisnikPrikaz;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.KorisnikRegistracija;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovor;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovorObjekt;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisKorisnika;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeispravanException;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikVecPostojiException;
+import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikPrikaz;
+import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikRegistracija;
+import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovor;
+import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovorObjekt;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;

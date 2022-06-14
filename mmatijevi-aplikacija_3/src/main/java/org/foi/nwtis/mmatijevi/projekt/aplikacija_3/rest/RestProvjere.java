@@ -2,13 +2,13 @@ package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.rest;
 
 import java.net.Authenticator;
 
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.KorisnikNeovlastenException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.ZetonNePostojiException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.NovaOznakaNedostupnaException;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.RestOdgovor;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.Zeton;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisKorisnika;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisZetona;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeovlastenException;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.NovaOznakaNedostupnaException;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.ZetonNePostojiException;
+import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovor;
+import org.foi.nwtis.mmatijevi.projekt.modeli.Zeton;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.DELETE;

@@ -10,9 +10,9 @@ import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke.ServerUdaljenostiIznimka;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli.OdgovorStatusUdaljenost;
 import org.foi.nwtis.mmatijevi.projekt.ispis.Terminal;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.ServerUdaljenostiIznimka;
+import org.foi.nwtis.mmatijevi.projekt.modeli.OdgovorStatusUdaljenost;
 
 import jakarta.enterprise.context.ApplicationScoped;
 

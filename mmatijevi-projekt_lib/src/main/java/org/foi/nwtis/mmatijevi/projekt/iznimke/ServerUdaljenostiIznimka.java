@@ -1,4 +1,4 @@
-package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke;
+package org.foi.nwtis.mmatijevi.projekt.iznimke;
 
 public class ServerUdaljenostiIznimka extends Exception {
     public ServerUdaljenostiIznimka(String poruka) {

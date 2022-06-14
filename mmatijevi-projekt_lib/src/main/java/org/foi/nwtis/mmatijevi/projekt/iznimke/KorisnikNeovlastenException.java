@@ -1,4 +1,4 @@
-package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.iznimke;
+package org.foi.nwtis.mmatijevi.projekt.iznimke;
 
 public class KorisnikNeovlastenException extends Exception {
     public KorisnikNeovlastenException(String message) {

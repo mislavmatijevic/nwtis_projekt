@@ -1,4 +1,4 @@
-package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.modeli;
+package org.foi.nwtis.mmatijevi.projekt.modeli;
 
 import jakarta.json.bind.annotation.JsonbProperty;
 import lombok.AllArgsConstructor;
