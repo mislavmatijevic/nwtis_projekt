@@ -1,13 +1,17 @@
 package org.foi.nwtis.mmatijevi.projekt.aplikacija_4.modeli;
 
-import jakarta.enterprise.context.SessionScoped;
+import java.io.Serializable;
+
+import org.foi.nwtis.mmatijevi.projekt.modeli.Zeton;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
-@SessionScoped
 @Getter
+@Setter
 @AllArgsConstructor
-public class PrijavljeniKorisnik {
-    private String korime;
-    private String zeton;
+public class PrijavljeniKorisnik implements Serializable {
+    private String korime = null;
+    private Zeton zeton = null;
 }

@@ -17,6 +17,6 @@ public class PristupServisu {
     public PristupServisu(String odredisnaTocka, ServletContext context) {
         this.konfig = (Konfiguracija) context.getAttribute("postavke");
         this.odredisnaAdresa = this.konfig.dajPostavku("adresa.aplikacija_3");
-        this.odredisnaAdresa += odredisnaTocka;
+        this.odredisnaAdresa += "/" + odredisnaTocka;
     }
 }
