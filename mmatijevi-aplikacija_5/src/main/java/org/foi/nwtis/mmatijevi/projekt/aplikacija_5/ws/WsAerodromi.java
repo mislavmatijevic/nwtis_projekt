@@ -2,21 +2,25 @@ package org.foi.nwtis.mmatijevi.projekt.aplikacija_5.ws;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_5.klijenti.AerodromiKlijent;
+import org.foi.nwtis.mmatijevi.projekt.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.rest.podaci.AvionLeti;
 
-import jakarta.annotation.Resource;
+import jakarta.inject.Inject;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
 import jakarta.jws.WebService;
-import jakarta.xml.ws.WebServiceContext;
+import jakarta.servlet.ServletContext;
 
 @WebService(serviceName = "aerodromi")
 public class WsAerodromi {
 	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 
-	@Resource
-	private WebServiceContext wsContext;
+	@Inject
+	ServletContext kontekst;
 
 	/**
 	 * Dohvaća polaske u formatu dd.mm.gggg.
@@ -34,7 +38,19 @@ public class WsAerodromi {
 			@WebParam(name = "icao") String icao,
 			@WebParam(name = "danOd") String danOd,
 			@WebParam(name = "danDo") String danDo) {
-		return null;
+		List<AvionLeti> polasci = null;
+
+		try {
+			int zetonBrojcani = Integer.parseInt(zeton);
+			PrijavljeniKorisnik prijavljeniKorisnik = new PrijavljeniKorisnik(korisnik, "", zetonBrojcani);
+			AerodromiKlijent aerodromiKlijent = new AerodromiKlijent(kontekst);
+			polasci = aerodromiKlijent.dajPolaskeDan(prijavljeniKorisnik, icao, danOd, danDo);
+		} catch (Exception ex) {
+			Logger.getLogger(WsAerodromi.class.getName()).log(Level.SEVERE,
+					"Neuspio dohvat polazaka po čitljivim datumima: " + danOd + " i " + danDo, ex);
+		}
+
+		return polasci;
 	}
 
 	/**
