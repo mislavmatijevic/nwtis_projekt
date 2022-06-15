@@ -50,7 +50,7 @@ public class RestAerodromi {
      */
     @GET
     @Produces({ MediaType.APPLICATION_JSON })
-    public Response dajSveAerodrome(
+    public Response dajAerodrome(
             @QueryParam("preuzimanje") String preuzimanje,
             @QueryParam("stranica") String stranica) {
         Response odgovor;
