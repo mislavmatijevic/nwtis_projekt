@@ -319,11 +319,7 @@ public class RestAerodromi {
                     if (aktivnostiAerodroma.size() > 0) {
                         odgovor = Response
                                 .status(Status.OK)
-                                .entity(new RestOdgovorUzPodatke<>(
-                                        true,
-                                        "Dohvaćeno je " + aktivnostiAerodroma.size() +
-                                                " podataka iz tablice " + relevantnaTablica.toString(),
-                                        aktivnostiAerodroma))
+                                .entity(aktivnostiAerodroma)
                                 .build();
                     } else {
                         odgovor = Response.status(Status.NOT_FOUND)
