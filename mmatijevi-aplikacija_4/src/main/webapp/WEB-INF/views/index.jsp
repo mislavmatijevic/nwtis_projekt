@@ -15,7 +15,7 @@
 
 <body class="cover-container d-flex w-100 h-100 mx-auto flex-column">
     <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-around mb-5">
-        <a class="navbar-brand m-l-2" href="${pageContext.servletContext.contextPath}/mvc/pocetak">
+        <a class="navbar-brand m-l-2 ms-5" href="${pageContext.servletContext.contextPath}/mvc/pocetak">
             Aplikacija 4</a>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">

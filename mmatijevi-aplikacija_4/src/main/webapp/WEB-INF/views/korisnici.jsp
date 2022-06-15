@@ -17,7 +17,7 @@
 
 <body class="cover-container d-flex w-100 h-100 mx-auto flex-column">
     <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-around mb-5">
-        <a class="navbar-brand m-l-2" href="${pageContext.servletContext.contextPath}/mvc/pocetak">
+        <a class="navbar-brand m-l-2 ms-5" href="${pageContext.servletContext.contextPath}/mvc/pocetak">
             Aplikacija 4</a>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
@@ -65,7 +65,7 @@
                         <span>Poništavanje svih sesija korisnika</span>
                     </div>
                     <div class="form-group mx-sm-3 mb-2">
-                        <input type="text" class="form-control" id="korime" placeholder="Korisničko ime">
+                        <input type="text" class="form-control" id="korime" name="korime" placeholder="Korisničko ime">
                         <button type="submit" class="btn btn-primary mb-2">Deaktiviraj žetone</button>
                     </div>
                 </form>
