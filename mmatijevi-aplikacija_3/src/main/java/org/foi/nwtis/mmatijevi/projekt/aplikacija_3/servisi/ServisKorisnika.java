@@ -155,7 +155,7 @@ public class ServisKorisnika extends KonfigurabilniServis {
      * @throws KorisnikVecPostojiException
      * @throws KorisnikNeispravanException
      */
-    public boolean dodajNovogKorisnika(Korisnik korisnik)
+    public boolean registrirajNovogKorisnika(Korisnik korisnik)
             throws KorisnikVecPostojiException, KorisnikNeispravanException {
         boolean uspjeh = false;
 

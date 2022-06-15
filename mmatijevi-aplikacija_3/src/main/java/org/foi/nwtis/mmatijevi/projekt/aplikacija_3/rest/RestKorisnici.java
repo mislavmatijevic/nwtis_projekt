@@ -48,12 +48,12 @@ public class RestKorisnici {
     }
 
     @POST
-    public Response dodajNovogKorisnika(KorisnikRegistracija korisnik) {
+    public Response registrirajNovogKorisnika(KorisnikRegistracija korisnik) {
         Response odgovor = null;
 
         if (korisnik != null) {
             try {
-                boolean uspjeh = servisKorisnika.dodajNovogKorisnika(korisnik);
+                boolean uspjeh = servisKorisnika.registrirajNovogKorisnika(korisnik);
                 if (uspjeh) {
                     odgovor = Response.ok(new RestOdgovor(true, "Korisnik je dodan")).build();
                 } else {
