@@ -73,8 +73,21 @@ public class WsAerodromi {
 			@WebParam(name = "korisnik") String korisnik,
 			@WebParam(name = "zeton") String zeton,
 			@WebParam(name = "icao") String icao) {
-		return false;
-	}
+
+		boolean uspjeh;
+
+		try {
+			int zetonBrojcani = Integer.parseInt(zeton);
+			PrijavljeniKorisnik prijavljeniKorisnik = new PrijavljeniKorisnik(korisnik, "", zetonBrojcani);
+			AerodromiKlijent aerodromiKlijent = new AerodromiKlijent(kontekst);
+			uspjeh = aerodromiKlijent.unesiAerodromZaPratiti(prijavljeniKorisnik, icao);
+		} catch (Exception e) {
+			e.printStackTrace();
+			uspjeh = false;
+		}
+
+		return uspjeh;
+	};
 
 	private List<AvionLeti> dohvatPolazakaPoKriteriju(
 			String korisnik,
