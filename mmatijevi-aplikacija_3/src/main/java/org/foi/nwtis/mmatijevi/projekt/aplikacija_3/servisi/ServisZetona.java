@@ -16,6 +16,7 @@ import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeovlastenException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.NovaOznakaNedostupnaException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ZetonNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.modeli.Zeton;
+import org.foi.nwtis.mmatijevi.projekt.usluge.KonfigurabilniServis;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

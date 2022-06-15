@@ -5,11 +5,11 @@ import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisUdaljenosti;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisUdaljenosti.ServerUdaljenostiNaredba;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ServerUdaljenostiIznimka;
 import org.foi.nwtis.mmatijevi.projekt.modeli.OdgovorStatusUdaljenost;
 import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovor;
+import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti;
+import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti.ServerUdaljenostiNaredba;
 import org.foi.nwtis.podaci.Aerodrom;
 
 import com.google.gson.Gson;
@@ -27,7 +27,7 @@ import jakarta.ws.rs.core.Response.Status;
 public class RestServeri {
 
     @Inject
-    ServisUdaljenosti servisUdaljenosti;
+    PosluziteljUdaljenosti servisUdaljenosti;
 
     @GET
     public Response posaljiStatus() {

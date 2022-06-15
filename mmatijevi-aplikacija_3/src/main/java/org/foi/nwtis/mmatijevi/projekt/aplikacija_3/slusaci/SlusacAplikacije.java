@@ -6,12 +6,12 @@ import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisKorisnika;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisUdaljenosti;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisZetona;
 import org.foi.nwtis.mmatijevi.projekt.ispis.Terminal;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.NeispravnaKonfiguracija;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.bazePodataka.KonfiguracijaBP;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.bazePodataka.PostavkeBazaPodataka;
+import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti;
 
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
@@ -29,7 +29,7 @@ public class SlusacAplikacije implements ServletContextListener {
 	@Inject
 	ServisZetona servisZetona;
 	@Inject
-	ServisUdaljenosti servisUdaljenosti;
+	PosluziteljUdaljenosti servisUdaljenosti;
 	@Inject
 	Baza baza;
 

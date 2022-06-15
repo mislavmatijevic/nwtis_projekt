@@ -12,13 +12,13 @@ import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma.VrstaTablice;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisUdaljenosti;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisUdaljenosti.ServerUdaljenostiNaredba;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.AerodromVecPracenException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ServerUdaljenostiIznimka;
 import org.foi.nwtis.mmatijevi.projekt.modeli.AvionLetiPrikaz;
 import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovor;
 import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovorUzPodatke;
+import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti;
+import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti.ServerUdaljenostiNaredba;
 import org.foi.nwtis.podaci.Aerodrom;
 
 import jakarta.inject.Inject;
@@ -38,7 +38,7 @@ public class RestAerodromi {
     @Inject
     ServisAerodroma servisAerodroma;
     @Inject
-    ServisUdaljenosti servisUdaljenosti;
+    PosluziteljUdaljenosti servisUdaljenosti;
 
     /** 
      * Metoda vraća sve aerodrome u JSON formatu <strong>ILI</strong> 

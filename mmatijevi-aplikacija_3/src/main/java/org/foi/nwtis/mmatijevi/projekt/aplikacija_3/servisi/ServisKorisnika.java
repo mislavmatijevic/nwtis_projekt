@@ -14,6 +14,7 @@ import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeispravanException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikVecPostojiException;
 import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikPrikaz;
+import org.foi.nwtis.mmatijevi.projekt.usluge.KonfigurabilniServis;
 import org.foi.nwtis.podaci.Korisnik;
 
 import jakarta.enterprise.context.ApplicationScoped;

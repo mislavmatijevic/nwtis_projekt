@@ -1,4 +1,4 @@
-package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi;
+package org.foi.nwtis.mmatijevi.projekt.usluge;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,7 +17,7 @@ import org.foi.nwtis.mmatijevi.projekt.modeli.OdgovorStatusUdaljenost;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class ServisUdaljenosti extends KonfigurabilniServis {
+public class PosluziteljUdaljenosti extends KonfigurabilniServis {
 
     public enum ServerUdaljenostiNaredba {
         STATUS,
@@ -134,11 +134,12 @@ public class ServisUdaljenosti extends KonfigurabilniServis {
                 veza.shutdownInput();
                 return tekst.toString();
             } catch (SocketException ex) {
-                Logger.getLogger(ServisUdaljenosti.class.getName()).log(Level.SEVERE, "Nije uspjelo povezivanje", ex);
+                Logger.getLogger(PosluziteljUdaljenosti.class.getName()).log(Level.SEVERE, "Nije uspjelo povezivanje",
+                        ex);
                 throw new SocketException("ServerUdaljenosti je prepoznat, no nije uspjelo povezivanje.");
             }
         } catch (IOException ex) {
-            Logger.getLogger(ServisUdaljenosti.class.getName()).log(Level.SEVERE, "Problem pri vezi", ex);
+            Logger.getLogger(PosluziteljUdaljenosti.class.getName()).log(Level.SEVERE, "Problem pri vezi", ex);
             throw ex;
         } finally {
             ugasiVezu(veza);
@@ -154,7 +155,8 @@ public class ServisUdaljenosti extends KonfigurabilniServis {
             try {
                 veza.close();
             } catch (IOException ex) {
-                Logger.getLogger(ServisUdaljenosti.class.getName()).log(Level.SEVERE, "Neuspjelo gašenje veze", ex);
+                Logger.getLogger(PosluziteljUdaljenosti.class.getName()).log(Level.SEVERE, "Neuspjelo gašenje veze",
+                        ex);
                 Terminal.greskaIspis("Neuspjelo gašenje veze!");
             }
         }
