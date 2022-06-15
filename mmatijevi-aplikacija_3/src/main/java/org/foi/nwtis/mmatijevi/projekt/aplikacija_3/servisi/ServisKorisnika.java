@@ -206,7 +206,7 @@ public class ServisKorisnika extends KonfigurabilniServis {
 
     private KorisnikPrikaz dajObjektPrikazaKorisnika(ResultSet rezultat) throws SQLException {
         return new KorisnikPrikaz(rezultat.getString("korisnik"), rezultat.getString("ime"),
-                rezultat.getString("prezime"), "**********", rezultat.getString("email"));
+                rezultat.getString("prezime"), rezultat.getString("email"));
     }
 
     private boolean provjeriIspravnostKorisnika(Korisnik korisnik) {
