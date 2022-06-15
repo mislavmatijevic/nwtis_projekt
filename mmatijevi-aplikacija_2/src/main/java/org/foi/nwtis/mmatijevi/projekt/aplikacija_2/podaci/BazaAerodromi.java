@@ -142,7 +142,7 @@ public class BazaAerodromi {
                         "estDepartureAirportVertDistance, estArrivalAirportHorizDistance, " +
                         "estArrivalAirportVertDistance, departureAirportCandidatesCount, " +
                         "arrivalAirportCandidatesCount, `stored`) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");) {
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())");) {
 
             izraz.setString(1, polazak.getIcao24());
             izraz.setInt(2, polazak.getFirstSeen());
@@ -156,7 +156,6 @@ public class BazaAerodromi {
             izraz.setInt(10, polazak.getEstArrivalAirportVertDistance());
             izraz.setInt(11, polazak.getDepartureAirportCandidatesCount());
             izraz.setInt(12, polazak.getArrivalAirportCandidatesCount());
-            izraz.setTimestamp(13, Timestamp.valueOf(LocalDateTime.now()));
             izraz.execute();
         }
     }
@@ -170,7 +169,7 @@ public class BazaAerodromi {
     public boolean unesiAerodromZaPratiti(Connection veza, String icao)
             throws ClassNotFoundException, SQLException, AerodromVecPracenException {
         try (PreparedStatement izrazUnosPraceni = veza.prepareStatement(
-                "INSERT INTO AERODROMI_PRACENI (ident, `stored`) VALUES (?, ?)");) {
+                "INSERT INTO AERODROMI_PRACENI (ident, `stored`) VALUES (?, NOW())");) {
 
             if (dohvatiAerodrom(veza, icao) == null) {
                 return false;
@@ -185,7 +184,6 @@ public class BazaAerodromi {
             }
 
             izrazUnosPraceni.setString(1, icao);
-            izrazUnosPraceni.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
             izrazUnosPraceni.execute();
         }
 
@@ -254,10 +252,9 @@ public class BazaAerodromi {
     public void unesiProblem(Connection veza, ProblemDTO problemDTO)
             throws ClassNotFoundException, SQLException {
         try (PreparedStatement izrazProblem = veza.prepareStatement(
-                "INSERT INTO AERODROMI_PROBLEMI (ident, description, `stored`) VALUES (?, ?, ?)")) {
+                "INSERT INTO AERODROMI_PROBLEMI (ident, description, `stored`) VALUES (?, ?, NOW())")) {
             izrazProblem.setString(1, problemDTO.getIdent());
             izrazProblem.setString(2, problemDTO.getDescription());
-            izrazProblem.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now()));
             izrazProblem.execute();
         }
     }

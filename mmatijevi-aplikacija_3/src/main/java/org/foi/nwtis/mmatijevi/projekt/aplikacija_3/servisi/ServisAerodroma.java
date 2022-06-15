@@ -185,7 +185,7 @@ public class ServisAerodroma {
             throws ClassNotFoundException, SQLException, AerodromVecPracenException {
         try (Connection veza = baza.dohvatiVezu();
                 PreparedStatement izrazUnosPraceni = veza.prepareStatement(
-                        "INSERT INTO AERODROMI_PRACENI (ident, `stored`) VALUES (?, ?)");) {
+                        "INSERT INTO AERODROMI_PRACENI (ident, `stored`) VALUES (?, NOW())");) {
 
             if (dohvatiAerodromNaPostojecojVezi(icao, veza) == null) {
                 return false;
@@ -199,7 +199,6 @@ public class ServisAerodroma {
             }
 
             izrazUnosPraceni.setString(1, icao);
-            izrazUnosPraceni.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
             izrazUnosPraceni.execute();
         }
 
