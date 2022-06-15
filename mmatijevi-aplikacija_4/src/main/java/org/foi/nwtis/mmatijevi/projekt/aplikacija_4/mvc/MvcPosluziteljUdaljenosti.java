@@ -6,9 +6,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.klijenti.AerodromiKlijent;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ServerUdaljenostiIznimka;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ZetonIstekaoException;
+import org.foi.nwtis.mmatijevi.projekt.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti;
 import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti.ServerUdaljenostiNaredba;
 import org.foi.nwtis.podaci.Aerodrom;

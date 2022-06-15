@@ -1,4 +1,4 @@
-package org.foi.nwtis.mmatijevi.projekt.aplikacija_4.modeli;
+package org.foi.nwtis.mmatijevi.projekt.modeli;
 
 import java.io.Serializable;
 

@@ -1,9 +1,10 @@
 package org.foi.nwtis.mmatijevi.projekt.aplikacija_4.klijenti;
 
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
+import org.foi.nwtis.mmatijevi.projekt.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovor;
 import org.foi.nwtis.mmatijevi.projekt.modeli.Zeton;
+import org.foi.nwtis.mmatijevi.projekt.usluge.PristupServisu;
 
 import com.google.gson.Gson;
 

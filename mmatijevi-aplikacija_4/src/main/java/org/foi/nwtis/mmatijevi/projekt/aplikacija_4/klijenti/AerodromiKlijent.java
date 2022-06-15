@@ -2,9 +2,10 @@ package org.foi.nwtis.mmatijevi.projekt.aplikacija_4.klijenti;
 
 import java.util.List;
 
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ZetonIstekaoException;
+import org.foi.nwtis.mmatijevi.projekt.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.mmatijevi.projekt.usluge.ParserRestOdgovoraUzPodatke;
+import org.foi.nwtis.mmatijevi.projekt.usluge.PristupServisu;
 import org.foi.nwtis.podaci.Aerodrom;
 
 import jakarta.servlet.ServletContext;

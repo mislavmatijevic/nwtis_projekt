@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.klijenti.KorisniciKlijent;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.klijenti.ProvjereKlijent;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ZetonIstekaoException;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.Konfiguracija;
+import org.foi.nwtis.mmatijevi.projekt.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.podaci.Korisnik;
 
 import jakarta.enterprise.context.RequestScoped;

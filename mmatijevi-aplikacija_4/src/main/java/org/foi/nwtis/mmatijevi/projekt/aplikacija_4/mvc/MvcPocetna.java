@@ -1,6 +1,6 @@
 package org.foi.nwtis.mmatijevi.projekt.aplikacija_4.mvc;
 
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.modeli.PrijavljeniKorisnik;
+import org.foi.nwtis.mmatijevi.projekt.modeli.PrijavljeniKorisnik;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;

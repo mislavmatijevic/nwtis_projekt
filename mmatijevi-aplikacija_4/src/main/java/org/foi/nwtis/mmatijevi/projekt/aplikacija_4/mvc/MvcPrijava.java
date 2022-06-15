@@ -1,7 +1,7 @@
 package org.foi.nwtis.mmatijevi.projekt.aplikacija_4.mvc;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.klijenti.ProvjereKlijent;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.modeli.PrijavljeniKorisnik;
+import org.foi.nwtis.mmatijevi.projekt.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.mmatijevi.projekt.modeli.Zeton;
 
 import jakarta.enterprise.context.RequestScoped;
