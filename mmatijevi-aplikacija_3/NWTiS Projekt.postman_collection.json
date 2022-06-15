@@ -1,0 +1,789 @@
+{
+	"info": {
+		"_postman_id": "3b5158d4-e2a4-4e40-91ac-d3bae16ff0cc",
+		"name": "NWTiS Projekt",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Aplikacija_3",
+			"item": [
+				{
+					"name": "Provjere",
+					"item": [
+						{
+							"name": "Daj Žeton",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "lozinka",
+										"value": "123456",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/provjere",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"provjere"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Provjeri Žeton",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "lozinka",
+										"value": "123456",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/provjere/15",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"provjere",
+										"15"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deaktiviraj Žeton",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "lozinka",
+										"value": "123456",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/provjere/18",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"provjere",
+										"18"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deaktiviraj Sve Žetone",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "lozinka",
+										"value": "123456",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/provjere/korisnik/pkos",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"provjere",
+										"korisnik",
+										"pkos"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Korisnici",
+					"item": [
+						{
+							"name": "Dohvati Sve Korisnike",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/korisnici",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"korisnici"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Registriraj Korisnika",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"korisnicko_ime\": \"mmatijevi5\",\n    \"ime\": \"Mislav\",\n    \"prezime\": \"Matijević\",\n    \"lozinka\": \"123456\",\n    \"email\": \"mmatijevi@foi.hr\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/korisnici",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"korisnici"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dohvat Korisnika",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/korisnici/mmatijevi",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"korisnici",
+										"mmatijevi"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dohvat Grupa Korisnika",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/korisnici/pkos/grupe",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"korisnici",
+										"pkos",
+										"grupe"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Aerodromi",
+					"item": [
+						{
+							"name": "Dohvati Sve Aerodrome",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/aerodromi?stranica=2",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"aerodromi"
+									],
+									"query": [
+										{
+											"key": "stranica",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dohvati Praćene Aerodrome",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/aerodromi?preuzimanje",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"aerodromi"
+									],
+									"query": [
+										{
+											"key": "preuzimanje",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dodaj Aerodrom Za Praćenje",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"icao\": \"EGHI\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/aerodromi",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"aerodromi"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dohvati Jedan Aerodrom",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/aerodromi/LDZA",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"aerodromi",
+										"LDZA"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dohvati Polaske (Datum)",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/aerodromi/LDZA/polasci?vrsta=0&od=15.4.2020&do=30.4.2020",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"aerodromi",
+										"LDZA",
+										"polasci"
+									],
+									"query": [
+										{
+											"key": "vrsta",
+											"value": "0"
+										},
+										{
+											"key": "od",
+											"value": "15.4.2020"
+										},
+										{
+											"key": "do",
+											"value": "30.4.2020"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dohvati Polaske (UNIX)",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/aerodromi/LDZA/polasci?vrsta=1&od=1586901600&do=1588197600",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"aerodromi",
+										"LDZA",
+										"polasci"
+									],
+									"query": [
+										{
+											"key": "vrsta",
+											"value": "1"
+										},
+										{
+											"key": "od",
+											"value": "1586901600"
+										},
+										{
+											"key": "do",
+											"value": "1588197600"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dohvati Dolaske (Datum)",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/aerodromi/LDZA/dolasci?vrsta=0&od=15.4.2020&do=30.4.2020",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"aerodromi",
+										"LDZA",
+										"dolasci"
+									],
+									"query": [
+										{
+											"key": "vrsta",
+											"value": "0"
+										},
+										{
+											"key": "od",
+											"value": "15.4.2020"
+										},
+										{
+											"key": "do",
+											"value": "30.4.2020"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dohvati Dolaske (UNIX)",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/aerodromi/LDZA/dolasci?vrsta=1&od=1586901600&do=1588197600",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"aerodromi",
+										"LDZA",
+										"dolasci"
+									],
+									"query": [
+										{
+											"key": "vrsta",
+											"value": "1"
+										},
+										{
+											"key": "od",
+											"value": "1586901600"
+										},
+										{
+											"key": "do",
+											"value": "1588197600"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dohvati Udaljenost",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/aerodromi/CYEG/AYPY",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"aerodromi",
+										"CYEG",
+										"AYPY"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Udaljenosti",
+					"item": [
+						{
+							"name": "Udaljenost STATUS",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/serveri",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"serveri"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Udaljenost INIT",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/serveri/init",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"serveri",
+										"init"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Udaljenost LOAD",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n        \"icao\": \"AYPY\",\n        \"naziv\": \"Port Moresby Jacksons International Airport\",\n        \"lokacija\": {\n            \"latitude\": -9.4433803,\n            \"longitude\": 147.22000122070312\n        }\n    },\n    {\n        \"icao\": \"BIKF\",\n        \"naziv\": \"Keflavik International Airport\",\n        \"lokacija\": {\n            \"latitude\": -22.605600357056,\n            \"longitude\": 63.985000610\n        }\n    },\n    {\n        \"icao\": \"CMN\",\n        \"naziv\": \"CMN\",\n        \"lokacija\": {\n            \"latitude\": 0,\n            \"longitude\": 0\n        }\n    },\n    {\n        \"icao\": \"CYEG\",\n        \"naziv\": \"Edmonton International Airport\",\n        \"lokacija\": {\n            \"latitude\": 53.30970001220,\n            \"longitude\": -113.580001831\n        }\n    },\n    {\n        \"icao\": \"CYHZ\",\n        \"naziv\": \"Halifax / Stanfield International Airport\",\n        \"lokacija\": {\n            \"latitude\": 44.8807983398,\n            \"longitude\": -63.5085983276\n        }\n    }\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/serveri/load",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"serveri",
+										"load"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Udaljenost Clear",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/serveri/clear",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"serveri",
+										"clear"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Udaljenost QUIT",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "korisnik",
+										"value": "pkos",
+										"type": "text"
+									},
+									{
+										"key": "zeton",
+										"value": "0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{nwtis_app_3}}/api/serveri/quit",
+									"host": [
+										"{{nwtis_app_3}}"
+									],
+									"path": [
+										"api",
+										"serveri",
+										"quit"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
