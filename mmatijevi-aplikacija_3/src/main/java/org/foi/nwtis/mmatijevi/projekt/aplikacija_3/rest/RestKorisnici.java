@@ -9,7 +9,7 @@ import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikVecPostojiException;
 import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikPrikaz;
 import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikRegistracija;
 import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovor;
-import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovorObjekt;
+import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovorUzPodatke;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -35,7 +35,7 @@ public class RestKorisnici {
 
         List<KorisnikPrikaz> korisnici = servisKorisnika.dajSveKorisnike();
         if (korisnici != null) {
-            odgovor = Response.ok(new RestOdgovorObjekt<List<KorisnikPrikaz>>(
+            odgovor = Response.ok(new RestOdgovorUzPodatke<List<KorisnikPrikaz>>(
                     true, "Dohvat svih korisnika uspješan", korisnici))
                     .build();
         } else {
@@ -84,7 +84,7 @@ public class RestKorisnici {
         try {
             pronadjeniKorisnik = servisKorisnika.dohvatiJednogKorisnika(korime);
             if (pronadjeniKorisnik != null) {
-                odgovor = Response.ok(new RestOdgovorObjekt<KorisnikPrikaz>(
+                odgovor = Response.ok(new RestOdgovorUzPodatke<KorisnikPrikaz>(
                         true, "Dohvat korisnika uspješan", pronadjeniKorisnik))
                         .build();
             } else {
@@ -111,7 +111,7 @@ public class RestKorisnici {
             pronadjeneGrupe = servisKorisnika.dohvatiGrupeKorisnika(korime);
             if (pronadjeneGrupe != null) {
                 if (pronadjeneGrupe.size() > 0) {
-                    odgovor = Response.ok(new RestOdgovorObjekt<List<String>>(
+                    odgovor = Response.ok(new RestOdgovorUzPodatke<List<String>>(
                             true, "Dohvat grupa korisnika uspješan", pronadjeneGrupe))
                             .build();
                 } else {

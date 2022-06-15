@@ -9,12 +9,12 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class RestOdgovorObjekt<T> extends RestOdgovor {
+public class RestOdgovorUzPodatke<T> extends RestOdgovor {
     @JsonbProperty("podaci")
-    private T objektKlase;
+    private T podaci;
 
-    public RestOdgovorObjekt(boolean uspjeh, String poruka, T objekt) {
+    public RestOdgovorUzPodatke(boolean uspjeh, String poruka, T podaci) {
         super(uspjeh, poruka);
-        this.objektKlase = objekt;
+        this.podaci = podaci;
     }
 }

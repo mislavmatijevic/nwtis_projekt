@@ -18,7 +18,7 @@ import org.foi.nwtis.mmatijevi.projekt.iznimke.AerodromVecPracenException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ServerUdaljenostiIznimka;
 import org.foi.nwtis.mmatijevi.projekt.modeli.AvionLetiPrikaz;
 import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovor;
-import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovorObjekt;
+import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovorUzPodatke;
 import org.foi.nwtis.podaci.Aerodrom;
 
 import jakarta.inject.Inject;
@@ -79,7 +79,7 @@ public class RestAerodromi {
                         .build();
             } else {
                 odgovor = Response.status(Status.OK)
-                        .entity(new RestOdgovorObjekt<>(true, "Dohvat uspješan!", aerodromi)).build();
+                        .entity(new RestOdgovorUzPodatke<>(true, "Dohvat uspješan!", aerodromi)).build();
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -146,7 +146,7 @@ public class RestAerodromi {
             Aerodrom aerodrom = servisAerodroma.dohvatiAerodrom(icao);
             if (aerodrom != null) {
                 odgovor = Response.status(Status.OK)
-                        .entity(new RestOdgovorObjekt<>(true, "Uspješan dohvat aerodroma", aerodrom)).build();
+                        .entity(new RestOdgovorUzPodatke<>(true, "Uspješan dohvat aerodroma", aerodrom)).build();
             } else {
                 odgovor = Response.status(Status.NOT_FOUND)
                         .entity(new RestOdgovor(false, "Nema aerodroma '" + icao + "'")).build();
@@ -319,7 +319,7 @@ public class RestAerodromi {
                     if (aktivnostiAerodroma.size() > 0) {
                         odgovor = Response
                                 .status(Status.OK)
-                                .entity(new RestOdgovorObjekt<>(
+                                .entity(new RestOdgovorUzPodatke<>(
                                         true,
                                         "Dohvaćeno je " + aktivnostiAerodroma.size() +
                                                 " podataka iz tablice " + relevantnaTablica.toString(),
