@@ -1,5 +1,6 @@
 package org.foi.nwtis.mmatijevi.projekt.aplikacija_4.klijenti;
 
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovor;
 import org.foi.nwtis.mmatijevi.projekt.modeli.Zeton;
@@ -52,5 +53,30 @@ public class ProvjereKlijent extends PristupServisu {
 		}
 
 		return odgovorZeton;
+	}
+
+	public String deaktivirajSveZetone(String korime, PrijavljeniKorisnik korisnik) {
+		Client client = ClientBuilder.newClient();
+
+		WebTarget webResource = client.target(this.odredisnaAdresa).path("korisnik").path(korime);
+		Response restOdgovor = webResource.request()
+				.header("Accept", "application/json")
+				.header("korisnik", korisnik.getKorime())
+				.header("lozinka", korisnik.getLozinka())
+				.delete();
+
+		String porukaSaPosluzitelja = "";
+
+		String odgovor = restOdgovor.readEntity(String.class);
+		Gson gson = new Gson();
+		try {
+			RestOdgovor odgovorPogreske = gson.fromJson(odgovor, RestOdgovor.class);
+			porukaSaPosluzitelja = odgovorPogreske.getPoruka();
+		} catch (Exception e) {
+			porukaSaPosluzitelja = "Dogodio se problem s poslužiteljem!";
+			e.printStackTrace();
+		}
+
+		return porukaSaPosluzitelja;
 	}
 }

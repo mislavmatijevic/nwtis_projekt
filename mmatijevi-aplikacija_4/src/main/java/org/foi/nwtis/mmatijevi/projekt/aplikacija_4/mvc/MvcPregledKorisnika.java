@@ -3,6 +3,7 @@ package org.foi.nwtis.mmatijevi.projekt.aplikacija_4.mvc;
 import java.util.List;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.klijenti.KorisniciKlijent;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.klijenti.ProvjereKlijent;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ZetonIstekaoException;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.Konfiguracija;
@@ -16,7 +17,9 @@ import jakarta.mvc.View;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Context;
 
@@ -26,8 +29,6 @@ import jakarta.ws.rs.core.Context;
 public class MvcPregledKorisnika {
     @Inject
     Models model;
-    @Inject
-    HttpSession sjednica;
     @Inject
     ServletContext kontekst;
 
@@ -41,26 +42,10 @@ public class MvcPregledKorisnika {
 
         if (korisnik != null) {
             try {
-                List<Korisnik> korisnici = korisniciKlijent.dohvatiSveKorisnike(
-                        korisnik.getKorime(),
-                        korisnik.getZeton());
+                List<Korisnik> korisnici = korisniciKlijent.dohvatiSveKorisnike(korisnik);
                 if (korisnici != null) {
 
-                    Konfiguracija konfig = (Konfiguracija) kontekst.getAttribute("postavke");
-                    String administratorskaGrupa = konfig.dajPostavku("sustav.administratori");
-
-                    String[] korisnikoveGrupe = korisniciKlijent.dohvatiKorisnikoveGrupe(
-                            korisnik.getKorime(), korisnik.getZeton());
-
-                    boolean korisnikJeAdministrator = false;
-
-                    if (korisnikoveGrupe != null) {
-                        for (int i = 0; i < korisnikoveGrupe.length && korisnikJeAdministrator == false; i++) {
-                            if (korisnikoveGrupe[i].equals(administratorskaGrupa)) {
-                                korisnikJeAdministrator = true;
-                            }
-                        }
-                    }
+                    boolean korisnikJeAdministrator = provjeriAdministrskeOvlasti(korisnik, korisniciKlijent);
 
                     if (korisnikJeAdministrator) {
                         model.put("korisnikJeAdministrator", true);
@@ -76,7 +61,38 @@ public class MvcPregledKorisnika {
                 model.put("greskaPoruka", ex.getLocalizedMessage());
             }
         } else {
-            model.put("greskaPoruka", "Prvo se prijavite u sustav!");
+            model.put("greskaPoruka", "Prvo se morate prijaviti!");
+        }
+
+    }
+
+    @POST
+    @View("korisnici.jsp")
+    public void brisanjeTokenaDrugogKorisnika(@FormParam("korime") String korime, @Context HttpServletRequest zahtjev) {
+
+        HttpSession sjednica = zahtjev.getSession();
+        PrijavljeniKorisnik korisnik = (PrijavljeniKorisnik) sjednica.getAttribute("korisnik");
+
+        if (korisnik != null) {
+
+            KorisniciKlijent korisniciKlijent = new KorisniciKlijent(kontekst);
+
+            boolean korisnikJeAdministrator = false;
+            try {
+                korisnikJeAdministrator = provjeriAdministrskeOvlasti(korisnik, korisniciKlijent);
+            } catch (Exception ex) {
+                model.put("greskaPoruka", ex.getLocalizedMessage());
+            }
+
+            if (korisnikJeAdministrator) {
+                ProvjereKlijent provjereKlijent = new ProvjereKlijent(kontekst);
+                String odgovor = provjereKlijent.deaktivirajSveZetone(korime, korisnik);
+                model.put("infoPoruka", odgovor);
+            } else {
+                model.put("greskaPoruka", "Niste administrator sustava!");
+            }
+        } else {
+            model.put("greskaPoruka", "Ponovno se prijavite u sustav!");
         }
     }
 
