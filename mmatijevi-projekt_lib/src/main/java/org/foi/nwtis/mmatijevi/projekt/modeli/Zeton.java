@@ -1,6 +1,5 @@
 package org.foi.nwtis.mmatijevi.projekt.modeli;
 
-import jakarta.json.bind.annotation.JsonbProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,11 +12,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class Zeton {
-    @JsonbProperty(value = "zeton")
-    private int oznaka;
+    /** Oznaka žetona */
+    private int zeton;
     /**
      * Vrijeme u sekundama!
      */
-    @JsonbProperty(value = "vrijeme")
     private int vrijeme;
 }

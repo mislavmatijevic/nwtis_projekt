@@ -48,7 +48,7 @@ public class KorisniciKlijent extends PristupServisu {
 		Response restOdgovor = webResource.request()
 				.header("Accept", "application/json")
 				.header("korisnik", sustavKorisnik)
-				.header("zeton", zeton.getOznaka())
+				.header("zeton", zeton.getZeton())
 				.post(Entity.entity(korisnik, "application/json"));
 
 		boolean uspjeh = false;
@@ -73,7 +73,7 @@ public class KorisniciKlijent extends PristupServisu {
 		Response restOdgovor = webResource.request()
 				.header("Accept", "application/json")
 				.header("korisnik", korisnik.getKorime())
-				.header("zeton", korisnik.getZeton().getOznaka())
+				.header("zeton", korisnik.getZeton())
 				.get();
 
 		List<Korisnik> korisnici = null;
@@ -102,7 +102,7 @@ public class KorisniciKlijent extends PristupServisu {
 		Response restOdgovor = webResource.request()
 				.header("Accept", "application/json")
 				.header("korisnik", korisnik.getKorime())
-				.header("zeton", korisnik.getZeton().getOznaka())
+				.header("zeton", korisnik.getZeton())
 				.get();
 
 		String[] grupe = null;
