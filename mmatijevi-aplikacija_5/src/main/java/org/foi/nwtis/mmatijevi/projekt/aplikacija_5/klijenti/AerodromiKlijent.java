@@ -21,16 +21,25 @@ public class AerodromiKlijent extends PristupServisu {
         super("aerodromi", kontekst);
     }
 
-    public List<AvionLeti> dajPolaskeDan(PrijavljeniKorisnik korisnik, String icao, String danOd, String danDo)
+    public enum VrsteVremenskogRaspona {
+        DATUM,
+        TIMESTAMP
+    }
+
+    public List<AvionLeti> dajPolaske(PrijavljeniKorisnik korisnik, String icao, String danOd, String danDo,
+            VrsteVremenskogRaspona vrsta)
             throws ZetonIstekaoException {
         Client client = ClientBuilder.newClient();
+
+        Object rasponOd = vrsta == VrsteVremenskogRaspona.TIMESTAMP ? Integer.parseInt(danOd) : danOd;
+        Object rasponDo = vrsta == VrsteVremenskogRaspona.TIMESTAMP ? Integer.parseInt(danDo) : danDo;
 
         WebTarget webResource = client.target(this.odredisnaAdresa)
                 .path(icao)
                 .path("polasci")
-                .queryParam("vrsta", 0)
-                .queryParam("od", danOd)
-                .queryParam("do", danDo);
+                .queryParam("vrsta", vrsta.ordinal())
+                .queryParam("od", rasponOd)
+                .queryParam("do", rasponDo);
         Response restOdgovor = webResource.request()
                 .header("Accept", "application/json")
                 .header("korisnik", korisnik.getKorime())

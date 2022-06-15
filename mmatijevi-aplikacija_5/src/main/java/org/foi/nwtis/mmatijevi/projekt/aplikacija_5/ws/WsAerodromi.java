@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_5.klijenti.AerodromiKlijent;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_5.klijenti.AerodromiKlijent.VrsteVremenskogRaspona;
 import org.foi.nwtis.mmatijevi.projekt.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.rest.podaci.AvionLeti;
 
@@ -38,19 +39,7 @@ public class WsAerodromi {
 			@WebParam(name = "icao") String icao,
 			@WebParam(name = "danOd") String danOd,
 			@WebParam(name = "danDo") String danDo) {
-		List<AvionLeti> polasci = null;
-
-		try {
-			int zetonBrojcani = Integer.parseInt(zeton);
-			PrijavljeniKorisnik prijavljeniKorisnik = new PrijavljeniKorisnik(korisnik, "", zetonBrojcani);
-			AerodromiKlijent aerodromiKlijent = new AerodromiKlijent(kontekst);
-			polasci = aerodromiKlijent.dajPolaskeDan(prijavljeniKorisnik, icao, danOd, danDo);
-		} catch (Exception ex) {
-			Logger.getLogger(WsAerodromi.class.getName()).log(Level.SEVERE,
-					"Neuspio dohvat polazaka po čitljivim datumima: " + danOd + " i " + danDo, ex);
-		}
-
-		return polasci;
+		return dohvatPolazakaPoKriteriju(korisnik, zeton, icao, danOd, danDo, VrsteVremenskogRaspona.DATUM);
 	}
 
 	/**
@@ -69,7 +58,7 @@ public class WsAerodromi {
 			@WebParam(name = "icao") String icao,
 			@WebParam(name = "vrijemeOd") String vrijemeOd,
 			@WebParam(name = "vrijemeDo") String vrijemeDo) {
-		return null;
+		return dohvatPolazakaPoKriteriju(korisnik, zeton, icao, vrijemeOd, vrijemeDo, VrsteVremenskogRaspona.TIMESTAMP);
 	}
 
 	/** 
@@ -85,5 +74,27 @@ public class WsAerodromi {
 			@WebParam(name = "zeton") String zeton,
 			@WebParam(name = "icao") String icao) {
 		return false;
+	}
+
+	private List<AvionLeti> dohvatPolazakaPoKriteriju(
+			String korisnik,
+			String zeton,
+			String icao,
+			String oznakaOd,
+			String oznakaDo,
+			VrsteVremenskogRaspona vrsta) {
+		List<AvionLeti> polasci = null;
+
+		try {
+			int zetonBrojcani = Integer.parseInt(zeton);
+			PrijavljeniKorisnik prijavljeniKorisnik = new PrijavljeniKorisnik(korisnik, "", zetonBrojcani);
+			AerodromiKlijent aerodromiKlijent = new AerodromiKlijent(kontekst);
+			polasci = aerodromiKlijent.dajPolaske(prijavljeniKorisnik, icao, oznakaOd, oznakaDo, vrsta);
+		} catch (Exception ex) {
+			Logger.getLogger(WsAerodromi.class.getName()).log(Level.SEVERE,
+					"Neuspio dohvat polazaka po čitljivim datumima: " + oznakaOd + " i " + oznakaDo, ex);
+		}
+
+		return polasci;
 	}
 }
