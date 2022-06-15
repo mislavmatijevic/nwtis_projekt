@@ -63,7 +63,7 @@ public class SlusacAplikacije implements ServletContextListener {
 
 		servisPrijava.postaviKonfiguraciju(konfig);
 		servisZetona.postaviKonfiguraciju(konfig);
-		servisUdaljenosti.postaviKonfiguraciju(konfig);
+		servisUdaljenosti.postaviAdresu(konfig.dajPostavku("a"), Integer.parseInt(konfig.dajPostavku("p")));
 		baza.konfig = konfig;
 
 		ServletContextListener.super.contextInitialized(sce);

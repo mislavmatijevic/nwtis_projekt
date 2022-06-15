@@ -8,7 +8,9 @@ import org.foi.nwtis.mmatijevi.projekt.ispis.Terminal;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.Konfiguracija;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.KonfiguracijaApstraktna;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.NeispravnaKonfiguracija;
+import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti;
 
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
@@ -19,6 +21,8 @@ import jakarta.servlet.annotation.WebListener;
  */
 @WebListener
 public class SlusacAplikacije implements ServletContextListener {
+	@Inject
+	PosluziteljUdaljenosti servisUdaljenosti;
 
 	/**
 	 * Učitavanje konfiguracije
@@ -31,13 +35,18 @@ public class SlusacAplikacije implements ServletContextListener {
 		String putanja = context.getRealPath("/WEB-INF") + File.separator;
 		nazivDatoteke = putanja + nazivDatoteke;
 
+		Konfiguracija konfig;
 		try {
-			Konfiguracija konfig = KonfiguracijaApstraktna.preuzmiKonfiguraciju(nazivDatoteke);
+			konfig = KonfiguracijaApstraktna.preuzmiKonfiguraciju(nazivDatoteke);
 			context.setAttribute("postavke", konfig);
 		} catch (NeispravnaKonfiguracija ex) {
 			Logger.getLogger(SlusacAplikacije.class.getName()).log(Level.WARNING, null, ex);
 			Terminal.greskaIspis("Konfiguracija nije ispravna! " + ex.getMessage());
 			return;
+		}
+
+		if (konfig != null) {
+			servisUdaljenosti.postaviAdresu(konfig.dajPostavku("a"), Integer.parseInt(konfig.dajPostavku("p")));
 		}
 
 		ServletContextListener.super.contextInitialized(sce);

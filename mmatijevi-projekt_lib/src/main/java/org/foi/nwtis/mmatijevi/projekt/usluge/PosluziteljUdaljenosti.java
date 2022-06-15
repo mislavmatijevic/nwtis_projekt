@@ -17,7 +17,7 @@ import org.foi.nwtis.mmatijevi.projekt.modeli.OdgovorStatusUdaljenost;
 import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
-public class PosluziteljUdaljenosti extends KonfigurabilniServis {
+public class PosluziteljUdaljenosti {
 
     public enum ServerUdaljenostiNaredba {
         STATUS,
@@ -28,18 +28,25 @@ public class PosluziteljUdaljenosti extends KonfigurabilniServis {
         QUIT
     }
 
+    private String adresa;
+    private int port;
+
+    public void postaviAdresu(String adresa, int port) {
+        this.adresa = adresa;
+        this.port = port;
+    }
+
     /**
      * Kontaktira poslužitelja udaljenosti zahtijevajući udaljenost među aerodromima.
      * @param naredba ServerUdaljenostiNaredba za poslužitelja.
      * @param argumenti Argumenti uz naredbu. Može biti prazno.
      * @return Broj udaljenosti.
      * @throws ServerUdaljenostiIznimka Poruka sadržava opis problema sa udaljenog poslužitelja.
-     * @throws NumberFormatException Problem pri čitanju brojevnog odgovora sa poslužitelja udaljenosti.
      * @throws IOException Pogreška pri spajanju na poslužitelja.
      * @throws SocketException Pogreška pri komunikaciji s poslužiteljem.
      */
     public String izvrsiNaredbu(ServerUdaljenostiNaredba naredba, String[] argumenti)
-            throws SocketException, IOException, NumberFormatException, ServerUdaljenostiIznimka {
+            throws SocketException, IOException, ServerUdaljenostiIznimka {
 
         StringBuilder komanda = new StringBuilder();
 
@@ -88,9 +95,7 @@ public class PosluziteljUdaljenosti extends KonfigurabilniServis {
 
         try {
             posaljiKomandu("STATUS");
-            odgovor = new OdgovorStatusUdaljenost(
-                    konfig.dajPostavku("a"),
-                    Integer.parseInt(konfig.dajPostavku("p")));
+            odgovor = new OdgovorStatusUdaljenost(adresa, port);
         } catch (Exception e) {
             odgovor = null;
         }
@@ -111,9 +116,8 @@ public class PosluziteljUdaljenosti extends KonfigurabilniServis {
         Socket veza = new Socket();
 
         try {
-            InetSocketAddress isa = new InetSocketAddress(konfig.dajPostavku("a"),
-                    Integer.parseInt(konfig.dajPostavku("p")));
-            veza.connect(isa, Integer.parseInt(konfig.dajPostavku("maks.cekanje")));
+            InetSocketAddress isa = new InetSocketAddress(adresa, port);
+            veza.connect(isa, 1000);
 
             try (InputStreamReader isr = new InputStreamReader(veza.getInputStream(), Charset.forName("UTF-8"));
                     OutputStreamWriter osw = new OutputStreamWriter(veza.getOutputStream(),
