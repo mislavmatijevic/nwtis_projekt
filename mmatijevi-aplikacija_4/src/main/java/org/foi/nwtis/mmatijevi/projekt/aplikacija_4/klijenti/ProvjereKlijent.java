@@ -32,7 +32,7 @@ public class ProvjereKlijent extends PristupServisu {
 				.get();
 		Zeton odgovorZeton = null;
 
-		if (restOdgovor.getStatus() == 200) {
+		if (restOdgovor.getStatus() == Response.Status.OK.getStatusCode()) {
 			String odgovor = restOdgovor.readEntity(String.class);
 			Gson gson = new Gson();
 			odgovorZeton = gson.fromJson(odgovor, Zeton.class);

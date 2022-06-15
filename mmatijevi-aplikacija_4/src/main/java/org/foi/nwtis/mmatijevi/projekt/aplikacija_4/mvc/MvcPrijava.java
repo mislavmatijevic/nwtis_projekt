@@ -28,13 +28,11 @@ public class MvcPrijava {
     ServletContext kontekst;
 
     @GET
-    @Path("")
     @View("prijava.jsp")
     public void prijavaUnos() {
     }
 
     @POST
-    @Path("")
     @View("prijava.jsp")
     public void prijavaPoslana(@FormParam("korime") String korime, @FormParam("lozinka") String lozinka) {
         ProvjereKlijent pk = new ProvjereKlijent(kontekst);

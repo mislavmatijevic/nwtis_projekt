@@ -3,6 +3,7 @@ package org.foi.nwtis.mmatijevi.projekt.aplikacija_4.klijenti;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeispravanException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikVecPostojiException;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.ZetonIstekaoException;
 import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikRegistracija;
 import org.foi.nwtis.mmatijevi.projekt.modeli.Zeton;
 
@@ -23,7 +24,8 @@ public class KorisniciKlijent extends PristupServisu {
 	}
 
 	public boolean registrirajKorisnika(KorisnikRegistracija korisnik)
-			throws KorisnikNePostojiException, KorisnikNeispravanException, KorisnikVecPostojiException {
+			throws KorisnikNePostojiException, KorisnikNeispravanException, KorisnikVecPostojiException,
+			ZetonIstekaoException {
 		Client client = ClientBuilder.newClient();
 
 		String sustavKorisnik = this.konfig.dajPostavku("sustav.korisnik");
@@ -45,6 +47,8 @@ public class KorisniciKlijent extends PristupServisu {
 			throw new KorisnikNeispravanException();
 		} else if (restOdgovor.getStatus() == Response.Status.CONFLICT.getStatusCode()) {
 			throw new KorisnikVecPostojiException(korisnik.getKorIme());
+		} else if (restOdgovor.getStatus() == Response.Status.REQUEST_TIMEOUT.getStatusCode()) {
+			throw new ZetonIstekaoException();
 		} else if (restOdgovor.getStatus() == Response.Status.OK.getStatusCode()) {
 			uspjeh = true;
 		}

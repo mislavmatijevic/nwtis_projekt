@@ -39,6 +39,7 @@
         </div>
     </nav>
     <div class="text-center">
+
         <c:forEach var="greskaPoruka" items="${requestScope.greskaPoruka}">
             <div class="alert alert-danger" role="alert">
                 ${greskaPoruka}
@@ -49,6 +50,7 @@
                 ${infoPoruka}
             </div>
         </c:forEach>
+
         <form method="POST" style="margin: auto; max-width: 500px">
             <div class="form-outline mb-4">
                 <label class="form-label" for="korime">Korisničko ime</label>
@@ -67,6 +69,7 @@
                         href="${pageContext.servletContext.contextPath}/mvc/registracija/">Registracija</a></p>
             </div>
         </form>
+        
     </div>
 </body>
 

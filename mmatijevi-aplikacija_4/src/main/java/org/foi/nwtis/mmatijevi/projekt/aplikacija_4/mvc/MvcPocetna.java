@@ -21,7 +21,6 @@ public class MvcPocetna {
     HttpSession sjednica;
 
     @GET
-    @Path("")
     @View("index.jsp")
     public void pocetak() {
 

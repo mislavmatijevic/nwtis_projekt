@@ -67,6 +67,8 @@ public class MvcRegistracija {
             model.put("greskaPoruka", "Popunite sva polja!");
         } catch (KorisnikVecPostojiException ex) {
             model.put("greskaPoruka", "Korisnik s tim korisničkim imenom već postoji!");
+        } catch (Exception ex) {
+            model.put("greskaPoruka", ex.getLocalizedMessage());
         } finally {
             if (registracijaObavljena) {
                 model.put("korime", korime);
