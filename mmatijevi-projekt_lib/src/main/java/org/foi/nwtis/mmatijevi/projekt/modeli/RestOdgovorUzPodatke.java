@@ -1,6 +1,5 @@
 package org.foi.nwtis.mmatijevi.projekt.modeli;
 
-import jakarta.json.bind.annotation.JsonbProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +9,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RestOdgovorUzPodatke<T> extends RestOdgovor {
-    @JsonbProperty("podaci")
     private T podaci;
 
     public RestOdgovorUzPodatke(boolean uspjeh, String poruka, T podaci) {

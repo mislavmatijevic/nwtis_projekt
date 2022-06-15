@@ -6,7 +6,6 @@ import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeispravanException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikVecPostojiException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ZetonIstekaoException;
-import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikRegistracija;
 import org.foi.nwtis.mmatijevi.projekt.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.mmatijevi.projekt.modeli.Zeton;
 import org.foi.nwtis.mmatijevi.projekt.usluge.ParserRestOdgovoraUzPodatke;
@@ -29,7 +28,7 @@ public class KorisniciKlijent extends PristupServisu {
 		super("korisnici", kontekst);
 	}
 
-	public boolean registrirajKorisnika(KorisnikRegistracija korisnik)
+	public boolean registrirajKorisnika(Korisnik korisnik)
 			throws KorisnikNePostojiException, KorisnikNeispravanException, KorisnikVecPostojiException,
 			ZetonIstekaoException {
 		Client client = ClientBuilder.newClient();

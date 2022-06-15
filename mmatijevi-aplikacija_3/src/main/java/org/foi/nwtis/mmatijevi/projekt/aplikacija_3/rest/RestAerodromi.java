@@ -14,12 +14,12 @@ import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma.VrstaTablice;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.AerodromVecPracenException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ServerUdaljenostiIznimka;
-import org.foi.nwtis.mmatijevi.projekt.modeli.AvionLetiPrikaz;
 import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovor;
 import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovorUzPodatke;
 import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti;
 import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti.ServerUdaljenostiNaredba;
 import org.foi.nwtis.podaci.Aerodrom;
+import org.foi.nwtis.rest.podaci.AvionLeti;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
@@ -314,7 +314,7 @@ public class RestAerodromi {
 
             if (odgovor == null) {
                 try {
-                    List<AvionLetiPrikaz> aktivnostiAerodroma = servisAerodroma.dohvatiPraceneLetoveZaAerodrom(
+                    List<AvionLeti> aktivnostiAerodroma = servisAerodroma.dohvatiPraceneLetoveZaAerodrom(
                             icao, datumOd, datumDo, relevantnaTablica);
                     if (aktivnostiAerodroma.size() > 0) {
                         odgovor = Response

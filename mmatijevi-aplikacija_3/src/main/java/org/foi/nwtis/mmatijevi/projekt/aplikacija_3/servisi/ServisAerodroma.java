@@ -15,7 +15,6 @@ import java.util.List;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.AerodromVecPracenException;
 import org.foi.nwtis.mmatijevi.projekt.modeli.AerodromiSviPrikaz;
-import org.foi.nwtis.mmatijevi.projekt.modeli.AvionLetiPrikaz;
 import org.foi.nwtis.podaci.Aerodrom;
 import org.foi.nwtis.podaci.Airport;
 import org.foi.nwtis.rest.podaci.AvionLeti;
@@ -218,11 +217,11 @@ public class ServisAerodroma {
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public List<AvionLetiPrikaz> dohvatiPraceneLetoveZaAerodrom(
+    public List<AvionLeti> dohvatiPraceneLetoveZaAerodrom(
             String icao, Date datumOd, Date datumDo, VrstaTablice nazivTablice)
             throws ClassNotFoundException, SQLException {
 
-        List<AvionLetiPrikaz> aktivnostiLetova = new LinkedList<AvionLetiPrikaz>();
+        List<AvionLeti> aktivnostiLetova = new LinkedList<AvionLeti>();
 
         long datumPocetniUNIX = datumOd.getTime() / 1000;
         long datumZavrsniUNIX = datumDo.getTime() / 1000;
@@ -263,7 +262,7 @@ public class ServisAerodroma {
 
             try (ResultSet rs = izrazUnosPraceni.executeQuery()) {
                 while (rs.next()) {
-                    AvionLetiPrikaz info = new AvionLetiPrikaz(
+                    AvionLeti info = new AvionLeti(
                             rs.getString("icao24"),
                             rs.getInt("firstSeen"),
                             rs.getString("estDepartureAirport"),

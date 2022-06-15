@@ -5,7 +5,7 @@ import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeispravanException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikVecPostojiException;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.Konfiguracija;
-import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikRegistracija;
+import org.foi.nwtis.podaci.Korisnik;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -47,7 +47,7 @@ public class MvcRegistracija {
             @FormParam("email") String email) {
         KorisniciKlijent pk = new KorisniciKlijent(kontekst);
 
-        KorisnikRegistracija korisnik = new KorisnikRegistracija(korime, ime, prezime, lozinka, email);
+        Korisnik korisnik = new Korisnik(korime, ime, prezime, lozinka, email);
 
         boolean registracijaObavljena = false;
 

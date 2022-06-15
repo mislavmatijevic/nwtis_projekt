@@ -7,9 +7,9 @@ import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeispravanException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikVecPostojiException;
 import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikPrikaz;
-import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikRegistracija;
 import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovor;
 import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovorUzPodatke;
+import org.foi.nwtis.podaci.Korisnik;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -48,7 +48,7 @@ public class RestKorisnici {
     }
 
     @POST
-    public Response registrirajNovogKorisnika(KorisnikRegistracija korisnik) {
+    public Response registrirajNovogKorisnika(Korisnik korisnik) {
         Response odgovor = null;
 
         if (korisnik != null) {
