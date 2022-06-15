@@ -13,7 +13,6 @@ import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
 import jakarta.mvc.View;
 import jakarta.servlet.ServletContext;
-import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -25,8 +24,6 @@ import jakarta.ws.rs.Path;
 public class MvcRegistracija {
     @Inject
     Models model;
-    @Inject
-    HttpSession sjednica;
     @Inject
     ServletContext kontekst;
 

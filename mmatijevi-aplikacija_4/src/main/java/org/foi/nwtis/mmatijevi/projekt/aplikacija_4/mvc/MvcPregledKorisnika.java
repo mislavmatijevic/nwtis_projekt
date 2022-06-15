@@ -14,9 +14,11 @@ import jakarta.mvc.Controller;
 import jakarta.mvc.Models;
 import jakarta.mvc.View;
 import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.Context;
 
 @Controller
 @Path("korisnici")
@@ -31,9 +33,10 @@ public class MvcPregledKorisnika {
 
     @GET
     @View("korisnici.jsp")
-    public void registracijaUnos() {
+    public void dohvatiSveKorisnike(@Context HttpServletRequest zahtjev) {
         KorisniciKlijent korisniciKlijent = new KorisniciKlijent(kontekst);
 
+        HttpSession sjednica = zahtjev.getSession();
         PrijavljeniKorisnik korisnik = (PrijavljeniKorisnik) sjednica.getAttribute("korisnik");
 
         if (korisnik != null) {
