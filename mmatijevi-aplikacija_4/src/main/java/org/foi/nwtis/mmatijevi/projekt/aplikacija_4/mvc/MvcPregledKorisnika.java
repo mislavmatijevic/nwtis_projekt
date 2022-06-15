@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.klijenti.KorisniciKlijent;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.modeli.PrijavljeniKorisnik;
+import org.foi.nwtis.mmatijevi.projekt.iznimke.ZetonIstekaoException;
 import org.foi.nwtis.mmatijevi.projekt.konfiguracije.Konfiguracija;
 import org.foi.nwtis.podaci.Korisnik;
 
@@ -74,6 +75,24 @@ public class MvcPregledKorisnika {
         } else {
             model.put("greskaPoruka", "Prvo se prijavite u sustav!");
         }
+    }
 
+    private boolean provjeriAdministrskeOvlasti(PrijavljeniKorisnik korisnik, KorisniciKlijent korisniciKlijent)
+            throws ZetonIstekaoException {
+        Konfiguracija konfig = (Konfiguracija) kontekst.getAttribute("postavke");
+        String administratorskaGrupa = konfig.dajPostavku("sustav.administratori");
+
+        String[] korisnikoveGrupe = korisniciKlijent.dohvatiKorisnikoveGrupe(korisnik);
+
+        boolean korisnikJeAdministrator = false;
+
+        if (korisnikoveGrupe != null) {
+            for (int i = 0; i < korisnikoveGrupe.length && korisnikJeAdministrator == false; i++) {
+                if (korisnikoveGrupe[i].equals(administratorskaGrupa)) {
+                    korisnikJeAdministrator = true;
+                }
+            }
+        }
+        return korisnikJeAdministrator;
     }
 }

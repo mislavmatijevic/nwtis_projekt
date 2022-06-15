@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeispravanException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikVecPostojiException;
@@ -65,14 +66,14 @@ public class KorisniciKlijent extends PristupServisu {
 		return uspjeh;
 	}
 
-	public List<Korisnik> dohvatiSveKorisnike(String korime, Zeton zeton) throws ZetonIstekaoException {
+	public List<Korisnik> dohvatiSveKorisnike(PrijavljeniKorisnik korisnik) throws ZetonIstekaoException {
 		Client client = ClientBuilder.newClient();
 
 		WebTarget webResource = client.target(this.odredisnaAdresa);
 		Response restOdgovor = webResource.request()
 				.header("Accept", "application/json")
-				.header("korisnik", korime)
-				.header("zeton", zeton.getOznaka())
+				.header("korisnik", korisnik.getKorime())
+				.header("zeton", korisnik.getZeton().getOznaka())
 				.get();
 
 		List<Korisnik> korisnici = null;
@@ -94,14 +95,14 @@ public class KorisniciKlijent extends PristupServisu {
 		return korisnici;
 	}
 
-	public String[] dohvatiKorisnikoveGrupe(String korime, Zeton zeton) throws ZetonIstekaoException {
+	public String[] dohvatiKorisnikoveGrupe(PrijavljeniKorisnik korisnik) throws ZetonIstekaoException {
 		Client client = ClientBuilder.newClient();
 
-		WebTarget webResource = client.target(this.odredisnaAdresa).path(korime).path("grupe");
+		WebTarget webResource = client.target(this.odredisnaAdresa).path(korisnik.getKorime()).path("grupe");
 		Response restOdgovor = webResource.request()
 				.header("Accept", "application/json")
-				.header("korisnik", korime)
-				.header("zeton", zeton.getOznaka())
+				.header("korisnik", korisnik.getKorime())
+				.header("zeton", korisnik.getZeton().getOznaka())
 				.get();
 
 		String[] grupe = null;
