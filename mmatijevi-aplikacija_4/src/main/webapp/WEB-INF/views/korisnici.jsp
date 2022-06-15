@@ -49,7 +49,7 @@
             </div>
         </c:forEach>
         <c:forEach var="infoPoruka" items="${requestScope.infoPoruka}">
-            <div class="alert alert-primary" role="alert">
+            <div class="alert alert-success" role="alert">
                 ${infoPoruka}
             </div>
         </c:forEach>
