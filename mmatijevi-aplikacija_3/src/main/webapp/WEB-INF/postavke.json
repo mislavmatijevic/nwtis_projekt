@@ -3,7 +3,7 @@
     "p": 8000,
     "maks.cekanje": 10,
     "zeton.trajanje": 60,
-    "sustav.administratori": "NWTiS Admin",
+    "sustav.administratori": "admin",
     "jdbc.derby": "org.apache.derby.jdbc.ClientDriver",
     "jdbc.hsqldb.hsql": "org.hsqldb.jdbcDriver",
     "user.username": "nwtis_bp_1",
