@@ -83,7 +83,6 @@
                             <td>${k.korIme}</td>
                             <td>${k.ime}</td>
                             <td>${k.prezime}</td>
-                            <td>${k.lozinka}</td>
                             <td>${k.email}</td>
                         </tr>
                     </c:forEach>
