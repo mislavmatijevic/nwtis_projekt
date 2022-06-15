@@ -1,7 +1,5 @@
 package org.foi.nwtis.mmatijevi.projekt.aplikacija_4.klijenti;
 
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.modeli.PrijavljeniKorisnik;
@@ -10,12 +8,9 @@ import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeispravanException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikVecPostojiException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ZetonIstekaoException;
 import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikRegistracija;
-import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovorUzPodatke;
 import org.foi.nwtis.mmatijevi.projekt.modeli.Zeton;
+import org.foi.nwtis.mmatijevi.projekt.usluge.ParserRestOdgovoraUzPodatke;
 import org.foi.nwtis.podaci.Korisnik;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import jakarta.servlet.ServletContext;
 import jakarta.ws.rs.client.Client;
@@ -78,16 +73,10 @@ public class KorisniciKlijent extends PristupServisu {
 
 		List<Korisnik> korisnici = null;
 		if (restOdgovor.getStatus() == Response.Status.OK.getStatusCode()) {
-			String odgovor = restOdgovor.readEntity(String.class);
+			String jsonOdgovor = restOdgovor.readEntity(String.class);
 
-			TypeToken<RestOdgovorUzPodatke<Korisnik[]>> odgovorToken = new TypeToken<RestOdgovorUzPodatke<Korisnik[]>>() {
-			};
-			RestOdgovorUzPodatke<Korisnik[]> odgovorParsirani = KorisniciKlijent.parsirajJson(odgovor,
-					odgovorToken.getType());
-
-			korisnici = new LinkedList<>();
-			korisnici.addAll(Arrays.asList((Korisnik[]) odgovorParsirani.getPodaci()));
-
+			korisnici = ParserRestOdgovoraUzPodatke
+					.<List<Korisnik>>dohvatiPodatkeIzRestOdgovora(jsonOdgovor);
 		} else if (restOdgovor.getStatus() == Response.Status.REQUEST_TIMEOUT.getStatusCode()) {
 			throw new ZetonIstekaoException();
 		}
@@ -95,7 +84,7 @@ public class KorisniciKlijent extends PristupServisu {
 		return korisnici;
 	}
 
-	public String[] dohvatiKorisnikoveGrupe(PrijavljeniKorisnik korisnik) throws ZetonIstekaoException {
+	public List<String> dohvatiKorisnikoveGrupe(PrijavljeniKorisnik korisnik) throws ZetonIstekaoException {
 		Client client = ClientBuilder.newClient();
 
 		WebTarget webResource = client.target(this.odredisnaAdresa).path(korisnik.getKorime()).path("grupe");
@@ -105,26 +94,14 @@ public class KorisniciKlijent extends PristupServisu {
 				.header("zeton", korisnik.getZeton())
 				.get();
 
-		String[] grupe = null;
+		List<String> grupe = null;
 		if (restOdgovor.getStatus() == Response.Status.OK.getStatusCode()) {
-			String odgovor = restOdgovor.readEntity(String.class);
-
-			TypeToken<RestOdgovorUzPodatke<String[]>> odgovorToken = new TypeToken<RestOdgovorUzPodatke<String[]>>() {
-			};
-			RestOdgovorUzPodatke<String[]> odgovorParsirani = KorisniciKlijent.parsirajJson(odgovor,
-					odgovorToken.getType());
-
-			grupe = (String[]) odgovorParsirani.getPodaci();
+			String jsonOdgovor = restOdgovor.readEntity(String.class);
+			grupe = ParserRestOdgovoraUzPodatke.dohvatiPodatkeIzRestOdgovora(jsonOdgovor);
 		} else if (restOdgovor.getStatus() == Response.Status.REQUEST_TIMEOUT.getStatusCode()) {
 			throw new ZetonIstekaoException();
 		}
 
 		return grupe;
 	}
-
-	private static <T> T parsirajJson(String strRequest, java.lang.reflect.Type typeOfT) {
-		Gson gson = new Gson();
-		return gson.fromJson(strRequest, typeOfT);
-	}
-
 }

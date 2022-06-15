@@ -101,17 +101,14 @@ public class MvcPregledKorisnika {
         Konfiguracija konfig = (Konfiguracija) kontekst.getAttribute("postavke");
         String administratorskaGrupa = konfig.dajPostavku("sustav.administratori");
 
-        String[] korisnikoveGrupe = korisniciKlijent.dohvatiKorisnikoveGrupe(korisnik);
+        List<String> korisnikoveGrupe = korisniciKlijent.dohvatiKorisnikoveGrupe(korisnik);
 
         boolean korisnikJeAdministrator = false;
 
         if (korisnikoveGrupe != null) {
-            for (int i = 0; i < korisnikoveGrupe.length && korisnikJeAdministrator == false; i++) {
-                if (korisnikoveGrupe[i].equals(administratorskaGrupa)) {
-                    korisnikJeAdministrator = true;
-                }
-            }
+            korisnikJeAdministrator = korisnikoveGrupe.contains(administratorskaGrupa);
         }
+
         return korisnikJeAdministrator;
     }
 }
