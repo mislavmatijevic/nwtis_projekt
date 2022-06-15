@@ -2,7 +2,6 @@ package org.foi.nwtis.mmatijevi.projekt.aplikacija_4.mvc;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.klijenti.ProvjereKlijent;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_4.modeli.PrijavljeniKorisnik;
-import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.modeli.Zeton;
 
 import jakarta.enterprise.context.RequestScoped;
@@ -16,7 +15,6 @@ import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.core.Context;
 
 @Controller
 @Path("prijava")
@@ -26,6 +24,8 @@ public class MvcPrijava {
     Models model;
     @Inject
     HttpSession sjednica;
+    @Inject
+    ServletContext kontekst;
 
     @GET
     @Path("")
@@ -36,16 +36,15 @@ public class MvcPrijava {
     @POST
     @Path("")
     @View("prijava.jsp")
-    public void prijavaPoslana(@FormParam("korime") String korime, @FormParam("lozinka") String lozinka,
-            @Context ServletContext context) {
-        ProvjereKlijent pk = new ProvjereKlijent(context);
+    public void prijavaPoslana(@FormParam("korime") String korime, @FormParam("lozinka") String lozinka) {
+        ProvjereKlijent pk = new ProvjereKlijent(kontekst);
 
         try {
             Zeton zeton = pk.prijaviKorisnika(korime, lozinka);
             sjednica.setAttribute("korisnik", new PrijavljeniKorisnik(korime, zeton));
             model.put("infoPoruka", "Uspješno ste prijavljeni!");
-        } catch (KorisnikNePostojiException e) {
-            model.put("greskaPoruka", e.getLocalizedMessage());
+        } catch (Exception e) {
+            model.put("greskaPoruka", "Prijava neuspješna");
         }
 
     }

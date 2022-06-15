@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> <%@ taglib prefix="c"
-uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 
@@ -51,13 +51,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         </c:forEach>
         <form method="POST" style="margin: auto; max-width: 500px">
             <div class="form-outline mb-4">
-                <input name="korime" type="text" id="form2Example1" class="form-control" />
-                <label class="form-label" for="form2Example1">Korisničko ime</label>
+                <label class="form-label" for="korime">Korisničko ime</label>
+                <input name="korime" type="text" id="korime" class="form-control" />
             </div>
 
             <div class="form-outline mb-4">
-                <input name="lozinka" type="password" id="form2Example2" class="form-control" />
-                <label class="form-label" for="form2Example2">Lozinka</label>
+                <label class="form-label" for="lozinka">Lozinka</label>
+                <input name="lozinka" type="password" id="lozinka" class="form-control" />
             </div>
 
             <button type="submit" class="btn btn-primary btn-block mb-4">Prijava</button>

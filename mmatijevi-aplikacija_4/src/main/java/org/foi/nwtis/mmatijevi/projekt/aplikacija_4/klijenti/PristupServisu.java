@@ -8,14 +8,16 @@ import jakarta.servlet.ServletContext;
 
 public class PristupServisu {
 
-    private Konfiguracija konfig = null;
+    protected ServletContext kontekst = null;
+    protected Konfiguracija konfig = null;
     public String odredisnaAdresa;
 
     @Inject
     PrijavljeniKorisnik podaciKorisnik;
 
-    public PristupServisu(String odredisnaTocka, ServletContext context) {
-        this.konfig = (Konfiguracija) context.getAttribute("postavke");
+    public PristupServisu(String odredisnaTocka, ServletContext kontekst) {
+        this.kontekst = kontekst;
+        this.konfig = (Konfiguracija) this.kontekst.getAttribute("postavke");
         this.odredisnaAdresa = this.konfig.dajPostavku("adresa.aplikacija_3");
         this.odredisnaAdresa += "/" + odredisnaTocka;
     }

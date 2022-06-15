@@ -17,8 +17,8 @@ import jakarta.ws.rs.core.Response;
  * Ova klasa brine se za slanje i primanje informacija o provjerama i žetonima.
  */
 public class ProvjereKlijent extends PristupServisu {
-	public ProvjereKlijent(ServletContext context) {
-		super("provjere", context);
+	public ProvjereKlijent(ServletContext kontekst) {
+		super("provjere", kontekst);
 	}
 
 	public Zeton prijaviKorisnika(String korime, String lozinka) throws KorisnikNePostojiException {
