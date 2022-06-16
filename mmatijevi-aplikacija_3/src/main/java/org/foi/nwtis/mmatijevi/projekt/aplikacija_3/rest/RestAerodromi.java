@@ -16,6 +16,7 @@ import org.foi.nwtis.mmatijevi.projekt.iznimke.AerodromVecPracenException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ServerUdaljenostiIznimka;
 import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovor;
 import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovorAerodrom;
+import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovorPodaciLetova;
 import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovorUzPodatke;
 import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti;
 import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti.ServerUdaljenostiNaredba;
@@ -315,12 +316,15 @@ public class RestAerodromi {
 
             if (odgovor == null) {
                 try {
-                    List<AvionLeti> aktivnostiAerodroma = servisAerodroma.dohvatiPraceneLetoveZaAerodrom(
+                    List<AvionLeti> letovi = servisAerodroma.dohvatiPraceneLetoveZaAerodrom(
                             icao, datumOd, datumDo, relevantnaTablica);
-                    if (aktivnostiAerodroma.size() > 0) {
+                    if (letovi.size() > 0) {
                         odgovor = Response
                                 .status(Status.OK)
-                                .entity(aktivnostiAerodroma)
+                                .entity(new RestOdgovorPodaciLetova(true,
+                                        "Dohvaćeni podaci iz tablice " + relevantnaTablica + " za vremenski raspon "
+                                                + datumOd + " - " + datumDo,
+                                        letovi))
                                 .build();
                     } else {
                         odgovor = Response.status(Status.NOT_FOUND)

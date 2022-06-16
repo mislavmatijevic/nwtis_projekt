@@ -2,7 +2,6 @@ package org.foi.nwtis.mmatijevi.projekt.aplikacija_5.klijenti;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,6 +10,7 @@ import org.foi.nwtis.mmatijevi.projekt.iznimke.AerodromVecPracenException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ZetonIstekaoException;
 import org.foi.nwtis.mmatijevi.projekt.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovorAerodrom;
+import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovorPodaciLetova;
 import org.foi.nwtis.mmatijevi.projekt.usluge.ParserRestOdgovoraUzPodatke;
 import org.foi.nwtis.mmatijevi.projekt.usluge.PristupServisu;
 import org.foi.nwtis.podaci.Aerodrom;
@@ -60,7 +60,7 @@ public class AerodromiKlijent extends PristupServisu {
         if (restOdgovor.getStatus() == Response.Status.OK.getStatusCode()) {
             String jsonOdgovor = restOdgovor.readEntity(String.class);
             Gson gson = new Gson();
-            polasci = Arrays.asList(gson.fromJson(jsonOdgovor, AvionLeti[].class));
+            polasci = gson.fromJson(jsonOdgovor, RestOdgovorPodaciLetova.class).getPodaci();
         } else if (restOdgovor.getStatus() == Response.Status.REQUEST_TIMEOUT.getStatusCode()) {
             throw new ZetonIstekaoException();
         }
