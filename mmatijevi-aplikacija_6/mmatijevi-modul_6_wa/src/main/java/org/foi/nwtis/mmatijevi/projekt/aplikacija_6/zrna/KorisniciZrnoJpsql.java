@@ -3,8 +3,8 @@ package org.foi.nwtis.mmatijevi.projekt.aplikacija_6.zrna;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_6.jpa.criteriaapi.KorisniciJpa;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_6.jpa.entiteti.Korisnici;
-import org.foi.nwtis.mmatijevi.projekt.aplikacija_6.jpa.jpsql.KorisniciJpaJpsql;
 
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
@@ -14,7 +14,7 @@ import jakarta.inject.Named;
 @Named("korisniciZrnoJpsql")
 public class KorisniciZrnoJpsql {
 	@EJB
-	KorisniciJpaJpsql korisniciJpa;
+	KorisniciJpa korisniciJpa;
 
 	List<Korisnici> korisnici = new ArrayList<>();
 
