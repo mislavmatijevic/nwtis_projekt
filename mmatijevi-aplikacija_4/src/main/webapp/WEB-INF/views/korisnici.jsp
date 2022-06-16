@@ -57,18 +57,6 @@
         <c:if test="${korisnici != null}">
             <div class="text-left" style="width: 60%; margin: auto">
 
-            <c:if test="${korisnikJeAdministrator}">
-                <form class="form-inline mb-5" method="POST">
-                    <div class="form-group mb-2">
-                        <span>Poništavanje svih sesija korisnika</span>
-                    </div>
-                    <div class="form-group mx-sm-3 mb-2">
-                        <input type="text" class="form-control" id="korime" name="korime" placeholder="Korisničko ime">
-                        <button type="submit" class="btn btn-primary mb-2">Deaktiviraj žetone</button>
-                    </div>
-                </form>
-            </c:if>
-
                 <form style="position: fixed; right: 10px" method="POST">
                     <input name="odjava" type="hidden" value="1">
                     <button type="submit" class="btn btn-primary mb-2">Izbriši trenutni žeton</button>
@@ -80,6 +68,9 @@
                         <th>Ime</th>
                         <th>Prezime</th>
                         <th>Email</th>
+                    <c:if test="${korisnikJeAdministrator}">
+                        <th>Administracija</th>
+                    </c:if>
                     </tr>
                     <c:forEach var="k" items="${requestScope.korisnici}">
                         <tr>
@@ -87,6 +78,14 @@
                             <td>${k.ime}</td>
                             <td>${k.prezime}</td>
                             <td>${k.email}</td>
+                        <c:if test="${korisnikJeAdministrator}">
+                            <td>
+                                <form class="form-inline mb-5" method="POST">
+                                        <input type="hidden" name="korime" value="${k.korIme}" >
+                                        <button type="submit" class="btn btn-danger">Deaktiviraj žetone</button>
+                                </form>
+                            </td>
+                        </c:if>
                         </tr>
                     </c:forEach>
                 </table>
