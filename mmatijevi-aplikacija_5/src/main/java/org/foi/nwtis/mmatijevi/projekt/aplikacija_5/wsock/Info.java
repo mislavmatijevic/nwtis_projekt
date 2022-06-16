@@ -3,7 +3,13 @@ package org.foi.nwtis.mmatijevi.projekt.aplikacija_5.wsock;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.foi.nwtis.mmatijevi.projekt.ispis.Terminal;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.jws.WebMethod;
 import jakarta.websocket.CloseReason;
 import jakarta.websocket.EndpointConfig;
 import jakarta.websocket.OnClose;
@@ -13,17 +19,19 @@ import jakarta.websocket.OnOpen;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 
+@ApplicationScoped
 @ServerEndpoint("/info")
 public class Info {
-	Set<Session> sesije = new HashSet<>();
+	private static Set<Session> sesije = new HashSet<>();
 
 	public void informiraj(String poruka) {
 		for (Session sesija : sesije) {
 			if (sesija.isOpen()) {
 				try {
 					sesija.getBasicRemote().sendText(poruka);
-				} catch (IOException e) {
-					System.out.println("Pogreška kod slanja poruke za sesiju: " + sesija.getId());
+				} catch (IOException ex) {
+					Logger.getLogger(Info.class.getName()).log(Level.WARNING,
+							"Pogreška kod slanja poruke za sesiju: " + sesija.getId(), ex);
 				}
 			}
 		}

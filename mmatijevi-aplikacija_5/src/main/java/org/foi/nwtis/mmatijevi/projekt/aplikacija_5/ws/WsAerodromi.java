@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_5.klijenti.AerodromiKlijent;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_5.klijenti.AerodromiKlijent.VrsteVremenskogRaspona;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_5.wsock.Info;
 import org.foi.nwtis.mmatijevi.projekt.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.rest.podaci.AvionLeti;
 
@@ -22,6 +23,8 @@ public class WsAerodromi {
 
 	@Inject
 	ServletContext kontekst;
+	@Inject
+	Info info;
 
 	/**
 	 * Dohvaća polaske u formatu dd.mm.gggg.
@@ -81,6 +84,9 @@ public class WsAerodromi {
 			PrijavljeniKorisnik prijavljeniKorisnik = new PrijavljeniKorisnik(korisnik, "", zetonBrojcani);
 			AerodromiKlijent aerodromiKlijent = new AerodromiKlijent(kontekst);
 			uspjeh = aerodromiKlijent.unesiAerodromZaPratiti(prijavljeniKorisnik, icao);
+			if (uspjeh) {
+				info.informiraj("Korisnik [" + korisnik + "] dodao aerodrom [" + icao + "] u praćenje");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			uspjeh = false;
