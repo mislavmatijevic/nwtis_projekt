@@ -4,6 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.iznimke.AerodromVecPracenException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ZetonIstekaoException;
@@ -148,5 +150,30 @@ public class AerodromiKlijent extends PristupServisu {
         }
 
         return praceniAerodromi;
+    }
+
+    public Aerodrom dohvatiJedanAerodrom(String icao) {
+        Client client = ClientBuilder.newClient();
+
+        PrijavaKlijent prijavaKlijent = new PrijavaKlijent(kontekst);
+        int zeton = prijavaKlijent.prijaviSistemskogKorisnika().getZeton();
+
+        WebTarget webResource = client.target(this.odredisnaAdresa).path(icao);
+        Response restOdgovor = webResource.request()
+                .header("Accept", "application/json")
+                .header("korisnik", sustavKorisnik)
+                .header("zeton", zeton)
+                .get();
+
+        Aerodrom aerodrom = null;
+        if (restOdgovor.getStatus() == Response.Status.OK.getStatusCode()) {
+            String jsonOdgovor = restOdgovor.readEntity(String.class);
+            Gson gson = new Gson();
+            aerodrom = gson.fromJson(jsonOdgovor, Aerodrom.class);
+        } else {
+            Logger.getLogger(AerodromiKlijent.class.getName()).log(Level.WARNING, "Neuspio dohvat aerodroma " + icao);
+        }
+
+        return aerodrom;
     }
 }
