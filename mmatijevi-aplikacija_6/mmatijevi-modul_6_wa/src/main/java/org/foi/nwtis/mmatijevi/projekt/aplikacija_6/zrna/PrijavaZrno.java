@@ -10,7 +10,6 @@ import org.foi.nwtis.mmatijevi.projekt.aplikacija_6.klijenti.ProvjereKlijent;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.mmatijevi.projekt.modeli.Zeton;
-import org.primefaces.PrimeFaces;
 
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.SessionScoped;
@@ -81,6 +80,31 @@ public class PrijavaZrno implements Serializable {
 			}
 		} else {
 			poruka = new FacesMessage(FacesMessage.SEVERITY_ERROR, "Problem", "Takav korisnik nije pronađen!");
+		}
+
+		FacesContext.getCurrentInstance().addMessage(null, poruka);
+	}
+
+	public void odjaviSe() {
+		FacesMessage poruka = null;
+		ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+		Map<String, Object> sesija = externalContext.getSessionMap();
+		PrijavljeniKorisnik prijavljeniKorisnik = (PrijavljeniKorisnik) sesija.get("korisnik");
+
+		boolean prijavljen = prijavljeniKorisnik != null;
+
+		if (prijavljen) {
+			ProvjereKlijent provjereKlijent = new ProvjereKlijent(kontekst);
+			boolean uspjeh = provjereKlijent.deaktivirajZeton(prijavljeniKorisnik);
+			if (uspjeh) {
+				sesija.put("korisnik", null);
+				poruka = new FacesMessage(FacesMessage.SEVERITY_INFO, "Odjava uspješna", "Odjavljeni ste iz sustava");
+			} else {
+				poruka = new FacesMessage(FacesMessage.SEVERITY_WARN, "Odjava neuspješna",
+						"Čini se da niste niti bili prijavljeni");
+			}
+		} else {
+			poruka = new FacesMessage(FacesMessage.SEVERITY_WARN, "Problem", "Niste niti bili prijavljeni!");
 		}
 
 		FacesContext.getCurrentInstance().addMessage(null, poruka);

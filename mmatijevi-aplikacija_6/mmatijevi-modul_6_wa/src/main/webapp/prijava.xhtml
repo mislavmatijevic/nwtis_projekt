@@ -28,9 +28,16 @@
         <h:body class="cover-container d-flex w-100 h-100 mx-auto flex-column">
             <ui:include src="/WEB-INF/zaglavlje.xhtml" />
             <h:panelGroup styleClass="text-center m-auto">
+                <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
+                <h:form style="position: fixed; left: 20px">
+                    <p:commandButton
+                        styleClass="rounded-button ui-button-danger"
+                        value="Odjava"
+                        update="growl"
+                        action="#{prijavaZrno.odjaviSe}"
+                    />
+                </h:form>
                 <h:form className="m-auto">
-                    <p:growl id="growl" sticky="true" showDetail="true" life="3000" />
-
                     <h:panelGrid columns="2" cellpadding="5">
                         <h:outputLabel for="korime" value="Username:" />
                         <p:inputText id="korime" value="#{prijavaZrno.korime}" required="true" label="korime" />
