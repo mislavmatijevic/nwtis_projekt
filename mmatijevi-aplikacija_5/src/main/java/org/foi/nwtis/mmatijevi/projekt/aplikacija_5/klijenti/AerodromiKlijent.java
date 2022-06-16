@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.AerodromVecPracenException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ZetonIstekaoException;
 import org.foi.nwtis.mmatijevi.projekt.modeli.PrijavljeniKorisnik;
+import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovorAerodrom;
 import org.foi.nwtis.mmatijevi.projekt.usluge.ParserRestOdgovoraUzPodatke;
 import org.foi.nwtis.mmatijevi.projekt.usluge.PristupServisu;
 import org.foi.nwtis.podaci.Aerodrom;
@@ -169,7 +170,7 @@ public class AerodromiKlijent extends PristupServisu {
         if (restOdgovor.getStatus() == Response.Status.OK.getStatusCode()) {
             String jsonOdgovor = restOdgovor.readEntity(String.class);
             Gson gson = new Gson();
-            aerodrom = gson.fromJson(jsonOdgovor, Aerodrom.class);
+            aerodrom = gson.fromJson(jsonOdgovor, RestOdgovorAerodrom.class).getPodaci();
         } else {
             Logger.getLogger(AerodromiKlijent.class.getName()).log(Level.WARNING, "Neuspio dohvat aerodroma " + icao);
         }

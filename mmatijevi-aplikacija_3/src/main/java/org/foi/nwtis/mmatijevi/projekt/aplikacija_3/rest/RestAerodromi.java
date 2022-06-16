@@ -15,6 +15,7 @@ import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisAerodroma.Vrst
 import org.foi.nwtis.mmatijevi.projekt.iznimke.AerodromVecPracenException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ServerUdaljenostiIznimka;
 import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovor;
+import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovorAerodrom;
 import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovorUzPodatke;
 import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti;
 import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti.ServerUdaljenostiNaredba;
@@ -146,7 +147,7 @@ public class RestAerodromi {
             Aerodrom aerodrom = servisAerodroma.dohvatiAerodrom(icao);
             if (aerodrom != null) {
                 odgovor = Response.status(Status.OK)
-                        .entity(aerodrom).build();
+                        .entity(new RestOdgovorAerodrom(true, "Aerodrom [" + icao + "] dohvaćen", aerodrom)).build();
             } else {
                 odgovor = Response.status(Status.NOT_FOUND)
                         .entity(new RestOdgovor(false, "Nema aerodroma '" + icao + "'")).build();
