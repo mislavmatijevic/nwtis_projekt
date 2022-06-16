@@ -1,0 +1,27 @@
+<ui:composition xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-around mb-5">
+        <h:link styleClass="navbar-brand m-l-2 ms-5" outcome="index.xhtml" value="Aplikacija 6" />
+        <h:panelGroup styleClass="navbar-collapse" id="navbarText">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <h:link styleClass="nav-link" outcome="prijava.xhtml" value="Prijava" />
+                </li>
+                <li class="nav-item">
+                    <h:link styleClass="nav-link" outcome="korisnici.xhtml" value="Pregled korisnika" />
+                </li>
+                <li class="nav-item">
+                    <h:link styleClass="nav-link" outcome="poruke.xhtml" value="Pregled JMS poruka" />
+                </li>
+                <li class="nav-item">
+                    <h:link styleClass="nav-link" outcome="aerodromi.xhtml" value="Pregled aerodroma" />
+                </li>
+                <li class="nav-item">
+                    <h:link styleClass="nav-link" outcome="putovanja.xhtml" value="Pregled putovanja" />
+                </li>
+                <li class="nav-item">
+                    <h:link styleClass="nav-link" outcome="planiranje.xhtml" value="Planiranje putovanja" />
+                </li>
+            </ul>
+        </h:panelGroup>
+    </nav>
+</ui:composition>

@@ -21,16 +21,15 @@ public class PrimateljPoruke implements MessageListener {
 				TextMessage msg = (TextMessage) message;
 				StringBuilder sb = new StringBuilder();
 				sb.append("Stigla poruka:")
-				.append(message.getJMSMessageID())
-				.append(" ")
-				.append(new java.util.Date(message.getJMSTimestamp()))
-				.append(" ")
-				.append(msg.getText());
+						.append(message.getJMSMessageID())
+						.append(" ")
+						.append(new java.util.Date(message.getJMSTimestamp()))
+						.append(" ")
+						.append(msg.getText());
 				System.out.println(sb.toString());
 			} catch (JMSException ex) {
 				ex.printStackTrace();
 			}
-
 		}
 	}
 }

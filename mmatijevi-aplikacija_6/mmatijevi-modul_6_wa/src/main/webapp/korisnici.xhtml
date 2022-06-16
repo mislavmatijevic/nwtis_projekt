@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+>
+    <f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">
+        <h:head>
+            <title>Pregled korisnika</title>
+            <link
+                href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+                rel="stylesheet"
+                integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+                crossorigin="anonymous"
+            />
+            <script
+                defer="true"
+                src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+                crossorigin="anonymous"
+            ></script>
+        </h:head>
+        <h:body>
+            <ui:include src="/WEB-INF/zaglavlje.xhtml" />
+            <h:panelGroup styleClass="text-center m-auto">
+                <h1>Pregled korisnika</h1>
+                <h:panelGroup className="container">
+                    <p:dataTable value="#{korisniciZrno.korisnici}" var="k" paginator="true" rows="7" lazy="true">
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Korisnik" />
+                            </f:facet>
+                            #{k.korisnik}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Prezime" />
+                            </f:facet>
+                            #{k.prezime}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Ime" />
+                            </f:facet>
+                            #{k.ime}
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </h:panelGroup>
+        </h:body>
+    </f:view>
+</html>
