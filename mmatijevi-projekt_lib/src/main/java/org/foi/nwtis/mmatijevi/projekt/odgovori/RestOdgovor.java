@@ -1,4 +1,4 @@
-package org.foi.nwtis.mmatijevi.projekt.modeli;
+package org.foi.nwtis.mmatijevi.projekt.odgovori;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,6 +1,6 @@
 package org.foi.nwtis.mmatijevi.projekt.usluge;
 
-import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovorUzPodatke;
+import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovorUzPodatke;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

@@ -7,8 +7,8 @@ import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeispravanException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikVecPostojiException;
 import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikPrikaz;
-import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovor;
-import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovorUzPodatke;
+import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovor;
+import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovorUzPodatke;
 import org.foi.nwtis.podaci.Korisnik;
 
 import jakarta.inject.Inject;

@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ServerUdaljenostiIznimka;
 import org.foi.nwtis.mmatijevi.projekt.modeli.OdgovorStatusUdaljenost;
-import org.foi.nwtis.mmatijevi.projekt.modeli.RestOdgovor;
+import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovor;
 import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti;
 import org.foi.nwtis.mmatijevi.projekt.usluge.PosluziteljUdaljenosti.ServerUdaljenostiNaredba;
 import org.foi.nwtis.podaci.Aerodrom;
