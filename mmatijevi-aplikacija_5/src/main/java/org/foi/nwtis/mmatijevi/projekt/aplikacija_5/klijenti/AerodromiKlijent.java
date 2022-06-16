@@ -1,6 +1,7 @@
 package org.foi.nwtis.mmatijevi.projekt.aplikacija_5.klijenti;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -105,6 +106,29 @@ public class AerodromiKlijent extends PristupServisu {
         return uspjeh;
     }
 
+    /**
+     * Dohvaća praćene aerodrome u ime globalnog korisnika sustava.
+     * @return Lista praćenih aerodroma ILI prazna lista ako je došlo do pogreške.
+     */
+    public List<Aerodrom> dohvatiPraceneAerodrome() {
+        PrijavaKlijent prijavaKlijent = new PrijavaKlijent(kontekst);
+        int zeton = prijavaKlijent.prijaviSistemskogKorisnika().getZeton();
+        List<Aerodrom> praceni;
+        try {
+            praceni = dohvatiPraceneAerodrome(new PrijavljeniKorisnik(sustavKorisnik, sustavLozinka, zeton));
+        } catch (ZetonIstekaoException e) {
+            e.printStackTrace();
+            praceni = new ArrayList<>(0);
+        }
+        return praceni;
+    }
+
+    /**
+     * Dohvaća praćene aerodrome.
+     * @param korisnik Objekt korisnika koji je zahtijevao operaciju.
+     * @return Lista praćenih aerodroma.
+     * @throws ZetonIstekaoException U slučaju da je žeton istekao.
+     */
     public List<Aerodrom> dohvatiPraceneAerodrome(PrijavljeniKorisnik korisnik) throws ZetonIstekaoException {
         Client client = ClientBuilder.newClient();
 

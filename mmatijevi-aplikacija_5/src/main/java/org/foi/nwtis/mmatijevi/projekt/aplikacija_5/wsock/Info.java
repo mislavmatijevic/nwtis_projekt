@@ -24,6 +24,11 @@ import jakarta.websocket.server.ServerEndpoint;
 public class Info {
 	private static Set<Session> sesije = new HashSet<>();
 
+	@WebMethod
+	public void dajMeteo(String info) {
+		informiraj(info);
+	}
+
 	public void informiraj(String poruka) {
 		for (Session sesija : sesije) {
 			if (sesija.isOpen()) {
@@ -40,22 +45,22 @@ public class Info {
 	@OnOpen
 	public void otvori(Session sesija, EndpointConfig konfig) {
 		sesije.add(sesija);
-		System.out.println("Otvorena veza: " + sesija.getId());
+		Terminal.infoIspis("Otvorena veza: " + sesija.getId());
 	}
 
 	@OnClose
 	public void zatvori(Session sesija, CloseReason razlog) {
-		System.out.println("Zatvorena veza: " + sesija.getId() + " Razlog: " + razlog.getReasonPhrase());
+		Terminal.infoIspis("Zatvorena veza: " + sesija.getId() + " Razlog: " + razlog.getReasonPhrase());
 		sesije.remove(sesija);
 	}
 
 	@OnMessage
 	public void stiglaPoruka(Session sesija, String poruka) {
-		System.out.println("Veza: " + sesija.getId() + " Poruka: " + poruka);
+		Terminal.infoIspis("Veza: " + sesija.getId() + " Poruka: " + poruka);
 	}
 
 	@OnError
 	public void pogreska(Session sesija, Throwable iznimka) {
-		System.out.println("Veza: " + sesija.getId() + " Pogreška: " + iznimka.getMessage());
+		Terminal.infoIspis("Veza: " + sesija.getId() + " Pogreška: " + iznimka.getMessage());
 	}
 }
