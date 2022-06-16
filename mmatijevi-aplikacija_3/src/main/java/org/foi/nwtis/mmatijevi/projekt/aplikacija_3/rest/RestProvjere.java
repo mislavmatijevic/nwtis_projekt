@@ -137,7 +137,11 @@ public class RestProvjere extends Authenticator {
             if (brojDeaktiviranih > 0) {
                 odgovor = Response.status(Status.OK)
                         .entity(new RestOdgovor(true,
-                                brojDeaktiviranih + " žetona je deaktivirano za korisnika " + korime + ""))
+                                brojDeaktiviranih + " žeton"
+                                        + (brojDeaktiviranih % 10 == 1 && brojDeaktiviranih % 100 != 11
+                                                ? " je deaktiviran"
+                                                : "a je deaktivirano")
+                                        + " za korisnika " + korime + ""))
                         .build();
             } else {
                 odgovor = Response.status(Status.NOT_FOUND)

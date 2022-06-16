@@ -184,12 +184,16 @@ public class ServisZetona extends KonfigurabilniServis {
             }
         }
 
+        long trenutak = new Date().getTime();
+        trenutak /= 1000;
+
         try (Connection veza = baza.dohvatiVezu();
                 PreparedStatement izraz = veza
                         .prepareStatement(
-                                "UPDATE zetoni SET status = 0 WHERE podaci_korisnik = ? AND status = 1")) {
+                                "UPDATE zetoni SET status = 0 WHERE podaci_korisnik = ? AND status = 1 AND rok_trajanja > ?")) {
 
             izraz.setString(1, korime);
+            izraz.setLong(2, trenutak);
 
             brojObrisanihZetona = izraz.executeUpdate();
         } catch (ClassNotFoundException | SQLException ex) {
