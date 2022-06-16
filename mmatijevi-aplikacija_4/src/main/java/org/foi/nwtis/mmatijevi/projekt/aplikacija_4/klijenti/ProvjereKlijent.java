@@ -56,6 +56,19 @@ public class ProvjereKlijent extends PristupServisu {
 		return odgovorZeton;
 	}
 
+	public boolean deaktivirajZeton(PrijavljeniKorisnik korisnik) {
+		Client client = ClientBuilder.newClient();
+
+		WebTarget webResource = client.target(this.odredisnaAdresa).path(String.valueOf(korisnik.getZeton()));
+		Response restOdgovor = webResource.request()
+				.header("Accept", "application/json")
+				.header("korisnik", korisnik.getKorime())
+				.header("lozinka", korisnik.getLozinka())
+				.delete();
+
+		return restOdgovor.getStatus() == Response.Status.OK.getStatusCode();
+	}
+
 	public String deaktivirajSveZetone(String korime, PrijavljeniKorisnik korisnik) {
 		Client client = ClientBuilder.newClient();
 

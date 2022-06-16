@@ -68,31 +68,58 @@ public class MvcPregledKorisnika {
 
     @POST
     @View("korisnici.jsp")
-    public void brisanjeTokenaDrugogKorisnika(@FormParam("korime") String korime, @Context HttpServletRequest zahtjev) {
+    public void brisanjeTokenaDrugogKorisnika(@FormParam("korime") String korime, @FormParam("odjava") String odjava,
+            @Context HttpServletRequest zahtjev) {
 
         HttpSession sjednica = zahtjev.getSession();
         PrijavljeniKorisnik korisnik = (PrijavljeniKorisnik) sjednica.getAttribute("korisnik");
 
         if (korisnik != null) {
-
-            KorisniciKlijent korisniciKlijent = new KorisniciKlijent(kontekst);
-
-            boolean korisnikJeAdministrator = false;
-            try {
-                korisnikJeAdministrator = provjeriAdministrskeOvlasti(korisnik, korisniciKlijent);
-            } catch (Exception ex) {
-                model.put("greskaPoruka", ex.getLocalizedMessage());
-            }
-
-            if (korisnikJeAdministrator) {
-                ProvjereKlijent provjereKlijent = new ProvjereKlijent(kontekst);
-                String odgovor = provjereKlijent.deaktivirajSveZetone(korime, korisnik);
-                model.put("infoPoruka", odgovor);
-            } else {
-                model.put("greskaPoruka", "Niste administrator sustava!");
+            if (odjava != null) {
+                izbrisiTrenutniZeton(korisnik);
+            } else if (korime != null) {
+                izbrisiZetoneZaKorisnickoIme(korime, korisnik);
             }
         } else {
-            model.put("greskaPoruka", "Ponovno se prijavite u sustav!");
+            model.put("greskaPoruka", "Prijavite se u sustav!");
+        }
+    }
+
+    /**
+     * Obavlja brisanje trenutno aktivnog žetona, odnosno odjavu korisnika u trenutnom pogledu preglednika.
+     * @param korisnik Objekt prijavljenog korisnika.
+     */
+    private void izbrisiTrenutniZeton(PrijavljeniKorisnik korisnik) {
+
+        ProvjereKlijent provjereKlijent = new ProvjereKlijent(kontekst);
+        boolean uspjeh = false;
+
+        uspjeh = provjereKlijent.deaktivirajZeton(korisnik);
+
+        if (uspjeh) {
+            model.put("infoPoruka", "Odjavljeni ste! Morat ćete ponoviti prijavu za nastavak rada.");
+        } else {
+            model.put("greskaPoruka", "Odjava nije uspjela! Moguće da vam je istekla sesija.");
+        }
+    }
+
+    private void izbrisiZetoneZaKorisnickoIme(String korime, PrijavljeniKorisnik korisnik) {
+
+        KorisniciKlijent korisniciKlijent = new KorisniciKlijent(kontekst);
+
+        boolean korisnikJeAdministrator = false;
+        try {
+            korisnikJeAdministrator = provjeriAdministrskeOvlasti(korisnik, korisniciKlijent);
+        } catch (Exception ex) {
+            model.put("greskaPoruka", ex.getLocalizedMessage());
+        }
+
+        if (korisnikJeAdministrator) {
+            ProvjereKlijent provjereKlijent = new ProvjereKlijent(kontekst);
+            String odgovor = provjereKlijent.deaktivirajSveZetone(korime, korisnik);
+            model.put("infoPoruka", odgovor);
+        } else {
+            model.put("greskaPoruka", "Niste administrator sustava!");
         }
     }
 

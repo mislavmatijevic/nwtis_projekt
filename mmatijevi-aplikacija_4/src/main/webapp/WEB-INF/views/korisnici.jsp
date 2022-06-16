@@ -69,6 +69,11 @@
                 </form>
             </c:if>
 
+                <form style="position: fixed; right: 10px" method="POST">
+                    <input name="odjava" type="hidden" value="1">
+                    <button type="submit" class="btn btn-primary mb-2">Izbriši trenutni žeton</button>
+                </form>
+
                 <table class="table">
                     <tr>
                         <th>Korisničko Ime</th>
