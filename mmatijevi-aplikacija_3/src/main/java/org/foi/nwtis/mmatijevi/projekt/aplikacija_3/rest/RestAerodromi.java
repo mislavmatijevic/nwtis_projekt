@@ -146,7 +146,7 @@ public class RestAerodromi {
             Aerodrom aerodrom = servisAerodroma.dohvatiAerodrom(icao);
             if (aerodrom != null) {
                 odgovor = Response.status(Status.OK)
-                        .entity(new RestOdgovorUzPodatke<>(true, "Uspješan dohvat aerodroma", aerodrom)).build();
+                        .entity(aerodrom).build();
             } else {
                 odgovor = Response.status(Status.NOT_FOUND)
                         .entity(new RestOdgovor(false, "Nema aerodroma '" + icao + "'")).build();
