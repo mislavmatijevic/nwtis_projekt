@@ -99,7 +99,7 @@ public class MvcPregledKorisnika {
         if (uspjeh) {
             model.put("infoPoruka", "Odjavljeni ste! Morat ćete ponoviti prijavu za nastavak rada.");
         } else {
-            model.put("greskaPoruka", "Odjava nije uspjela! Moguće da vam je istekla sesija.");
+            model.put("greskaPoruka", "Problem! Moguće da vam je istekla sesija.");
         }
     }
 
