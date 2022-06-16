@@ -71,14 +71,8 @@ public class RestServeri {
                 odgovor = Response.status(Status.BAD_REQUEST)
                         .entity(new RestOdgovor(false, ex.getLocalizedMessage()))
                         .build();
-            } catch (SocketException ex) {
-                odgovor = Response.status(Status.BAD_REQUEST)
-                        .entity(new RestOdgovor(false, ex.getLocalizedMessage()))
-                        .build();
-                Logger.getLogger(RestAerodromi.class.getName()).log(Level.SEVERE,
-                        "Dogodio se problem pri pokušaju slanja komande na ServerUdaljenosti", ex);
             } catch (IOException ex) {
-                odgovor = Response.status(Status.BAD_REQUEST)
+                odgovor = Response.status(Status.SERVICE_UNAVAILABLE)
                         .entity(new RestOdgovor(false,
                                 "Dogodio se problem pri povezivanju na ServerUdaljenosti"))
                         .build();
@@ -93,7 +87,7 @@ public class RestServeri {
             } else {
                 poruka = "Komanda nije ispravna.";
             }
-            odgovor = Response.status(Status.METHOD_NOT_ALLOWED)
+            odgovor = Response.status(Status.BAD_REQUEST)
                     .entity(new RestOdgovor(false, poruka))
                     .build();
         }

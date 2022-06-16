@@ -1,7 +1,6 @@
 package org.foi.nwtis.mmatijevi.projekt.aplikacija_3.rest;
 
 import java.io.IOException;
-import java.net.SocketException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeParseException;
@@ -232,19 +231,13 @@ public class RestAerodromi {
                     .entity(new RestOdgovor(false,
                             "Server je odgovorio neispravnom vrijednošću: " + ex.getLocalizedMessage().split("\"")[1]))
                     .build();
-        } catch (SocketException ex) {
-            odgovor = Response.status(Status.BAD_REQUEST)
-                    .entity(new RestOdgovor(false, ex.getLocalizedMessage()))
-                    .build();
-            Logger.getLogger(RestAerodromi.class.getName()).log(Level.SEVERE,
-                    "Dogodio se problem pri pokušaju slanja komande na ServerUdaljenosti", ex);
         } catch (IOException ex) {
-            odgovor = Response.status(Status.BAD_REQUEST)
+            odgovor = Response.status(Status.SERVICE_UNAVAILABLE)
                     .entity(new RestOdgovor(false,
                             "Dogodio se problem pri povezivanju na ServerUdaljenosti"))
                     .build();
             Logger.getLogger(RestAerodromi.class.getName()).log(Level.SEVERE,
-                    "Dogodio se problem pri povezivanju na ServerUdaljenosti", ex);
+                    "Dogodio se problem pri uspostavi komunikacije sa poslužiteljem ServerUdaljenosti", ex);
         }
 
         return odgovor;
