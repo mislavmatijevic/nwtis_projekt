@@ -28,24 +28,43 @@
             <h:panelGroup styleClass="text-center m-auto">
                 <h1>Pregled korisnika</h1>
                 <h:panelGroup className="container">
-                    <p:dataTable value="#{korisniciZrno.korisnici}" var="k" paginator="true" rows="7" lazy="true">
+                    <p:dataTable
+                        value="#{korisniciZrno.korisnici}"
+                        var="k"
+                        paginator="true"
+                        rows="10"
+                        lazy="true"
+                        rowStyleClass="#{korisniciZrno.odrediNesinkroniziranost(k) eq false ? 'text-danger' : ''}"
+                    >
                         <p:column>
                             <f:facet name="header">
                                 <h:outputText value="Korisnik" />
                             </f:facet>
-                            #{k.korisnik}
+                            #{k.korIme}
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="Prezime" />
+                                <h:outputText value="Korisnik" />
+                            </f:facet>
+                            #{k.ime}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Korisnik" />
                             </f:facet>
                             #{k.prezime}
                         </p:column>
                         <p:column>
                             <f:facet name="header">
-                                <h:outputText value="Ime" />
+                                <h:outputText value="Korisnik" />
                             </f:facet>
-                            #{k.ime}
+                            #{k.lozinka}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Korisnik" />
+                            </f:facet>
+                            #{k.email}
                         </p:column>
                     </p:dataTable>
                 </h:panelGroup>
