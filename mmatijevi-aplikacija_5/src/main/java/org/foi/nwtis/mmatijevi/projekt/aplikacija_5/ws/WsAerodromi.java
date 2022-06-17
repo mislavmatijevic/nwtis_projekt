@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_5.jms.PosiljateljPoruke;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_5.klijenti.AerodromiKlijent;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_5.klijenti.AerodromiKlijent.VrsteVremenskogRaspona;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_5.wsock.Info;
@@ -23,6 +24,8 @@ public class WsAerodromi {
 
 	@Inject
 	ServletContext kontekst;
+	@Inject
+	PosiljateljPoruke posiljateljPoruke;
 	@Inject
 	Info info;
 
@@ -85,7 +88,7 @@ public class WsAerodromi {
 			AerodromiKlijent aerodromiKlijent = new AerodromiKlijent(kontekst);
 			uspjeh = aerodromiKlijent.unesiAerodromZaPratiti(prijavljeniKorisnik, icao);
 			if (uspjeh) {
-				info.informiraj("Korisnik [" + korisnik + "] dodao aerodrom [" + icao + "] u praćenje");
+				posiljateljPoruke.noviPoruka("Korisnik [" + korisnik + "] dodao aerodrom [" + icao + "] u praćenje");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

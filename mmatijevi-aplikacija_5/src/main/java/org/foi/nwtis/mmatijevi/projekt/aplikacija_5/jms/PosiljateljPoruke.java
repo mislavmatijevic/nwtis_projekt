@@ -1,4 +1,4 @@
-package org.foi.nwtis.mmatijevi.projekt.aplikacija_6.zrna.jms;
+package org.foi.nwtis.mmatijevi.projekt.aplikacija_5.jms;
 
 import jakarta.annotation.Resource;
 import jakarta.ejb.Stateless;
