@@ -44,12 +44,12 @@ public class RestProvjere extends Authenticator {
                 odgovor = Response.status(Status.OK).entity(zeton).build();
             } else {
                 odgovor = Response.status(Status.INTERNAL_SERVER_ERROR)
-                        .entity(new RestOdgovor(false, "Žeton nije mogla biti stvoren."))
+                        .entity(new RestOdgovor(false, "Žeton nije mogao biti stvoren."))
                         .build();
             }
         } catch (NovaOznakaNedostupnaException e) {
             odgovor = Response.status(Status.SERVICE_UNAVAILABLE)
-                    .entity(new RestOdgovor(false, "Oznaka nije mogla biti stvorena."))
+                    .entity(new RestOdgovor(false, "Žeton nije mogao biti stvorena."))
                     .build();
         }
 
