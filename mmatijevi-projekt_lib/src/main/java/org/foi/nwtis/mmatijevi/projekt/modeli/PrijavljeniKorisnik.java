@@ -11,4 +11,9 @@ public class PrijavljeniKorisnik implements Serializable {
     private String korime = null;
     private String lozinka = null;
     private int zeton;
+    private int vrijemeTrajanjaZetona;
+
+    public PrijavljeniKorisnik(String korime, String lozinka, int zeton) {
+        this(korime, lozinka, zeton, -1);
+    }
 }

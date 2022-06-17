@@ -63,7 +63,11 @@ public class PrijavaZrno implements Serializable {
 			ProvjereKlijent provjereKlijent = new ProvjereKlijent(kontekst);
 			try {
 				Zeton zeton = provjereKlijent.prijaviKorisnika(korime, lozinka);
-				PrijavljeniKorisnik prijavljeniKorisnik = new PrijavljeniKorisnik(korime, lozinka, zeton.getZeton());
+				PrijavljeniKorisnik prijavljeniKorisnik = new PrijavljeniKorisnik(
+						korime,
+						lozinka,
+						zeton.getZeton(),
+						zeton.getVrijeme());
 				ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
 				Map<String, Object> sesija = externalContext.getSessionMap();
 
