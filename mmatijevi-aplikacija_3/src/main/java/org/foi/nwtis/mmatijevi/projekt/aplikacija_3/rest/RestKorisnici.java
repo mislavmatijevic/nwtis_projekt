@@ -6,7 +6,6 @@ import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.servisi.ServisKorisnika;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeispravanException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikVecPostojiException;
-import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikPrikaz;
 import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovor;
 import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovorKorisnici;
 import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovorUzPodatke;
@@ -34,7 +33,7 @@ public class RestKorisnici {
     public Response dohvatiSveKorisnike() {
         Response odgovor;
 
-        List<KorisnikPrikaz> korisnici = servisKorisnika.dajSveKorisnike();
+        List<Korisnik> korisnici = servisKorisnika.dajSveKorisnike();
         if (korisnici != null) {
             odgovor = Response.ok(new RestOdgovorKorisnici(
                     true, "Dohvat svih korisnika uspješan", korisnici))
@@ -81,11 +80,11 @@ public class RestKorisnici {
     public Response dohvatiKorisnika(@PathParam("korisnik") String korime) {
         Response odgovor;
 
-        KorisnikPrikaz pronadjeniKorisnik;
+        Korisnik pronadjeniKorisnik;
         try {
             pronadjeniKorisnik = servisKorisnika.dohvatiJednogKorisnika(korime);
             if (pronadjeniKorisnik != null) {
-                odgovor = Response.ok(new RestOdgovorUzPodatke<KorisnikPrikaz>(
+                odgovor = Response.ok(new RestOdgovorUzPodatke<Korisnik>(
                         true, "Dohvat korisnika uspješan", pronadjeniKorisnik))
                         .build();
             } else {

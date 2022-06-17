@@ -38,10 +38,8 @@ public class KorisniciKlijent extends PristupServisu {
 		List<Korisnik> korisnici = null;
 		if (restOdgovor.getStatus() == Response.Status.OK.getStatusCode()) {
 			String jsonOdgovor = restOdgovor.readEntity(String.class);
-
-			List<? extends Korisnik> korisniciBezLozinke = new Gson().fromJson(jsonOdgovor, RestOdgovorKorisnici.class)
+			korisnici = new Gson().fromJson(jsonOdgovor, RestOdgovorKorisnici.class)
 					.getPodaci();
-			korisnici = (List<Korisnik>) korisniciBezLozinke;
 		} else if (restOdgovor.getStatus() == Response.Status.REQUEST_TIMEOUT.getStatusCode()) {
 			throw new ZetonIstekaoException();
 		}

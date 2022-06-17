@@ -13,7 +13,6 @@ import org.foi.nwtis.mmatijevi.projekt.aplikacija_3.baza.Baza;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNePostojiException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeispravanException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikVecPostojiException;
-import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikPrikaz;
 import org.foi.nwtis.mmatijevi.projekt.usluge.KonfigurabilniServis;
 import org.foi.nwtis.podaci.Korisnik;
 
@@ -95,12 +94,12 @@ public class ServisKorisnika extends KonfigurabilniServis {
      * Dohvaća sve korisnike iz baze, s lozinkama sakrivenima.
      * @return Listu korisnika ILI 'null' ako je došlo do pogreške.
      */
-    public List<KorisnikPrikaz> dajSveKorisnike() {
-        List<KorisnikPrikaz> korisnici = new LinkedList<>();
+    public List<Korisnik> dajSveKorisnike() {
+        List<Korisnik> korisnici = new LinkedList<>();
 
         try (Connection veza = baza.dohvatiVezu();
                 PreparedStatement izraz = veza
-                        .prepareStatement("SELECT korisnik, ime, prezime, email FROM korisnici")) {
+                        .prepareStatement("SELECT korisnik, ime, prezime, email, lozinka FROM korisnici")) {
 
             try (ResultSet rezultat = izraz.executeQuery()) {
                 while (rezultat.next()) {
@@ -122,14 +121,14 @@ public class ServisKorisnika extends KonfigurabilniServis {
      * @return Objekt korisnika ILI 'null' ako je došlo do pogreške.
      * @throws KorisnikNePostojiException Korisnik ne postoji u bazi.
      */
-    public KorisnikPrikaz dohvatiJednogKorisnika(String korime) throws KorisnikNePostojiException {
-        KorisnikPrikaz korisnik = null;
+    public Korisnik dohvatiJednogKorisnika(String korime) throws KorisnikNePostojiException {
+        Korisnik korisnik = null;
 
         if (korime != null && !korime.isBlank()) {
             try (Connection veza = baza.dohvatiVezu();
                     PreparedStatement izraz = veza
                             .prepareStatement(
-                                    "SELECT korisnik, ime, prezime, email FROM korisnici WHERE korisnik = ?")) {
+                                    "SELECT korisnik, ime, prezime, email, lozinka FROM korisnici WHERE korisnik = ?")) {
 
                 izraz.setString(1, korime);
 
@@ -205,9 +204,9 @@ public class ServisKorisnika extends KonfigurabilniServis {
         return postoji;
     }
 
-    private KorisnikPrikaz dajObjektPrikazaKorisnika(ResultSet rezultat) throws SQLException {
-        return new KorisnikPrikaz(rezultat.getString("korisnik"), rezultat.getString("ime"),
-                rezultat.getString("prezime"), rezultat.getString("email"));
+    private Korisnik dajObjektPrikazaKorisnika(ResultSet rezultat) throws SQLException {
+        return new Korisnik(rezultat.getString("korisnik"), rezultat.getString("ime"),
+                rezultat.getString("prezime"), rezultat.getString("lozinka"), rezultat.getString("email"));
     }
 
     private boolean provjeriIspravnostKorisnika(Korisnik korisnik) {
