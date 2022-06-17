@@ -8,6 +8,7 @@ import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikNeispravanException;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.KorisnikVecPostojiException;
 import org.foi.nwtis.mmatijevi.projekt.modeli.KorisnikPrikaz;
 import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovor;
+import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovorKorisnici;
 import org.foi.nwtis.mmatijevi.projekt.odgovori.RestOdgovorUzPodatke;
 import org.foi.nwtis.podaci.Korisnik;
 
@@ -35,7 +36,7 @@ public class RestKorisnici {
 
         List<KorisnikPrikaz> korisnici = servisKorisnika.dajSveKorisnike();
         if (korisnici != null) {
-            odgovor = Response.ok(new RestOdgovorUzPodatke<List<KorisnikPrikaz>>(
+            odgovor = Response.ok(new RestOdgovorKorisnici(
                     true, "Dohvat svih korisnika uspješan", korisnici))
                     .build();
         } else {
