@@ -27,14 +27,24 @@
             <ui:include src="/WEB-INF/zaglavlje.xhtml" />
             <h:panelGroup styleClass="text-center m-auto">
                 <h1>Pregled korisnika</h1>
+                <i>Crveno su označeni nesinkronizirani korisnici.</i>
+                <h:form style="position: fixed; left: 20px; top: 75px">
+                    <p:commandButton
+                        styleClass="rounded-button ui-button-info"
+                        value="Sinkroniziraj"
+                        update="growl tablicaKorisnika"
+                        action="#{korisniciZrno.sinkroniziraj}"
+                    />
+                </h:form>
                 <h:panelGroup className="container">
                     <p:dataTable
+                        id="tablicaKorisnika"
                         value="#{korisniciZrno.korisnici}"
                         var="k"
                         paginator="true"
                         rows="10"
                         lazy="true"
-                        rowStyleClass="#{korisniciZrno.odrediNesinkroniziranost(k) eq false ? 'text-danger' : ''}"
+                        rowStyleClass="#{korisniciZrno.odrediNesinkroniziranost(k) ne false ? 'text-danger' : ''}"
                     >
                         <p:column>
                             <f:facet name="header">

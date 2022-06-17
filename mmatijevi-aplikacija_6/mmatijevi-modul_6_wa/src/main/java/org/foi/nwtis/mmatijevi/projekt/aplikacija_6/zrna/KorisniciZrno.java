@@ -3,10 +3,13 @@ package org.foi.nwtis.mmatijevi.projekt.aplikacija_6.zrna;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_6.jpa.criteriaapi.KorisniciJpa;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_6.jpa.entiteti.Korisnici;
 import org.foi.nwtis.mmatijevi.projekt.aplikacija_6.klijenti.KorisniciKlijent;
+import org.foi.nwtis.mmatijevi.projekt.aplikacija_6.usluge.MapiranjeKorisnika;
 import org.foi.nwtis.mmatijevi.projekt.iznimke.ZetonIstekaoException;
 import org.foi.nwtis.mmatijevi.projekt.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.podaci.Korisnik;
@@ -71,18 +74,38 @@ public class KorisniciZrno implements Serializable {
 		List<Korisnici> korisniciLokalni = null;
 		korisniciLokalni = (List<Korisnici>) korisniciJpa.findAll();
 
-		for (Korisnici korisnikLokalni : korisniciLokalni) {
-			Korisnik korisnikGlobalniPronadjeni = null;
-			for (Korisnik korisnikGlobalni : korisnici) {
+		for (Korisnik korisnikGlobalni : korisnici) {
+			boolean pronadjenGlobalniKorisnik = false;
+			for (Korisnici korisnikLokalni : korisniciLokalni) {
 				if (korisnikGlobalni.getKorIme().equals(korisnikLokalni.getKorisnik())) {
-					korisnikGlobalniPronadjeni = korisnikGlobalni;
+					pronadjenGlobalniKorisnik = true;
 					break;
 				}
 			}
-			if (korisnikGlobalniPronadjeni != null) {
-				neSinkroniziraniKorisnici.add(korisnikGlobalniPronadjeni);
+			if (!pronadjenGlobalniKorisnik) {
+				neSinkroniziraniKorisnici.add(korisnikGlobalni);
 			}
 		}
 	}
 
+	public void sinkroniziraj() {
+		FacesMessage poruka;
+		if (!neSinkroniziraniKorisnici.isEmpty()) {
+			for (Korisnik korisnik : neSinkroniziraniKorisnici) {
+				try {
+					korisniciJpa.create(MapiranjeKorisnika.izKorisnikaUKorisnici(korisnik));
+				} catch (Exception ex) {
+					Logger.getLogger(KorisniciZrno.class.getName()).log(Level.WARNING,
+							"Neuspio unos korisnika " + korisnik.getKorIme() + " u lokalnu bazu!", ex);
+				}
+			}
+
+			neSinkroniziraniKorisnici.clear();
+
+			poruka = new FacesMessage(FacesMessage.SEVERITY_INFO, "Uspjeh", "Korisnici ažurirani!");
+		} else {
+			poruka = new FacesMessage(FacesMessage.SEVERITY_WARN, "Nije odrađeno", "Nije bilo korisnika za ažurirati!");
+		}
+		FacesContext.getCurrentInstance().addMessage(null, poruka);
+	}
 }
