@@ -32,7 +32,7 @@ public class GeneratorOznakaZetona {
     private int dohvatiPosljednjuOznakuIzBaze() throws NovaOznakaNedostupnaException {
         try (Connection veza = baza.dohvatiVezu();
                 PreparedStatement izraz = veza.prepareStatement(
-                        "SELECT oznaka_zeton FROM zetoni ORDER BY oznaka_zeton DESC LIMIT 1");
+                        "SELECT oznaka_zeton FROM zetoni ORDER BY id_zeton DESC LIMIT 1");
                 ResultSet rs = izraz.executeQuery()) {
 
             if (rs.next()) {
