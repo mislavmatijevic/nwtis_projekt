@@ -83,8 +83,7 @@ public class Dretva extends Thread {
             case hibernira:
                 if (komanda.equals("INIT")) {
                     StanjeServera.dajInstancu().promjeniStanje();
-                    posaljiOdgovor(osw,
-                            "OK");
+                    posaljiOdgovor(osw, "OK");
                 } else {
                     posaljiOdgovor(osw,
                             "ERROR 01 Komanda \"" + komanda + "\" nije ispravna dok poslužitelj hibernira.");
