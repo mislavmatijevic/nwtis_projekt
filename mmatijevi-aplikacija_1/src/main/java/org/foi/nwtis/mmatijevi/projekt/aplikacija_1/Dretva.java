@@ -91,7 +91,7 @@ public class Dretva extends Thread {
                 }
                 break;
             case inicijaliziran:
-                if (komanda.startsWith("LOAD")) {
+                if (komanda.startsWith("LOAD ")) {
                     String JSON = komanda.substring(5);
                     Gson gsonCitac = new Gson();
                     try {
