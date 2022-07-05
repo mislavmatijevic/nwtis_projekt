@@ -25,8 +25,39 @@
         </h:head>
         <h:body styleClass="cover-container d-flex w-100 h-100 mx-auto flex-column">
             <ui:include src="/WEB-INF/zaglavlje.xhtml" />
+            <h:form style="position: fixed; left: 20px; top: 75px">
+                <p:commandButton
+                    styleClass="rounded-button ui-button-info"
+                    value="Obriši"
+                    update="tablicaPoruka"
+                    action="#{jmsPorukeZrno.ocistiPoruke}"
+                />
+            </h:form>
             <h:panelGroup styleClass="text-center m-auto">
-                <h2>Dobrodošli u aplikaciju 6!</h2>
+                <h2>Dobivene JMS poruke!</h2>
+                <h:panelGroup className="container">
+                    <p:dataTable
+                        id="tablicaPoruka"
+                        value="#{jmsPorukeZrno.listaPoruka}"
+                        paginator="true"
+                        rows="10"
+                        lazy="true"
+                        var="p"
+                    >
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Poruka" />
+                            </f:facet>
+                            #{p.poruka}
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Vrijeme" />
+                            </f:facet>
+                            #{p.vrijeme}
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
             </h:panelGroup>
         </h:body>
     </f:view>
