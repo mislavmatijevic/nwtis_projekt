@@ -16,7 +16,6 @@ import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import jakarta.ws.rs.core.Response;
 
 @WebFilter(servletNames = { "Faces Servlet" })
 public class FilterProvjeraKorisnika implements Filter {
@@ -53,9 +52,7 @@ public class FilterProvjeraKorisnika implements Filter {
                 !req.getServletPath().equals("/index.xhtml") &&
                 !req.getServletPath().equals("/prijava.xhtml") &&
                 !req.getServletPath().equals("/pogreska.xhtml")) {
-            res.setStatus(Response.Status.REQUEST_TIMEOUT.getStatusCode());
             res.sendRedirect(req.getContextPath() + "/pogreska.xhtml");
-            return;
         } else {
             chain.doFilter(req, res);
         }
