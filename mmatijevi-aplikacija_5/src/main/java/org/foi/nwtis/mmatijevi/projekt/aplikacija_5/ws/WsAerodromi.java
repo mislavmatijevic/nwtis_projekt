@@ -12,6 +12,7 @@ import org.foi.nwtis.mmatijevi.projekt.aplikacija_5.wsock.Info;
 import org.foi.nwtis.mmatijevi.projekt.modeli.PrijavljeniKorisnik;
 import org.foi.nwtis.rest.podaci.AvionLeti;
 
+import jakarta.ejb.EJB;
 import jakarta.inject.Inject;
 import jakarta.jws.WebMethod;
 import jakarta.jws.WebParam;
@@ -24,7 +25,7 @@ public class WsAerodromi {
 
 	@Inject
 	ServletContext kontekst;
-	@Inject
+	@EJB
 	PosiljateljPoruke posiljateljPoruke;
 	@Inject
 	Info info;
