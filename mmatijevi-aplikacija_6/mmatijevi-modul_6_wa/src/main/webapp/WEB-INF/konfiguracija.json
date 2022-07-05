@@ -1,5 +1,6 @@
 {
+    "datoteka.jmsPoruke": "jms_poruke.bin",
     "sustav.korisnik": "pkos",
     "sustav.lozinka": "123456",
-    "adresa.aplikacija_3": "http://localhost:8080/mmatijevi-aplikacija_3-1.0.0/api"
+    "adresa.aplikacija_3": "http://localhost:8080/mmatijevi-aplikacija_3/api"
 }
